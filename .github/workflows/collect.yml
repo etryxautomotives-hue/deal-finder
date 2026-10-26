@@ -1,0 +1,30 @@
+name: Collect deals
+
+# Runs every morning on GitHub's servers. No Claude involved.
+on:
+  schedule:
+    - cron: "15 5 * * *"   # 05:15 UTC, before Belgian shops open
+  workflow_dispatch: {}     # "Run workflow" button for a manual run
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m collector.run
+      - name: Save this week's deals
+        run: |
+          git config user.name "deal-collector"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/deals.json
+          git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
+          git push
