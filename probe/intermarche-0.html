@@ -1,0 +1,2749 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+    <!-- Powered by Webpublication.fr -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- X-UA-Compatible should stay the first -->
+    <title>s45</title>
+    <!--{METAS_TAGS}-->
+    <meta name="generator" content="Webpublication.fr" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="google" content="notranslate" />
+    
+    
+
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <meta name="twitter:title" content="s45" class="social-meta-tag__title" />
+    
+    
+    <meta name="twitter:image:src" content="https://fr.zone-secure.net/863887/2728685/publication/contents/media-epub/pages/1/page.jpg" class="social-meta-tag__image" />
+
+    <meta property="og:title" content="s45" class="social-meta-tag__title" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://folders.intermarche.be/.2026-s45fr/" class="social-meta-tag__url" />
+    <meta property="og:image" content="https://fr.zone-secure.net/863887/2728685/publication/contents/media-epub/pages/1/page.jpg" class="social-meta-tag__image" />
+    
+    
+
+    <link rel="icon" type="image/ico" href="../.favicon.ico" />
+  <script data-checksum="309MDk91XcU5dFX4JiImFMC0QaJaRBptjCKrWWu8" data-snippetid="top_bar_js">
+/* global webpublicationNamespace, wishlistV4, w */
+
+/* initialization after Reader ready*/
+window.addEventListener('webpub-init', () => {
+  w.Main.menuService.add('cart_btn', {
+    icon: {
+      url: w.Utils.resolveVariable('${template}wishlistV4/icons/cart_btn.svg')
+    },
+    label: 'Commander',
+    onclick: () => window.wishlistV4.API.openCartPanel()
+  });
+  w.Main.menuService.add('product_search_btn', {
+    icon: {
+      url: w.Utils.resolveVariable('${template}wishlistV4/icons/search_btn.svg')
+    },
+    label: 'Rechercher',
+    onclick: () => window.wishlistV4.API.openSearchPanel()
+  });
+
+  initCartBadge();
+});
+
+</script><script data-checksum="FhnZNsaIxS5RdARFZYNkCWNtLQdqoJg9fRCUn85bQ" data-snippetid="main_js">
+  window.wishlistV4 = {
+    isLoaded: false,
+  };
+  var initCartBadge = function () {
+    if (!window.wishlistV4 || !window.wishlistV4.config) {
+      setTimeout(initCartBadge, 100);
+      return;
+    }
+
+    // TODO: Remove setTimeout when Reader's badge initialisation will be fixed
+    setTimeout(function () { window.wishlistV4.API.updateCartBadge(); }, 3 * 1000);
+  };
+
+  var getCartLine = function (sku, attributes, quantity, isInShoppingList) {
+    var cartLine = {
+      sku: sku,
+      attributes: attributes,
+      quantity: quantity,
+    };
+    // Add isInShoppingList property if provided, default to false for backward compatibility
+    if (isInShoppingList !== undefined) {
+      cartLine.isInShoppingList = isInShoppingList;
+    }
+    return cartLine;
+  };
+
+  var notifyCartChange = function (isRemoved) {
+    var toastMessage = isRemoved ?
+      window.wishlistV4.API.translate('general', 'product_removed') :
+      window.wishlistV4.API.translate('general', 'product_added');
+    displayNotification(toastMessage);
+  };
+
+  var getFindCartLine = function (sku, attributes) {
+    return function (cartLine) {
+      if (cartLine.sku !== sku) {
+        return false;
+      }
+
+      for (var attributeName in attributes) {
+        var attributeValue = attributes[attributeName];
+        if (cartLine.attributes[attributeName] !== attributeValue) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+  };
+
+  var isCartsInitialized = function () {
+    var cartsString = localStorage.getItem(getCartLocalStorageKey());
+    if (!cartsString) {
+      return false;
+    }
+
+    try {
+      var parsedCarts = JSON.parse(cartsString);
+      return !Array.isArray(parsedCarts);
+    } catch (error) {
+      return false;
+    }
+  };
+
+  var initCarts = function () {
+    const previousCart = localStorage.getItem(getCartLocalStorageKey());
+    localStorage.setItem(getCartLocalStorageKey(), JSON.stringify({
+      subcarts: {},
+      nextId: 1,
+      selectedId: null,
+    }));
+
+    try {
+      return JSON.parse(previousCart);
+    } catch (error) {
+      return null
+    }
+  };
+
+  var getCarts = function () {
+    var carts = JSON.parse(localStorage.getItem(getCartLocalStorageKey()));
+    for (let subcartKey in carts.subcarts) {
+      const subcart = carts.subcarts[subcartKey];
+      subcart.products = subcart.products.filter(filterCartlines);
+      // Ensure backward compatibility: initialize isInShoppingList for old cart items
+      subcart.products.forEach(function (cartLine) {
+        if (cartLine.isInShoppingList === undefined) {
+          cartLine.isInShoppingList = false;
+        }
+      });
+    }
+    return carts;
+  };
+
+  var getCartLocalStorageKey = function () {
+    const cartPrefix = 'wishlistCart-';
+    if (window.wishlistV4.config.general.isCommonCart) {
+      return cartPrefix + window.wishlistV4.config.project;
+    }
+
+    const publicationId = w.Main.xmlManager.getVariable('id');
+    return cartPrefix + publicationId;
+  };
+
+  var getCart = function (cartId) {
+    var carts = getCarts();
+    return carts.subcarts[cartId];
+  };
+
+  var getCartList = function () {
+    var carts = getCarts();
+    return Object.keys(carts.subcarts)
+      .reduce(function (result, key) {
+        result.push({
+          id: carts.subcarts[key].id,
+          name: carts.subcarts[key].name
+        });
+        return result;
+      }, []);
+  };
+
+  const filterCartlines = (cartLine) => window.wishlistV4.products[cartLine.sku] !== undefined;
+
+  var setCarts = function (cart) {
+    localStorage.setItem(getCartLocalStorageKey(), JSON.stringify(cart));
+    window.wishlistV4.API.updateCartBadge();
+    document.querySelectorAll('#webpub-lightbox-wishlistV4Cart iframe, figure iframe')
+      .forEach(iframe => iframe.contentWindow.postMessage('updateCart', '*'));
+  };
+
+  var createCart = function (name, previousProducts) {
+    var carts = getCarts();
+    carts.subcarts[carts.nextId] = {
+      id: carts.nextId,
+      name: name,
+      products: previousProducts || [],
+    };
+    carts.selectedId = carts.nextId;
+    carts.nextId += 1;
+    setCarts(carts);
+  };
+
+  var deleteCart = function () {
+    var carts = getCarts();
+    delete carts.subcarts[carts.selectedId];
+    var cartIds = Object.keys(carts.subcarts);
+    carts.selectedId = cartIds.length > 0 ? parseInt(cartIds[0]) : null;
+    setCarts(carts);
+  };
+
+  var setSelectedCartId = function (cartId) {
+    var carts = getCarts();
+    carts.selectedId = cartId;
+    setCarts(carts);
+  };
+
+  var getSelectedCartId = function () {
+    var carts = getCarts();
+    return carts.selectedId;
+  };
+
+  var getCurrentCart = function () {
+    var selectedCartId = getSelectedCartId();
+
+    if (selectedCartId === null) {
+      return null;
+    }
+    return getCart(selectedCartId);
+  };
+
+  var getCurrentCartProducts = function () {
+    var currentCart = getCurrentCart();
+    return currentCart ? currentCart.products : null;
+  };
+
+  var setCurrentCartProducts = function (products) {
+    var carts = getCarts();
+    carts.subcarts[carts.selectedId].products = products;
+    setCarts(carts);
+  };
+
+  var doIfCartNotEmpty = function (callback) {
+    var cartProducts = getCurrentCartProducts();
+    if (cartProducts && cartProducts.length > 0) {
+      callback();
+    } else {
+      displayNotification(window.wishlistV4.API.translate('general', 'empty_selection'));
+    }
+  };
+
+  var displayNotification = function (message) {
+    w.Utils.toast({
+      html: message,
+      duration: 5000,
+      position: 'bottom'
+    });
+  };
+
+  var getProductIndexInCart = function (sku, attributes) {
+    var cartProducts = getCurrentCartProducts();
+
+    if (!cartProducts) {
+      return -1;
+    }
+
+    var productIndex = cartProducts
+      .findIndex(getFindCartLine(sku, attributes));
+
+    return productIndex;
+  };
+
+  const getPlaylistParamFromCart = (products, cartProducts, importantPages) => {
+    const productPages = cartProducts.reduce((acc, cartProduct) => {
+      const product = products[cartProduct.sku];
+      acc.push(...getProductOriginalPages(product));
+
+      return acc;
+    }, []);
+
+    const playlistPages = [...new Set([...importantPages, ...productPages])]// removes duplicate pages
+      .sort((a, b) => a - b);// reorder pages
+
+    return { key: 'dpp', value: playlistPages.join(',') };
+  };
+
+  const getSelectionParamFromCart = (cartProducts) => {
+    const minifiedCartProducts = cartProducts.map((cartProduct) => {
+      const smallerCartProduct = { s: cartProduct.sku };
+      if (Object.keys(cartProduct.attributes).length > 0) {
+        smallerCartProduct.a = cartProduct.attributes;
+      }
+      if (cartProduct.quantity > 1) {
+        smallerCartProduct.q = cartProduct.quantity;
+      }
+
+      return smallerCartProduct;
+    });
+
+    return JSON.stringify(minifiedCartProducts);
+  };
+
+  const getCartFromSelectionParam = (selectionParam) => {
+    let minifiedCartProducts;
+    try {
+      minifiedCartProducts = JSON.parse(selectionParam);
+    } catch (error) {
+      return [];
+    }
+    const cartProducts = minifiedCartProducts.map((minifiedCartProduct) => {
+      const cartProduct = { sku: minifiedCartProduct.s };
+      cartProduct.attributes = minifiedCartProduct.a || {};
+      cartProduct.quantity = minifiedCartProduct.q || 1;
+
+      return cartProduct;
+    });
+
+    return cartProducts;
+  };
+
+  const getProductOriginalPages = (product) => {
+    if (!product.pages) {
+      return [];
+    }
+
+    if (!w.Main.playlistManager || w.Main.playlistManager.isEnabled !== true) {
+      return product.pages;
+    }
+
+    return product.pages.map(page => w.Main.playlistManager.getOriginalPageNumber(page));
+  };
+
+  /**
+   * Toggle shopping list status for a cart item
+   * @param {string} sku - Product SKU
+   * @param {Object} attributes - Product attributes
+   * @param {boolean} isInShoppingList - New shopping list status (optional, toggles if not provided)
+   * @returns {boolean} - New shopping list status
+   */
+  var toggleShoppingListStatus = function (sku, attributes, isInShoppingList) {
+    var cartProducts = getCurrentCartProducts();
+    if (!cartProducts) {
+      return false;
+    }
+
+    var productIndex = getProductIndexInCart(sku, attributes);
+    if (productIndex === -1) {
+      return false;
+    }
+
+    var cartLine = cartProducts[productIndex];
+    // Ensure isInShoppingList property exists (backward compatibility)
+    if (cartLine.isInShoppingList === undefined) {
+      cartLine.isInShoppingList = false;
+    }
+
+    // Toggle if isInShoppingList not provided, otherwise set to provided value
+    if (isInShoppingList === undefined) {
+      cartLine.isInShoppingList = !cartLine.isInShoppingList;
+    } else {
+      cartLine.isInShoppingList = isInShoppingList;
+    }
+
+    setCurrentCartProducts(cartProducts);
+    return cartLine.isInShoppingList;
+  };
+
+  /**
+   * Get all items in the shopping list
+   * @returns {Array} - Array of cart items where isInShoppingList === true
+   */
+  var getShoppingListItems = function () {
+    var cartProducts = getCurrentCartProducts();
+    if (!cartProducts) {
+      return [];
+    }
+
+    return cartProducts.filter(function (cartLine) {
+      // Ensure backward compatibility: items without isInShoppingList are not in shopping list
+      return cartLine.isInShoppingList === true;
+    });
+  };
+
+  /**
+   * Filter shopping list items from a cart products array
+   * @param {Array} cartProducts - Array of cart items
+   * @returns {Array} - Array of cart items where isInShoppingList === true
+   */
+  var filterShoppingListItems = function (cartProducts) {
+    if (!cartProducts || !Array.isArray(cartProducts)) {
+      return [];
+    }
+
+    return cartProducts.filter(function (cartLine) {
+      // Ensure backward compatibility: items without isInShoppingList are not in shopping list
+      return cartLine.isInShoppingList === true;
+    });
+  };
+
+  /**
+   * Filter cart items (exclude shopping list items) from a cart products array
+   * @param {Array} cartProducts - Array of cart items
+   * @returns {Array} - Array of cart items where isInShoppingList === false or undefined
+   */
+  var filterCartItems = function (cartProducts) {
+    if (!cartProducts || !Array.isArray(cartProducts)) {
+      return [];
+    }
+
+    return cartProducts.filter(function (cartLine) {
+      // Items without isInShoppingList property are considered cart items (backward compatibility)
+      return cartLine.isInShoppingList !== true;
+    });
+  };
+
+  /**
+   * Sort cart items alphabetically by Rayon property
+   * Items without Rayon are placed at the end
+   * @param {Array} cartProducts - Array of cart items
+   * @returns {Array} - Sorted array of cart items
+   */
+  var sortByRayon = function (cartProducts) {
+    if (!cartProducts || !Array.isArray(cartProducts)) {
+      return [];
+    }
+
+    // Create a copy to avoid mutating the original array
+    var sortedProducts = cartProducts.slice();
+
+    sortedProducts.sort(function (a, b) {
+      var productA = window.wishlistV4.products[a.sku];
+      var productB = window.wishlistV4.products[b.sku];
+
+      var rayonA = productA ? (productA.Rayon || '') : '';
+      var rayonB = productB ? (productB.Rayon || '') : '';
+
+      // Items without Rayon go to the end
+      if (!rayonA && !rayonB) {
+        return 0; // Both have no Rayon, maintain order
+      }
+      if (!rayonA) {
+        return 1; // A has no Rayon, put it after B
+      }
+      if (!rayonB) {
+        return -1; // B has no Rayon, put it after A
+      }
+
+      // Alphabetical comparison (case-insensitive)
+      return rayonA.localeCompare(rayonB, undefined, { sensitivity: 'base' });
+    });
+
+    return sortedProducts;
+  };
+  /**
+   * Discount Utilities for Cart
+   * Handles product grouping, promo detection, and discount calculations
+   */
+
+  /**
+   * Check if product has promo classique
+   * @param {Object} product - Product object
+   * @returns {boolean} - True if product has promo classique
+   */
+  const hasPromoClassique = (product) => {
+    if (!product) return false;
+    // Classic promo exists if we have a quantity threshold and either:
+    // - a percentage discount (pourcent)  -> current behaviour
+    // - or a fixed-price bundle (prix_fixe) for "X POUR Y€" type offers
+    return !!(
+      product.quantiter &&
+      (product.pourcent || product.prix_fixe)
+    );
+  };
+
+  /**
+   * Check if product has promo carte
+   * @param {Object} product - Product object
+   * @returns {boolean} - True if product has promo carte
+   */
+  const hasPromoCarte = (product) => {
+    if (!product) return false;
+    // Card promo exists if we have a quantity threshold and either:
+    // - a percentage discount (pourcent_carte)
+    // - or a fixed-price bundle (prix_fixe_carte) for "X POUR Y€" card offers
+    return !!(
+      product.quantiter &&
+      (product.pourcent_carte || product.prix_fixe_carte)
+    );
+  };
+
+  /**
+   * Get promo type for a product
+   * @param {Object} product - Product object
+   * @returns {string|null} - 'classique', 'carte', or null
+   */
+  const getPromoType = (product) => {
+    if (!product) return null;
+
+    // Check mutual exclusivity - classique takes precedence if both exist
+    if (hasPromoClassique(product)) {
+      return 'classique';
+    }
+    if (hasPromoCarte(product)) {
+      return 'carte';
+    }
+    return null;
+  };
+
+  /**
+   * Group cart products by groupe filtre (variantGroupReference).
+   * Products with no variantGroupReference are treated as their own group using title (Nom produit), then sku as fallback.
+   * @param {Array} cart - Cart array with {sku, attributes, quantity}
+   * @param {Object} products - Products object (w4.products)
+   * @returns {Object} - Grouped object { "GroupName": [...], "_ungrouped": [...] }
+   */
+  const groupCartProductsByFilter = (cart, products) => {
+    const grouped = {};
+
+    for (let i = 0; i < cart.length; i++) {
+      const cartLine = cart[i];
+      const product = products[cartLine.sku];
+
+      if (!product) {
+        // Product not found, skip
+        continue;
+      }
+
+      // Use variant group if set; otherwise treat as own group by product name (title) or sku
+      const groupName = product.variantGroupReference || product.title || product.sku || '_ungrouped';
+
+      if (!grouped[groupName]) {
+        grouped[groupName] = [];
+      }
+
+      // Add cart line with product reference
+      grouped[groupName].push({
+        ...cartLine,
+        product: product
+      });
+    }
+
+    return grouped;
+  };
+
+  /**
+   * Calculate total quantity for a group
+   * @param {Array} group - Array of cart lines in the group
+   * @returns {number} - Total quantity
+   */
+  const getGroupTotalQuantity = (group) => {
+    if (!group || group.length === 0) return 0;
+
+    return group.reduce((total, cartLine) => {
+      return total + (cartLine.quantity || 0);
+    }, 0);
+  };
+
+  /**
+   * Get promo threshold (quantiter) for a group
+   * @param {Array} group - Array of cart lines in the group
+   * @returns {number|null} - Threshold value or null if not available
+   */
+  const getGroupPromoThreshold = (group) => {
+    if (!group || group.length === 0) return null;
+
+    // Get threshold from first product in group (all products in group should have same threshold)
+    const firstProduct = group[0].product;
+    if (!firstProduct || !firstProduct.quantiter) {
+      return null;
+    }
+
+    // quantiter is stored as string, convert to number
+    const threshold = parseInt(firstProduct.quantiter, 10);
+    return isNaN(threshold) ? null : threshold;
+  };
+
+  /**
+   * Select products for discount using cheapest-first algorithm
+   * When quantity exceeds threshold, creates multiple promo groups
+   * @param {Array} group - Array of cart lines in the group
+   * @param {number} threshold - Quantity threshold for promo
+   * @returns {Array} - Array of promo groups, each containing selected products
+   *   Format: [{ products: [{cartLine, quantity}], totalQuantity: number }, ...]
+   */
+  const selectProductsForDiscount = (group, threshold) => {
+    if (!group || group.length === 0 || !threshold) {
+      return [];
+    }
+
+    // Sort products by price (ascending) - cheapest first
+    // Group items have structure: {sku, attributes, quantity, product} (from groupCartProductsByFilter)
+    const sortedGroup = [...group].sort((a, b) => {
+      const productA = a.product || a;
+      const productB = b.product || b;
+      const priceA = (productA && productA.price) || 0;
+      const priceB = (productB && productB.price) || 0;
+      return priceA - priceB;
+    });
+
+    const promoGroups = [];
+    let remainingProducts = [...sortedGroup];
+    let currentPromoGroup = {
+      products: [],
+      totalQuantity: 0
+    };
+
+    // Process products until we've allocated all quantities
+    while (remainingProducts.length > 0) {
+      const cartLine = remainingProducts[0];
+      const availableQuantity = cartLine.quantity;
+      const neededForThreshold = threshold - currentPromoGroup.totalQuantity;
+
+      // Skip spent lines (e.g. remainder 0 after a split) so we never add quantity 0 to a group
+      if (!availableQuantity || availableQuantity <= 0) {
+        remainingProducts.shift();
+        continue;
+      }
+
+      if (neededForThreshold <= 0) {
+        // Current group is complete, start a new one
+        promoGroups.push(currentPromoGroup);
+        currentPromoGroup = {
+          products: [],
+          totalQuantity: 0
+        };
+        continue;
+      }
+
+      const useQty = Math.min(availableQuantity, neededForThreshold);
+
+      // Push a snapshot of the cart line with the used quantity so each promo group
+      // has its own copy and is not affected when we replace remainingProducts[0] or shift
+      currentPromoGroup.products.push({
+        cartLine: { ...cartLine, quantity: useQty, product: cartLine.product },
+        quantity: useQty
+      });
+      currentPromoGroup.totalQuantity += useQty;
+
+      const remainder = availableQuantity - useQty;
+
+      if (remainder <= 0) {
+        remainingProducts.shift();
+      } else {
+        remainingProducts[0] = { ...cartLine, quantity: remainder, product: cartLine.product };
+      }
+
+      if (currentPromoGroup.totalQuantity >= threshold) {
+        promoGroups.push(currentPromoGroup);
+        currentPromoGroup = { products: [], totalQuantity: 0 };
+      }
+    }
+
+    // Add final group only if threshold is reached
+    if (currentPromoGroup.totalQuantity >= threshold) {
+      promoGroups.push(currentPromoGroup);
+    }
+
+    return promoGroups;
+  };
+
+  /**
+   * Calculate weighted average price for selected products
+   * @param {Array} selectedProducts - Array of {cartLine, quantity} objects
+   * @returns {number} - Weighted average price
+   */
+  const calculateAveragePrice = (selectedProducts) => {
+    if (!selectedProducts || selectedProducts.length === 0) {
+      return 0;
+    }
+
+    let totalPrice = 0;
+    let totalQuantity = 0;
+
+    for (let i = 0; i < selectedProducts.length; i++) {
+      const { cartLine, quantity } = selectedProducts[i];
+      // cartLine might be the group item itself {sku, attributes, quantity, product}
+      // or nested {cartLine: {...}, product: {...}}
+      const product = cartLine.product || cartLine;
+      const price = (product && product.price) || 0;
+
+      totalPrice += price * quantity;
+      totalQuantity += quantity;
+    }
+
+    if (totalQuantity === 0) {
+      return 0;
+    }
+
+    // Round to 2 decimals so discount uses display precision (avoids 4.6→4.5999...→discount 4.59)
+    const averagePrice = totalPrice / totalQuantity;
+    return Math.round(averagePrice * 100) / 100;
+  };
+
+  /**
+   * Calculate classic discount amount
+   * @param {number} averagePrice - Average price of selected products
+   * @param {number} quantity - Total quantity for discount
+   * @param {number} percent - Discount percentage (e.g., 50 for 50%)
+   * @returns {number} - Discount amount rounded to 2 decimals (round to avoid float showing 4.59 instead of 4.60)
+   */
+  const calculateClassicDiscount = (averagePrice, quantity, percent) => {
+    if (!averagePrice || !quantity || !percent) {
+      return 0;
+    }
+
+    // Calculate: (average price × quantity) × percent / 100
+    const discount = (averagePrice * quantity) * (percent / 100);
+
+    // Round to 2 decimals so group discount displays correctly (e.g. 4.60 not 4.59 from float)
+    return Math.round(discount * 100) / 100;
+  };
+
+  /**
+   * Calculate total price for selected products
+   * @param {Array} selectedProducts - Array of {cartLine, quantity} objects
+   * @returns {number} - Total price (sum of price * quantity), rounded to 2 decimals
+   */
+  const calculateTotalPriceForGroup = (selectedProducts) => {
+    if (!selectedProducts || selectedProducts.length === 0) {
+      return 0;
+    }
+
+    let totalPrice = 0;
+
+    for (let i = 0; i < selectedProducts.length; i++) {
+      const { cartLine, quantity } = selectedProducts[i];
+      const product = cartLine.product || cartLine;
+      const price = (product && product.price) || 0;
+
+      totalPrice += price * quantity;
+    }
+
+    // Round to 2 decimals to keep consistency with other money calculations
+    return Math.round(totalPrice * 100) / 100;
+  };
+
+  /**
+   * Calculate all classic discounts for a cart
+   * Processes all groups with promo classique and handles multiple promo groups
+   * @param {Array} cart - Cart array with {sku, attributes, quantity}
+   * @param {Object} products - Products object (w4.products)
+   * @returns {Array} - Array of discount objects
+   *   Format: [{ groupName, discount, savings, products, threshold, currentQuantity, promoGroups }, ...]
+   */
+  const calculateAllClassicDiscounts = (cart, products) => {
+    // Handle both cart object { products: [...] } and products array [...]
+    const cartProducts = Array.isArray(cart) ? cart : (cart?.products || []);
+
+    if (!cartProducts || cartProducts.length === 0 || !products) {
+      return [];
+    }
+
+    const discounts = [];
+    const grouped = groupCartProductsByFilter(cartProducts, products);
+
+    // Process each group
+    for (const groupName in grouped) {
+      const group = grouped[groupName];
+
+      // Skip ungrouped products
+      if (groupName === '_ungrouped') {
+        continue;
+      }
+
+      // Check if group has promo classique
+      const firstProduct = group[0]?.product;
+      if (!firstProduct || !hasPromoClassique(firstProduct)) {
+        continue;
+      }
+
+      const threshold = getGroupPromoThreshold(group);
+      const totalQuantity = getGroupTotalQuantity(group);
+
+      if (!threshold || totalQuantity < threshold) {
+        // Threshold not reached, no discount
+        continue;
+      }
+
+      // Determine promo calculation mode for this group:
+      // - percent-based (existing behaviour using pourcent)
+      // - fixed-price bundle using prix_fixe ("X POUR Y€ AU CHOIX")
+      const hasPercent = !!firstProduct.pourcent;
+      const hasFixedPrice = !!firstProduct.prix_fixe;
+
+      // Prefer fixed-price if both are (incorrectly) set for the same product
+      const promoMode = hasFixedPrice ? 'fixed' : (hasPercent ? 'percent' : null);
+      if (!promoMode) {
+        continue;
+      }
+
+      const percent = promoMode === 'percent'
+        ? (parseFloat(firstProduct.pourcent) || 0)
+        : 0;
+
+      const fixedPrice = promoMode === 'fixed'
+        ? (parseFloat(String(firstProduct.prix_fixe).replace(',', '.')) || 0)
+        : 0;
+
+      // If mode is percent, we need a non-zero percentage
+      if (promoMode === 'percent' && percent === 0) {
+        continue;
+      }
+
+      // Select products for discount (handles multiple promo groups if quantity exceeds threshold)
+      const promoGroups = selectProductsForDiscount(group, threshold);
+
+      // Calculate discount for each promo group
+      const groupDiscounts = promoGroups.map((promoGroup, gIdx) => {
+        let discount = 0;
+        let averagePrice = 0;
+
+        if (promoMode === 'percent') {
+          // Existing percentage-based behaviour
+          averagePrice = calculateAveragePrice(promoGroup.products);
+          discount = calculateClassicDiscount(averagePrice, promoGroup.totalQuantity, percent);
+        } else {
+          // Fixed-price bundle: discount = sum(prices) - fixedPrice
+          const totalPrice = calculateTotalPriceForGroup(promoGroup.products);
+          averagePrice = promoGroup.totalQuantity ? totalPrice / promoGroup.totalQuantity : 0;
+
+          const rawDiscount = totalPrice - fixedPrice;
+          // Never allow negative discount
+          discount = Math.max(0, Math.round(rawDiscount * 100) / 100);
+        }
+
+        return {
+          promoGroup: promoGroup,
+          discount: discount,
+          averagePrice: averagePrice,
+          quantity: promoGroup.totalQuantity
+        };
+      });
+
+      // Sum all discounts for this group
+      const totalDiscount = groupDiscounts.reduce((sum, d) => sum + d.discount, 0);
+
+      discounts.push({
+        groupName: groupName,
+        discount: totalDiscount,
+        savings: totalDiscount, // Same as discount for classic promo
+        products: group,
+        threshold: threshold,
+        currentQuantity: totalQuantity,
+        promoGroups: promoGroups,
+        groupDiscounts: groupDiscounts // Individual promo group calculations
+      });
+    }
+
+    return discounts;
+  };
+
+  /**
+   * Get price by quantity for a product (helper function)
+   * Handles pricesByQuantity if available
+   * @param {Object} product - Product object
+   * @param {number} quantity - Quantity
+   * @returns {number} - Price for the quantity
+   */
+  const getPriceByQuantity = (product, quantity) => {
+    if (!product) return 0;
+
+    let price = product.price || 0;
+    const pricesByQuantity = product.pricesByQuantity;
+
+    if (pricesByQuantity && Array.isArray(pricesByQuantity)) {
+      for (let i = 0; i < pricesByQuantity.length; i++) {
+        const priceByQuantity = pricesByQuantity[i];
+        if (quantity >= priceByQuantity.quantity) {
+          price = priceByQuantity.price;
+        }
+      }
+    }
+
+    return price || 0;
+  };
+
+  /**
+   * Calculate cart total with discounts applied
+   * @param {Array} cart - Cart array with {sku, attributes, quantity}
+   * @param {Object} products - Products object (w4.products)
+   * @param {number} priceRatio - Price ratio multiplier (default: 1)
+   * @returns {Object} - Total breakdown object
+   *   Format: { baseTotal, classicDiscount, finalTotal, discounts }
+   */
+  const getCartTotalWithDiscounts = (cart, products, priceRatio = 1) => {
+    // Handle both cart object { products: [...] } and products array [...]
+    const cartProducts = Array.isArray(cart) ? cart : (cart?.products || []);
+
+    if (!cartProducts || cartProducts.length === 0 || !products) {
+      return {
+        baseTotal: 0,
+        classicDiscount: 0,
+        cardBenefits: 0,
+        finalTotal: 0,
+        discounts: [],
+        cardBenefitsDetails: []
+      };
+    }
+
+    // Calculate base total (same logic as getTotalCartPrice)
+    let baseTotal = 0;
+    for (let i = 0; i < cartProducts.length; i++) {
+      const cartLine = cartProducts[i];
+      const product = products[cartLine.sku];
+      if (!product) {
+        continue;
+      }
+
+      const priceByQuantity = getPriceByQuantity(product, cartLine.quantity);
+      baseTotal += cartLine.quantity * priceByQuantity * priceRatio;
+    }
+    // Round to 2 decimals so finalTotal isn't floored down by float (e.g. 9.1999... - 4.60 → 4.59)
+    baseTotal = Math.round(baseTotal * 100) / 100;
+
+    // Calculate classic discounts
+    const discounts = calculateAllClassicDiscounts(cartProducts, products);
+    const classicDiscount = discounts.reduce((sum, d) => sum + d.discount, 0);
+
+    // Calculate card benefits (do NOT subtract from total)
+    const cardBenefits = calculateAllCardDiscounts(cartProducts, products);
+    const totalCardBenefits = cardBenefits.reduce((sum, b) => sum + b.cardBenefit, 0);
+
+    // Final total = base minus classic discount. Round to 2 decimals to fix float (e.g. 9.2 - 4.6 → 4.5999... → show 4.60)
+    // Card benefits do NOT subtract from total
+    const rawFinal = baseTotal - classicDiscount;
+    const finalTotal = Math.max(0, Math.round(rawFinal * 100) / 100);
+
+    return {
+      baseTotal: baseTotal,
+      classicDiscount: classicDiscount,
+      cardBenefits: totalCardBenefits,
+      finalTotal: finalTotal,
+      discounts: discounts,
+      cardBenefitsDetails: cardBenefits // Array of card benefit objects
+    };
+  };
+
+  /**
+   * Calculate card discount for a single promo group
+   * Similar to classic discount but uses pourcent_carte
+   * @param {number} averagePrice - Average price of selected products
+   * @param {number} quantity - Quantity in this promo group
+   * @param {number} percent - Discount percentage (pourcent_carte)
+   * @returns {number} - Card benefit amount (rounded down to 2 decimals)
+   */
+  const calculateCardDiscount = (averagePrice, quantity, percent) => {
+    if (!averagePrice || !quantity || !percent) {
+      return 0;
+    }
+
+    const totalPrice = averagePrice * quantity;
+    const discountAmount = totalPrice * (percent / 100);
+
+    // Round down to 2 decimals
+    return Math.floor(discountAmount * 100) / 100;
+  };
+
+  /**
+   * Calculate all card discounts for a cart
+   * Processes all groups with promo carte and handles multiple promo groups
+   * Card benefits do NOT subtract from cart total
+   * @param {Array} cart - Cart array with {sku, attributes, quantity}
+   * @param {Object} products - Products object (w4.products)
+   * @returns {Array} - Array of card benefit objects
+   *   Format: [{ groupName, cardBenefit, products, threshold, currentQuantity, promoGroups }, ...]
+   */
+  const calculateAllCardDiscounts = (cart, products) => {
+    // Handle both cart object { products: [...] } and products array [...]
+    const cartProducts = Array.isArray(cart) ? cart : (cart?.products || []);
+
+    if (!cartProducts || cartProducts.length === 0 || !products) {
+      return [];
+    }
+
+    const cardBenefits = [];
+    const grouped = groupCartProductsByFilter(cartProducts, products);
+
+    // Process each group
+    for (const groupName in grouped) {
+      const group = grouped[groupName];
+
+      // Skip ungrouped products
+      if (groupName === '_ungrouped') {
+        continue;
+      }
+
+      // Check if group has promo carte (and NOT promo classique - mutual exclusivity)
+      const firstProduct = group[0]?.product;
+      if (!firstProduct || !hasPromoCarte(firstProduct)) {
+        continue;
+      }
+
+      // Check mutual exclusivity - if both exist, skip card (classique takes precedence)
+      if (hasPromoClassique(firstProduct)) {
+        // Data issue: product has both promos, skip card promo
+        console.warn(`Product group "${groupName}" has both promo classique and promo carte. Using promo classique only.`);
+        continue;
+      }
+
+      const threshold = getGroupPromoThreshold(group);
+      const totalQuantity = getGroupTotalQuantity(group);
+
+      if (!threshold || totalQuantity < threshold) {
+        // Threshold not reached, no card benefit
+        continue;
+      }
+
+      // Determine promo calculation mode for card benefits:
+      // - percent-based using pourcent_carte
+      // - fixed-price bundle using prix_fixe_carte ("X POUR Y€ AU CHOIX" en carte)
+      const hasPercentCarte = !!firstProduct.pourcent_carte;
+      const hasFixedPriceCarte = !!firstProduct.prix_fixe_carte;
+
+      const promoMode = hasFixedPriceCarte ? 'fixed' : (hasPercentCarte ? 'percent' : null);
+      if (!promoMode) {
+        continue;
+      }
+
+      const percent = promoMode === 'percent'
+        ? (parseFloat(firstProduct.pourcent_carte) || 0)
+        : 0;
+
+      const fixedPriceCarte = promoMode === 'fixed'
+        ? (parseFloat(String(firstProduct.prix_fixe_carte).replace(',', '.')) || 0)
+        : 0;
+
+      if (promoMode === 'percent' && percent === 0) {
+        continue;
+      }
+
+      // Select products for discount (handles multiple promo groups if quantity exceeds threshold)
+      const promoGroups = selectProductsForDiscount(group, threshold);
+
+      // Calculate card benefit for each promo group
+      const groupBenefits = promoGroups.map((promoGroup) => {
+        let cardBenefit = 0;
+        let averagePrice = 0;
+
+        if (promoMode === 'percent') {
+          // Existing percentage-based behaviour
+          averagePrice = calculateAveragePrice(promoGroup.products);
+          cardBenefit = calculateCardDiscount(averagePrice, promoGroup.totalQuantity, percent);
+        } else {
+          // Fixed-price card bundle: benefit = sum(prices) - fixed card price
+          const totalPrice = calculateTotalPriceForGroup(promoGroup.products);
+          averagePrice = promoGroup.totalQuantity ? totalPrice / promoGroup.totalQuantity : 0;
+
+          const rawBenefit = totalPrice - fixedPriceCarte;
+          // Never allow negative benefit
+          cardBenefit = Math.max(0, Math.round(rawBenefit * 100) / 100);
+        }
+
+        return {
+          promoGroup: promoGroup,
+          cardBenefit: cardBenefit,
+          averagePrice: averagePrice,
+          quantity: promoGroup.totalQuantity
+        };
+      });
+
+      // Sum all card benefits for this group
+      const totalCardBenefit = groupBenefits.reduce((sum, b) => sum + b.cardBenefit, 0);
+
+      cardBenefits.push({
+        groupName: groupName,
+        cardBenefit: totalCardBenefit,
+        products: group,
+        threshold: threshold,
+        currentQuantity: totalQuantity,
+        promoGroups: promoGroups,
+        groupBenefits: groupBenefits // Individual promo group calculations
+      });
+    }
+
+    return cardBenefits;
+  };
+
+  /**
+   * Validate promo exclusivity for a product
+   * Checks if product has both promo types and logs warning
+   * @param {Object} product - Product object
+   * @returns {string|null} - 'classique', 'carte', or null (returns the promo type to use)
+   */
+  const validatePromoExclusivity = (product) => {
+    if (!product) {
+      return null;
+    }
+
+    const hasClassique = hasPromoClassique(product);
+    const hasCarte = hasPromoCarte(product);
+
+    if (hasClassique && hasCarte) {
+      // Both exist - data issue, log warning
+      console.warn(`Product "${product.sku}" (${product.title}) has both promo classique and promo carte. Using promo classique only.`);
+      return 'classique'; // Classique takes precedence
+    }
+
+    if (hasClassique) {
+      return 'classique';
+    }
+
+    if (hasCarte) {
+      return 'carte';
+    }
+
+    return null;
+  };
+
+  /**
+   * Get promo status message for a group
+   * @param {Array} group - Array of cart lines in the group
+   * @param {number} threshold - Quantity threshold for promo
+   * @param {number} discount - Calculated discount amount (if threshold reached)
+   * @returns {Object} - Status message object
+   *   Format: { type: 'not_reached' | 'reached', remaining: number, savings: number }
+   */
+  const getPromoStatusMessage = (group, threshold, discount = 0) => {
+    if (!group || group.length === 0 || !threshold) {
+      return {
+        type: null,
+        remaining: null,
+        savings: 0
+      };
+    }
+
+    const totalQuantity = getGroupTotalQuantity(group);
+
+    if (totalQuantity < threshold) {
+      // Threshold not reached
+      const remaining = threshold - totalQuantity;
+      return {
+        type: 'not_reached',
+        remaining: remaining,
+        savings: 0
+      };
+    } else {
+      // Threshold reached
+      return {
+        type: 'reached',
+        remaining: 0,
+        savings: discount
+      };
+    }
+  };
+
+  /**
+   * Get card promo status message for a group
+   * Similar to getPromoStatusMessage but for card benefits
+   * @param {Array} group - Array of cart lines in the group
+   * @param {number} threshold - Quantity threshold for card promo
+   * @param {number} cardBenefit - Calculated card benefit amount (if threshold reached)
+   * @returns {Object} - Status message object
+   *   Format: { type: 'not_reached' | 'reached', remaining: number, benefits: number }
+   */
+  const getCardPromoStatusMessage = (group, threshold, cardBenefit = 0) => {
+    if (!group || group.length === 0 || !threshold) {
+      return {
+        type: null,
+        remaining: null,
+        benefits: 0
+      };
+    }
+
+    const totalQuantity = getGroupTotalQuantity(group);
+
+    if (totalQuantity < threshold) {
+      // Threshold not reached
+      const remaining = threshold - totalQuantity;
+      return {
+        type: 'not_reached',
+        remaining: remaining,
+        benefits: 0
+      };
+    } else {
+      // Threshold reached
+      return {
+        type: 'reached',
+        remaining: 0,
+        benefits: cardBenefit
+      };
+    }
+  };
+
+  /**
+   * Split a group into completed promo groups and leftover items
+   * Used when quantity exceeds threshold to show separate visual groups
+   * @param {Array} group - Array of cart lines in the group (format: [{cartLine, product}, ...])
+   * @param {number} threshold - Quantity threshold for promo
+   * @returns {Object} - Split groups object
+   *   Format: { completedGroups: [{cartLines: [...], quantity: number}], leftoverItems: [{cartLine, product, quantity}] }
+   */
+  const splitGroupByPromoGroups = (group, threshold) => {
+    if (!group || group.length === 0 || !threshold) {
+      return {
+        completedGroups: [],
+        leftoverItems: []
+      };
+    }
+
+    // Get promo groups using selectProductsForDiscount
+    const promoGroups = selectProductsForDiscount(group, threshold);
+
+    // Track which cart lines and quantities have been allocated
+    // Use a key based on sku + attributes to track allocations
+    const allocatedQuantities = new Map(); // Map of "sku|attributes" -> allocated quantity
+
+    // Build completed groups
+    const completedGroups = promoGroups.map((promoGroup) => {
+      // Reconstruct cart lines array from promo group products
+      const cartLines = [];
+      const cartLineMap = new Map(); // Track cart lines by sku+attributes
+
+      promoGroup.products.forEach(({ cartLine, quantity }) => {
+        // Create a unique key for this cart line
+        // cartLine might be the group item itself (with sku, attributes, quantity, product)
+        // or it might be nested {cartLine: {...}, product: {...}}
+        const cartLineSku = cartLine.sku || (cartLine.cartLine && cartLine.cartLine.sku);
+        const cartLineAttrs = cartLine.attributes || (cartLine.cartLine && cartLine.cartLine.attributes) || {};
+        const key = `${cartLineSku}|${JSON.stringify(cartLineAttrs)}`;
+        const currentAllocated = allocatedQuantities.get(key) || 0;
+        allocatedQuantities.set(key, currentAllocated + quantity);
+
+        // Find the original group item
+        // Group items have structure: {sku, attributes, quantity, product} (from groupCartProductsByFilter)
+        const originalItem = group.find(g => {
+          const gSku = g.sku || (g.cartLine && g.cartLine.sku);
+          const gAttrs = g.attributes || (g.cartLine && g.cartLine.attributes) || {};
+          return gSku === cartLineSku &&
+            JSON.stringify(gAttrs) === JSON.stringify(cartLineAttrs);
+        });
+
+        if (originalItem) {
+          if (!cartLineMap.has(key)) {
+            // Group item structure: {sku, attributes, quantity, product}
+            cartLineMap.set(key, {
+              cartLine: {
+                sku: originalItem.sku,
+                attributes: originalItem.attributes || {},
+                quantity: 0
+              },
+              product: originalItem.product,
+              quantity: 0
+            });
+          }
+          cartLineMap.get(key).cartLine.quantity += quantity;
+          cartLineMap.get(key).quantity += quantity;
+        }
+      });
+
+      // Convert map to array
+      cartLines.push(...Array.from(cartLineMap.values()));
+
+      return {
+        cartLines: cartLines,
+        quantity: promoGroup.totalQuantity,
+        threshold: threshold
+      };
+    });
+
+    // Find leftover items (items not fully allocated)
+    // Group items have structure: {sku, attributes, quantity, product} (from groupCartProductsByFilter)
+    const leftoverItems = [];
+    group.forEach((groupItem) => {
+      // Handle both structures: {sku, attributes, quantity, product} or {cartLine: {...}, product: {...}}
+      const itemSku = groupItem.sku || (groupItem.cartLine && groupItem.cartLine.sku);
+      const itemAttrs = groupItem.attributes || (groupItem.cartLine && groupItem.cartLine.attributes) || {};
+      const itemQuantity = groupItem.quantity || (groupItem.cartLine && groupItem.cartLine.quantity) || 0;
+      const key = `${itemSku}|${JSON.stringify(itemAttrs)}`;
+      const allocated = allocatedQuantities.get(key) || 0;
+      const remaining = itemQuantity - allocated;
+
+      if (remaining > 0) {
+        leftoverItems.push({
+          cartLine: {
+            sku: itemSku,
+            attributes: itemAttrs,
+            quantity: remaining
+          },
+          product: groupItem.product,
+          quantity: remaining
+        });
+      }
+    });
+
+    return {
+      completedGroups: completedGroups,
+      leftoverItems: leftoverItems
+    };
+  };
+
+  /* global promiseXHRJSON */
+
+  (() => {
+    const DEFAULT_LOCALE = 'en_GB';
+
+    // w.Main.xmlManager.getVariable('locale') returns a string in format "fr_FR.UTF-8"
+    const getReaderLocale = () => w.Main.xmlManager.getVariable('locale').split('.')[0];
+
+    const getTranslationPath = (locale = DEFAULT_LOCALE, isOverride = false) =>
+      `./publication/contents/templates/wishlistV4/translations/${locale}${isOverride ? '-override' : ''}.json`;
+
+    const getTranslations = async () => {
+      const readerLocale = getReaderLocale();
+
+      let translations;
+      try {
+        translations = await promiseXHRJSON(getTranslationPath(readerLocale));
+      } catch {
+        translations = await promiseXHRJSON(getTranslationPath(DEFAULT_LOCALE));
+      }
+
+      try {
+        const overrides = await promiseXHRJSON(getTranslationPath(readerLocale, true));
+        for (let [componentKey, componentOverrides] of Object.entries(overrides)) {
+          for (let [translationKey, overrideValue] of Object.entries(componentOverrides)) {
+            translations[componentKey][translationKey] = overrideValue;
+          }
+        }
+      } catch {
+        // no override file, nothing to do
+      }
+
+      return translations;
+    };
+
+    const translate = (componentKey, translationKey, variables) => {
+      const msgTemplate = window.wishlistV4.translations[componentKey] && window.wishlistV4.translations[componentKey][translationKey];
+
+      if (!msgTemplate) {
+        return translationKey;
+      }
+
+      let msg = msgTemplate;
+      for (let variableName in variables) {
+        if (Object.prototype.hasOwnProperty.call(variables, variableName)) {
+          msg = msg.replaceAll('${' + variableName + '}', variables[variableName]);
+        }
+      }
+
+      return msg;
+    }
+
+    window.wishlistV4.i18n = {
+      getTranslations,
+      translate,
+    };
+  })();
+  var getMediaUrls = function (images) {
+    if (!images) {
+      return [];
+    }
+    return images.map(getMediaUrl);
+  };
+
+  var getMediaUrl = function (image, isOnline = false) {
+    if (!image) {
+      return '';
+    }
+
+    if (image.startsWith('http')) {
+      return image;
+    }
+
+    const folderUrl = window.wishlistV4.config.products.images.folderUrl;
+    const onlineFolderUrl = window.wishlistV4.config.products.images.onlineFolderUrl || folderUrl;
+    const resolvedFolderUrl = isOnline ?
+      onlineFolderUrl :
+      folderUrl;
+    return new URL(resolvedFolderUrl + image, document.baseURI).href;
+  };
+
+  const getFirstImageIndex = (medias) => {
+    if (!medias) {
+      return -1;
+    }
+    return medias.findIndex((media) => media.type === 'image');
+  };
+
+  const getMedias = (urls) => {
+    if (!urls) {
+      return undefined;
+    }
+    return urls && urls.map(getMedia);
+  };
+
+  const getMedia = (url) => {
+    const type = getMediaType(url);
+
+    return {
+      type,
+      url: getMediaUrl(url),
+      onlineUrl: getMediaUrl(url, true),
+    };
+  };
+
+  const getMediaType = (mediaUrl) => {
+    if (mediaUrl.includes('youtube.com')) {
+      return window.wishlistV4.constants.mediaType.YOUTUBE;
+    }
+
+    const isVideo = isVideoFile(mediaUrl);
+    return isVideo ?
+      window.wishlistV4.constants.mediaType.VIDEO :
+      window.wishlistV4.constants.mediaType.IMAGE;
+  }
+
+  const isVideoFile = (mediaUrl) => {
+    const extension = getFileExtension(mediaUrl);
+    const videoExtensions = ['mp4', '.webm', 'avi', '.mov'];
+    return videoExtensions.includes(extension);
+  }
+
+  const getFileExtension = (mediaUrl) => {
+    const splittedUrl = mediaUrl.split('.');
+    return splittedUrl[splittedUrl.length - 1];
+  }
+  var formatProducts = function (products, formatActions) {
+    if (!formatActions || formatActions.length === 0) {
+      return products;
+    }
+    var formatedProducts = [];
+    for (var i = 0; i < products.length; i++) {
+      var product = JSON.parse(JSON.stringify(products[i]));
+      formatedProducts[i] = formatProduct(product, formatActions, i);
+    }
+    return formatedProducts;
+  };
+
+  var formatProduct = function (product, formatActions, lineNumber) {
+    for (var i = 0; i < formatActions.length; i++) {
+      var formatAction = formatActions[i];
+      product = formatProductByAction(product, formatAction);
+    }
+    product.lineNumber = lineNumber;
+    return product;
+  };
+
+  const formatActionName = {
+    RENAME: 'rename',
+    ARRAY: 'array',
+    ARRAY_SPLIT: 'array-split',
+    OBJECT: 'object',
+    CONCAT_TEXT: 'concat-text',
+    NUMBER: 'number',
+    CONCAT: 'concat',
+    INSERT_TEXT: 'insertText',
+    PRICES_BY_QUANTITY: 'pricesByQuantity',
+    LOWERCASE: 'lowercase',
+    COPY: 'copy',
+    WISHLIST_MEDIA: 'media',
+    WISHLIST_MEDIA_ARRAY: 'mediaArray',
+  };
+
+  const formatProductByAction = (product, formatAction) => {
+    switch (formatAction.action) {
+      case formatActionName.RENAME:
+        return formatProductRename(product, formatAction);
+      case formatActionName.ARRAY:
+        return formatProductArray(product, formatAction);
+      case formatActionName.ARRAY_SPLIT:
+        return formatProductArraySplit(product, formatAction);
+      case formatActionName.OBJECT:
+        return formatProductObject(product, formatAction);
+      case formatActionName.CONCAT_TEXT:
+        return formatProductConcatTexts(product, formatAction);
+      case formatActionName.NUMBER:
+        return formatProductNumber(product, formatAction);
+      case formatActionName.CONCAT:
+        // deprecated because 'concat-text' can do multiples 'concat' and 'insertText' in one action
+        return formatProductConcat(product, formatAction);
+      case formatActionName.INSERT_TEXT:
+        return formatProductInsertText(product, formatAction);
+      case formatActionName.PRICES_BY_QUANTITY:
+        return formatPricesByQuantity(product, formatAction);
+      case formatActionName.LOWERCASE:
+        return formatLowercase(product, formatAction);
+      case formatActionName.COPY:
+        return formatCopy(product, formatAction);
+      case formatActionName.WISHLIST_MEDIA:
+        return formatMedia(product, formatAction);
+      case formatActionName.WISHLIST_MEDIA_ARRAY:
+        return formatMediaArray(product, formatAction);
+      default:
+        return product;
+    }
+  };
+
+  const formatPricesByQuantity = (product, formatAction) => {
+    const getTempKey = (i) => `tempPriceByQuantity-${i}`;
+    const keyAsNumbers = formatAction.sourcePrices.concat(formatAction.sourceQuantities);
+    keyAsNumbers.forEach(key => {
+      product = formatProductNumber(product, {
+        action: formatActionName.NUMBER,
+        source: key,
+        destination: key
+      });
+    });
+
+    for (let i = 0; i < formatAction.sourceQuantities.length; i++) {
+      const quantityKey = formatAction.sourceQuantities[i];
+      const priceKey = formatAction.sourcePrices[i];
+      const quantity = product[quantityKey];
+      if (quantity) {
+        product = formatProductObject(product, {
+          action: formatActionName.OBJECT,
+          source: {
+            quantity: quantityKey,
+            price: priceKey,
+          },
+          destination: getTempKey(i),
+        });
+      }
+    }
+
+    let tempPriceByQuantityKeys = [];
+    for (let i = 0; i < formatAction.sourceQuantities.length; i++) {
+      const tempPriceByQuantityKey = getTempKey(i);
+      const tempPriceByQuantity = product[tempPriceByQuantityKey];
+      if (tempPriceByQuantity) {
+        tempPriceByQuantityKeys.push(tempPriceByQuantityKey);
+      }
+    }
+
+    product = formatProductArray(product, {
+      action: formatActionName.ARRAY,
+      source: tempPriceByQuantityKeys,
+      destination: formatAction.destination,
+    });
+
+    return product;
+  };
+
+  const formatLowercase = function (product, formatAction) {
+    const value = product[formatAction.source] || '';
+    delete product[formatAction.source];
+    product[formatAction.destination] = value.toLowerCase();
+    return product;
+  };
+
+  const formatMedia = function (product, formatAction) {
+    const value = product[formatAction.source] || '';
+    delete product[formatAction.source];
+    product[formatAction.destination] = getMedia(value);
+    return product;
+  };
+
+
+  const formatMediaArray = function (product, formatAction) {
+    const array = product[formatAction.source] || [];
+    if (!Array.isArray(array)) {
+      array = [array];
+    }
+    delete product[formatAction.source];
+    product[formatAction.destination] = array.map(getMedia);
+    return product;
+  };
+
+  const formatCopy = function (product, formatAction) {
+    var value = product[formatAction.source];
+    product[formatAction.destination] = value;
+    return product;
+  };
+
+  var formatProductInsertText = function (product, formatAction) {
+    var value = product[formatAction.source];
+    delete product[formatAction.source];
+    product[formatAction.destination] = formatAction.before + value + formatAction.after;
+    return product;
+  };
+
+  var formatProductRename = function (product, formatAction) {
+    var value = product[formatAction.source];
+    delete product[formatAction.source];
+    product[formatAction.destination] = value;
+    return product;
+  };
+
+  var formatProductArray = function (product, formatAction) {
+    var array = [];
+    var sources = formatAction.source;
+    for (var i = 0; i < sources.length; i++) {
+      var source = sources[i];
+      var value = product[source];
+      if (value) {
+        array.push(product[source]);
+      }
+      delete product[source];
+    }
+    product[formatAction.destination] = array;
+    return product;
+  };
+
+  var formatProductArraySplit = function (product, formatAction) {
+    var separator = formatAction.separator;
+    var splitArray = [];
+
+    if (product[formatAction.source]) {
+      splitArray = product[formatAction.source]
+        .split(separator)
+        .map(function (element) { return element.trim(); });
+      delete product[formatAction.source];
+    }
+
+    product[formatAction.destination] = splitArray;
+
+    return product;
+  };
+
+  var formatProductNumber = function (product, formatAction) {
+    var originalNumber = product[formatAction.source] || '0';
+    var number = Number(
+      originalNumber
+        .replaceAll(' ', '')
+        .replaceAll(',', '.')
+    );
+
+    if (isNaN(number)) {
+      number = 0;
+    }
+
+    product[formatAction.destination] = number;
+
+    return product;
+  };
+
+  var formatProductObject = function (product, formatAction) {
+    var object = {};
+    var sources = formatAction.source;
+    for (var key in sources) {
+      if (Object.hasOwnProperty.call(sources, key)) {
+        var value = sources[key];
+        var resolvedKey = getResolvedKey(key, product);
+        if (resolvedKey && value) {
+          object[resolvedKey] = product[value];
+        }
+        delete product[value];
+      }
+    }
+    product[formatAction.destination] = object;
+    return product;
+  };
+
+  var getResolvedKey = function (key, product) {
+    if (key.startsWith('@')) {
+      var propertyName = key.substring(1);
+      if (propertyName) {
+        return product[propertyName] || '';
+      }
+    }
+
+    return key || '';
+  };
+
+  var formatProductConcat = function (product, formatAction) {
+    var concatString = '';
+    var sources = formatAction.source;
+    for (var i = 0; i < sources.length; i++) {
+      var source = sources[i];
+      concatString += product[source];
+      delete product[source];
+    }
+    product[formatAction.destination] = concatString;
+    return product;
+  };
+
+  var formatProductConcatTexts = function (product, formatAction) {
+    var concatString = '';
+    var sources = formatAction.source;
+    for (var i = 0; i < sources.length; i++) {
+      var source = sources[i];
+      concatString += getResolvedKey(source, product);
+      delete product[source];
+    }
+    product[formatAction.destination] = concatString;
+    return product;
+  };
+
+  var formatProductPages = function (product) {
+    // Starting with 3.65 release, the product.page (number) field becomes product.pages (number[]) field
+    // To avoid issues if using an old product excel file with the new code or new project with an old custom dev, we format both fields
+    // But the product.page field is considered deprecated and should not be used
+    if (product.page) {
+      product.pages = [product.page];
+    } else if (product.pages) {
+      product.page = product.pages[0];
+    }
+  };
+  var trackSearch = function (request) {
+    var eventName = eventNames.SEARCH;
+
+    var variables = {
+      1: request,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackSearchResultClicked = function (product, request) {
+    var eventName = eventNames.SEARCH_RESULT_CLICKED;
+
+    var variables = {
+      1: product.title,
+      2: product.sku,
+      3: request,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackProductOpened = function (product, source) {
+    var eventName = eventNames.PRODUCT_OPENED;
+
+    var variables = {
+      1: product.title,
+      2: product.sku,
+      3: source,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackProductAdded = function (product) {
+    var eventName = eventNames.PRODUCT_ADDED;
+
+    var variables = {
+      1: product.title,
+      2: product.sku,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackProductShared = function (product) {
+    var eventName = eventNames.PRODUCT_SHARED;
+
+    var variables = {
+      1: product.title,
+      2: product.sku,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackCartOpened = function () {
+    var eventName = eventNames.CART_OPENED;
+
+    var variables = {};
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackCartCleared = function () {
+    var eventName = eventNames.CART_CLEARED;
+
+    var variables = {};
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackCartClickSend = function () {
+    var eventName = eventNames.CART_CLICK_SEND;
+
+    var variables = {};
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackCartClickShare = function (method) {
+    var eventName = eventNames.CART_CLICK_SHARE;
+
+    var variables = {
+      1: method,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackCartSent = function () {
+    var eventName = eventNames.CART_SENT;
+
+    var variables = {};
+
+    sendEvent(eventName, variables);
+  };
+
+  var trackProductSent = function (product) {
+    var eventName = eventNames.PRODUCT_SENT;
+
+    var variables = {
+      1: product.title,
+      2: product.sku,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  const trackVideoPlay = function (product, video, time) {
+    const eventName = eventNames.VIDEO_PLAY;
+
+    const variables = {
+      1: product.sku,
+      2: video,
+      3: time,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  const trackVideoPause = function (product, video, time) {
+    const eventName = eventNames.VIDEO_PAUSE;
+
+    const variables = {
+      1: product.sku,
+      2: video,
+      3: time,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  const trackVideoEnd = function (product, video) {
+    const eventName = eventNames.VIDEO_END;
+
+    const variables = {
+      1: product.sku,
+      2: video,
+    };
+
+    sendEvent(eventName, variables);
+  };
+
+  const sendEvent = function (name, variables) {
+    NIApi.stat.trackEvent(
+      name,
+      variables
+    );
+  };
+
+  var eventNames = {
+    SEARCH: 'wishlist-search',
+    SEARCH_RESULT_CLICKED: 'wishlist-searchResultClicked',
+    PRODUCT_OPENED: 'wishlist-productOpened',
+    PRODUCT_ADDED: 'wishlist-productAdded',
+    PRODUCT_SHARED: 'wishlist-productShared',
+    CART_OPENED: 'wishlist-cartOpened',
+    CART_CLEARED: 'wishlist-cartCleared',
+    CART_CLICK_SEND: 'wishlist-cartClickSend',
+    CART_CLICK_SHARE: 'wishlist-cartClickShare',
+    CART_SENT: 'wishlist-cartSent',
+    PRODUCT_SENT: 'wishlist-productSent',
+    VIDEO_PLAY: 'wishlist-videoPlay',
+    VIDEO_PAUSE: 'wishlist-videoPause',
+    VIDEO_END: 'wishlist-videoEnd',
+  };
+
+  var trackingConfigs = [
+    {
+      type: 'event',
+      name: eventNames.SEARCH,
+      properties: {
+        category: 'search',
+        action: eventNames.SEARCH,
+        label: 'search product ${1}',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.SEARCH_RESULT_CLICKED,
+      properties: {
+        category: 'search',
+        action: eventNames.SEARCH_RESULT_CLICKED,
+        label: 'search result ${1}-${2} clicked from request ${3}',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.PRODUCT_OPENED,
+      properties: {
+        category: 'navigation',
+        action: eventNames.PRODUCT_OPENED,
+        label: 'product ${1}-${2} opened from ${3}',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.PRODUCT_ADDED,
+      properties: {
+        category: 'cart',
+        action: eventNames.PRODUCT_ADDED,
+        label: 'product ${1}-${2} added to cart',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.PRODUCT_SHARED,
+      properties: {
+        category: 'cart',
+        action: eventNames.PRODUCT_SHARED,
+        label: 'product ${1}-${2} shared',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.CART_OPENED,
+      properties: {
+        category: 'cart',
+        action: eventNames.CART_OPENED,
+        label: 'cart opened',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.CART_CLEARED,
+      properties: {
+        category: 'cart',
+        action: eventNames.CART_CLEARED,
+        label: 'cart cleared',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.CART_CLICK_SEND,
+      properties: {
+        category: 'share',
+        action: eventNames.CART_CLICK_SEND,
+        label: 'wishlist cart click send',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.CART_CLICK_SHARE,
+      properties: {
+        category: 'share',
+        action: eventNames.CART_CLICK_SHARE,
+        label: 'wishlist cart click share ${1}',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.CART_SENT,
+      properties: {
+        category: 'share',
+        action: eventNames.CART_SENT,
+        label: 'wishlist cart sent',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.PRODUCT_SENT,
+      properties: {
+        category: 'share',
+        action: eventNames.PRODUCT_SENT,
+        label: 'product ${1}-${2} sent',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.VIDEO_PLAY,
+      properties: {
+        category: 'navigation',
+        action: eventNames.VIDEO_PLAY,
+        label: 'product video play ${1}-${2} at ${3}',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.VIDEO_PAUSE,
+      properties: {
+        category: 'navigation',
+        action: eventNames.VIDEO_PAUSE,
+        label: 'product video pause ${1}-${2} at ${3}',
+      },
+    },
+    {
+      type: 'event',
+      name: eventNames.VIDEO_END,
+      properties: {
+        category: 'navigation',
+        action: eventNames.VIDEO_END,
+        label: 'product video finished ${1}-${2}',
+      },
+    },
+  ];
+
+  window.addEventListener('webpub-init', () => {
+    trackingConfigs
+      .forEach(trackingConfig =>
+        NIApi.stat.addTracker(trackingConfig.type, trackingConfig.name, trackingConfig.properties)
+      );
+  });
+  const getProjectUrl = (projectUrl, distributor, playlistParam, cartProducts) => {
+    const projectLinkUrl = new URL(projectUrl);
+
+    if (distributor) {
+      projectLinkUrl.searchParams.set('transferring', distributor);
+    }
+
+    var currentUrl = new URL(window.location.href);
+    var transferringValue = currentUrl.searchParams.get('transferring');
+
+    if (transferringValue !== null && !projectLinkUrl.searchParams.has('transferring')) {
+      projectLinkUrl.searchParams.set('transferring', transferringValue);
+    }
+
+    if (playlistParam) {
+      projectLinkUrl.searchParams.set(playlistParam.key, playlistParam.value);
+    }
+
+    if (cartProducts) {
+      const hashObject = new URLSearchParams();
+      hashObject.set('wlSelection', wishlistV4.utils.getSelectionParamFromCart(cartProducts));
+      projectLinkUrl.hash = hashObject.toString();
+    }
+
+    return projectLinkUrl.href;
+  };
+
+  const getSharePlaylistParam = (cartProducts) => {
+    const config = wishlistV4.config;
+    if (!config.playlist || config.playlist.enabled !== true) {
+      return config.playlistParam;
+    }
+
+    return wishlistV4.utils.getPlaylistParamFromCart(wishlistV4.products, cartProducts, config.playlist.importantPages || []);
+  };
+
+  // Needed for Windows container using old Edge webview
+  if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function (str, newStr) {
+
+      // If a regex pattern
+      if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
+        return this.replace(str, newStr);
+      }
+
+      // If a string
+      return this.replace(new RegExp(str, 'g'), newStr);
+
+    };
+  }
+  /* global NIApi, w, Promise */
+
+  /* initialization at start */
+  var init = function () {
+    window.wishlistV4.constants = {
+      shareFormType: {
+        DISTRIBUTORS: 'distributors',
+        SHARE: 'share',
+      },
+      mediaType: {
+        IMAGE: 'image',
+        VIDEO: 'video',
+        YOUTUBE: 'youtube',
+      }
+    };
+
+
+    window.wishlistV4.selectedDistributorId = null;
+
+    window.wishlistV4.utils = {
+      getProductData: (productPath, field, isSlider = false) => {
+        let product = window.wishlistV4.products[productPath.reference];
+        if (!product) {
+          return null;
+        }
+
+        if (productPath.relatedProductIndex !== undefined) {
+          product = window.wishlistV4.products[product.relatedProducts[productPath.relatedProductIndex]];
+        }
+
+        if (!product) {
+          return null;
+        }
+
+        return getProductField(product, field, isSlider);
+      },
+      getDisplayedSku: (product) => product.displayedSku || product.sku,
+      getDisplayedPrice: (price, currency, decimalSeparator) => {
+        const DEFAULT_SEPARATOR = ',';
+        const SEPS = ['.', ','];
+        const sep = SEPS.includes(decimalSeparator) ? decimalSeparator : DEFAULT_SEPARATOR;
+        const fixedPrice = price.toFixed(2);
+        const parts = fixedPrice.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');// add a space every 3 numbers
+        const displayedPriceNumber = parts.join(sep);
+
+        return `${displayedPriceNumber}${currency}`;
+      },
+      getPriceByQuantity: (product, quantity) => {
+        let price = product.price;
+        const pricesByQuantity = product.pricesByQuantity;
+        if (pricesByQuantity) {
+          for (let i = 0; i < pricesByQuantity.length; i++) {
+            const priceByQuantity = pricesByQuantity[i];
+            if (quantity >= priceByQuantity.quantity) {
+              price = priceByQuantity.price;
+            }
+          }
+        }
+
+        return price || 0;
+      },
+      getProductUrl: (projectUrl, distributor, product, attributes, hideProductPages, isProductHTML, source, playlistParam) => {
+        const projectRootUrl = projectUrl.replace('/index.html', '/');
+        const productBaseUrl = isProductHTML === true ?
+          `${projectRootUrl}products/${product.sku}.html` :
+          projectUrl;
+
+        const productUrl = new URL(productBaseUrl);
+        productUrl.searchParams.set('initState', 'nowelcomepage');
+        if (distributor) {
+          productUrl.searchParams.set('transferring', distributor);
+        }
+        if (playlistParam) {
+          productUrl.searchParams.set(playlistParam.key, playlistParam.value);
+        }
+
+        var currentUrl = new URL(window.location.href);
+        var transferringValue = currentUrl.searchParams.get('transferring');
+
+        if (transferringValue !== null && !productUrl.searchParams.has('transferring')) {
+          productUrl.searchParams.set('transferring', transferringValue);
+        }
+
+        const hashObject = new URLSearchParams();
+        const { pages, sku } = product;
+        const publicationPage = (pages && pages[0]) || 1;
+        hashObject.set('page', publicationPage);
+        if (!hideProductPages) {
+          hashObject.set('wlSku', sku);
+          hashObject.set('wlAttributes', JSON.stringify(attributes));
+          hashObject.set('wlSource', source);
+        }
+        productUrl.hash = hashObject.toString();
+
+        return productUrl;
+      },
+      getTotalCartPrice: (products, cart, priceRatio) =>
+        cart.reduce((previousTotalPrice, cartLine) => {
+          const product = products[cartLine.sku];
+          if (!product) {
+            return previousTotalPrice;
+          }
+          const priceByQuantity = window.wishlistV4.utils.getPriceByQuantity(product, cartLine.quantity);
+          return previousTotalPrice += cartLine.quantity * priceByQuantity * priceRatio;
+        }, 0),
+      // Discount utilities
+      hasPromoClassique: hasPromoClassique,
+      hasPromoCarte: hasPromoCarte,
+      getPromoType: getPromoType,
+      groupCartProductsByFilter: groupCartProductsByFilter,
+      getGroupTotalQuantity: getGroupTotalQuantity,
+      getGroupPromoThreshold: getGroupPromoThreshold,
+      selectProductsForDiscount: selectProductsForDiscount,
+      calculateAveragePrice: calculateAveragePrice,
+      calculateClassicDiscount: calculateClassicDiscount,
+      calculateAllClassicDiscounts: calculateAllClassicDiscounts,
+      getCartTotalWithDiscounts: getCartTotalWithDiscounts,
+      getPromoStatusMessage: getPromoStatusMessage,
+      calculateCardDiscount: calculateCardDiscount,
+      calculateAllCardDiscounts: calculateAllCardDiscounts,
+      validatePromoExclusivity: validatePromoExclusivity,
+      getCardPromoStatusMessage: getCardPromoStatusMessage,
+      splitGroupByPromoGroups: splitGroupByPromoGroups,
+      getFirstImageIndex,
+      getPlaylistParamFromCart,
+      getSelectionParamFromCart,
+      getCartFromSelectionParam,
+      getProjectUrl,
+      getSharePlaylistParam,
+      sanitizeSku: (sku) => typeof sku === 'string' ? sku.replace(/\uFEFF/g, '') : sku
+    };
+
+    window.wishlistV4.API = {
+      openProductPopup: function (sku, attributes, source, skuList) {
+        sku = window.wishlistV4.utils.sanitizeSku(sku);
+        const productExists = window.wishlistV4.products[sku];
+        if (!productExists) {
+          displayNotification(window.wishlistV4.API.translate('general', 'product_not_found'));
+          return;
+        }
+        var popupBaseUrl = window.wishlistV4.config.templates.productPopup;
+        var popupUrl = popupBaseUrl + '?isInitialPage=true&sku=' + encodeURIComponent(sku);
+        if (attributes) {
+          popupUrl += '&attributes=' + encodeURIComponent(JSON.stringify(attributes));
+        }
+        if (source) {
+          popupUrl += '&source=' + encodeURIComponent(source);
+        }
+        if (skuList) {
+          popupUrl += '&skuList=' + encodeURIComponent(JSON.stringify(skuList));
+        }
+        NIApi.lightbox.openPopup(popupUrl, 'title/' + '/id/wishlistV4Product' + '/width/1270' + '/header/false');
+      },
+      openCartPanel: function () {
+        doIfCartNotEmpty(function () {
+          var popupUrl = window.wishlistV4.config.templates.cartPopup;
+          NIApi.lightbox.open(popupUrl, 'theme/default' + '/id/wishlistV4Cart');
+          window.wishlistV4.API.tracking.cartOpened();
+        });
+      },
+      openSearchPanel: function () {
+        var popupUrl = window.wishlistV4.config.templates.searchPopup;
+        NIApi.lightbox.openPopup(popupUrl, 'title/' + '/id/wishlistV4Search' + '/width/500');
+      },
+      openSendFormPopup: function () {
+        doIfCartNotEmpty(function () {
+          var popupBaseUrl = window.wishlistV4.config.templates.sendFormPopup;
+          NIApi.lightbox.open(popupBaseUrl, 'theme/default' + '/id/wishlistV4SendForm');
+        });
+      },
+      openProductExternalUrl: function (sku) {
+        const product = window.wishlistV4.products[sku];
+        if (!product) {
+          console.warn('wishlistV4: product not found for sku', sku);
+          return;
+        }
+
+        if (!product.externalUrl) {
+          console.warn('wishlistV4: product has no externalUrl configured for sku', sku);
+          return;
+        }
+
+        window.open(product.externalUrl, '_blank');
+      },
+      setProductInCart: function (sku, attributes, quantity) {
+        const productExists = window.wishlistV4.products[sku];
+        if (!productExists) {
+          displayNotification(window.wishlistV4.API.translate('general', 'product_not_found'));
+          return;
+        }
+        var cartProducts = getCurrentCartProducts();
+
+        if (!cartProducts) {
+          window.wishlistV4.API.openCartPanel();
+          return;
+        }
+
+        var productIndex = window.wishlistV4.API.getProductIndexInCart(sku, attributes);
+        var newQuantity = quantity > 0 && window.wishlistV4.config.general.hideQuantities ?
+          1 :
+          quantity;
+
+        var prevQuantity;
+        if (productIndex === -1) {
+          prevQuantity = 0;
+          cartProducts.push(getCartLine(sku, attributes, newQuantity));
+        } else {
+          prevQuantity = cartProducts[productIndex].quantity;
+          if (newQuantity > 0) {
+            // Preserve isInShoppingList property when updating quantity
+            cartProducts[productIndex].quantity = newQuantity;
+            // Ensure isInShoppingList exists for backward compatibility
+            if (cartProducts[productIndex].isInShoppingList === undefined) {
+              cartProducts[productIndex].isInShoppingList = false;
+            }
+          } else {
+            cartProducts.splice(productIndex, 1);
+          }
+        }
+
+        var isRemoved = prevQuantity > quantity;
+        notifyCartChange(isRemoved);
+
+        setCurrentCartProducts(cartProducts);
+      },
+      addProductInCart: function (sku, attributes, quantity) {
+        sku = window.wishlistV4.utils.sanitizeSku(sku);
+        quantity = quantity || 1;
+        const productExists = window.wishlistV4.products[sku];
+        if (!productExists) {
+          displayNotification(window.wishlistV4.API.translate('general', 'product_not_found'));
+          return;
+        }
+
+        var cartProducts = getCurrentCartProducts();
+        if (!cartProducts) {
+          window.wishlistV4.API.openCartPanel();
+          return;
+        }
+
+        var productIndex = window.wishlistV4.API.getProductIndexInCart(sku, attributes);
+
+        var prevQuantity;
+        var newQuantity;
+        if (productIndex === -1) {
+          prevQuantity = 0;
+          newQuantity = quantity;
+          cartProducts.push(getCartLine(sku, attributes, quantity));
+        } else {
+          prevQuantity = cartProducts[productIndex].quantity;
+          newQuantity = prevQuantity + quantity;
+
+          if (newQuantity > 0) {
+            // Preserve isInShoppingList property when updating quantity
+            cartProducts[productIndex].quantity = window.wishlistV4.config.general.hideQuantities ?
+              1 :
+              newQuantity;
+            // Ensure isInShoppingList exists for backward compatibility
+            if (cartProducts[productIndex].isInShoppingList === undefined) {
+              cartProducts[productIndex].isInShoppingList = false;
+            }
+          } else {
+            cartProducts.splice(productIndex, 1);
+          }
+        }
+
+        var isRemoved = prevQuantity > newQuantity;
+        if (!isRemoved) {
+          window.wishlistV4.API.tracking.productAdded(window.wishlistV4.products[sku]);
+        }
+        notifyCartChange(isRemoved);
+
+        setCurrentCartProducts(cartProducts);
+
+        return newQuantity;
+      },
+      getDistributor: function () {
+        var distributorId = window.wishlistV4.API.getDistributorId();
+        var config = window.wishlistV4.config.contactForm;
+        var distributors = config.distributors;
+
+        return distributors[distributorId];
+      },
+      getDistributorId: function () {
+        return window.wishlistV4.selectedDistributorId || window.wishlistV4.config.contactForm.defaultDistributorId;
+      },
+      setDistributorId: function (distributorId) {
+        window.wishlistV4.selectedDistributorId = distributorId;
+      },
+      getProductIndexInCart: getProductIndexInCart,
+      isProductInCart: function (sku, attributes) {
+        return getProductIndexInCart(sku, attributes) !== -1;
+      },
+      getCart: function () {
+        return getCurrentCart();
+      },
+      getCartList: function () {
+        return getCartList();
+      },
+      getAllCarts: function () {
+        return getCarts().subcarts;
+      },
+      clearCart: function () {
+        setCurrentCartProducts([]);
+      },
+      createCart: function (name) {
+        createCart(name);
+      },
+      deleteCart: function () {
+        deleteCart();
+      },
+      changeCart: function (cartId) {
+        setSelectedCartId(cartId);
+      },
+      updateCartBadge: function () {
+        var cartProducts = getCurrentCartProducts();
+        var badgeValue = 0;
+
+        if (cartProducts) {
+          for (var i = 0; i < cartProducts.length; i++) {
+            badgeValue += cartProducts[i].quantity;
+          }
+        }
+
+        NIApi.menu.setBadge('cart_btn', badgeValue);
+      },
+      translate: window.wishlistV4.i18n.translate,
+      // Discount API
+      hasPromoClassique: hasPromoClassique,
+      hasPromoCarte: hasPromoCarte,
+      getPromoType: getPromoType,
+      groupCartProductsByFilter: groupCartProductsByFilter,
+      getGroupTotalQuantity: getGroupTotalQuantity,
+      getGroupPromoThreshold: getGroupPromoThreshold,
+      selectProductsForDiscount: selectProductsForDiscount,
+      calculateAveragePrice: calculateAveragePrice,
+      calculateClassicDiscount: calculateClassicDiscount,
+      calculateAllClassicDiscounts: calculateAllClassicDiscounts,
+      getCartTotalWithDiscounts: getCartTotalWithDiscounts,
+      getPromoStatusMessage: getPromoStatusMessage,
+      calculateCardDiscount: calculateCardDiscount,
+      calculateAllCardDiscounts: calculateAllCardDiscounts,
+      validatePromoExclusivity: validatePromoExclusivity,
+      getCardPromoStatusMessage: getCardPromoStatusMessage,
+      splitGroupByPromoGroups: splitGroupByPromoGroups,
+      // Shopping List API
+      toggleShoppingListStatus: toggleShoppingListStatus,
+      getShoppingListItems: getShoppingListItems,
+      filterShoppingListItems: filterShoppingListItems,
+      filterCartItems: filterCartItems,
+      sortByRayon: sortByRayon,
+      tracking: {
+        search: trackSearch,
+        searchResultClicked: trackSearchResultClicked,
+        productOpened: trackProductOpened,
+        productAdded: trackProductAdded,
+        productShared: trackProductShared,
+        cartOpened: trackCartOpened,
+        cartCleared: trackCartCleared,
+        cartClickSend: trackCartClickSend,
+        cartClickShare: trackCartClickShare,
+        cartSent: trackCartSent,
+        productSent: trackProductSent,
+        videoPlay: trackVideoPlay,
+        videoPause: trackVideoPause,
+        videoEnd: trackVideoEnd,
+      },
+    };
+
+    const getConfigJson = () => promiseXHRJSON('./publication/contents/templates/wishlistV4/config.json');
+
+    const getDefaultDistributorId = () => {
+      const distributorFromURL = getDistributorIdFromUrl();
+      return distributorFromURL || 'default';
+    };
+
+    const getPlaylistParamFromUrl = () => {
+      const playlistKeys = ['dps', 'dpt', 'dpp'];
+
+      for (let i = 0; i < playlistKeys.length; i++) {
+        const key = playlistKeys[i];
+        const param = getSearchParamFromUrl(key);
+        if (param) {
+          return { key, value: param };
+        }
+      }
+
+      return null;
+    };
+
+    var getDistributorIdFromUrl = function () {
+      return getSearchParamFromUrl('transferring');
+    };
+
+    var getKeyFromUrl = function () {
+      return getSearchParamFromUrl('key');
+    };
+
+    var getSearchParamFromUrl = function (param) {
+      var urlString = window.location.search;
+      var searchParams = new URLSearchParams(urlString);
+
+      return searchParams.get(param);
+    };
+
+    var getProductsJson = function () {
+      var distributorId = getDistributorIdFromUrl();
+      var key = getKeyFromUrl();
+      if (distributorId && key) {
+        return getDistributorProductsJson(distributorId, key)
+          .catch(function () {
+            return getPublicProductsJson();
+          });
+      }
+
+      return getPublicProductsJson();
+    };
+
+    const getPublicProductsJson = () => promiseXHRJSON('./publication/contents/templates/wishlistV4/products.json');
+
+    const getDistributorProductsJson = (distributorId, key) => promiseXHRJSON(`./publication/contents/templates/wishlistV4/products-${distributorId}-${key}.json`);
+
+    Promise.all([getConfigJson(), getProductsJson(), window.wishlistV4.i18n.getTranslations()])
+      .then(([config, products, translations]) => {
+        config.contactForm.defaultDistributorId = getDefaultDistributorId();
+        config.playlistParam = getPlaylistParamFromUrl();
+        window.wishlistV4.config = config;
+        window.wishlistV4.translations = translations;
+
+        window.wishlistV4.config.products.images.folderUrl = w.Utils.resolveVariable(window.wishlistV4.config.products.images.folderUrl);
+        if (window.wishlistV4.config.products.images.onlineFolderUrl) {
+          window.wishlistV4.config.products.images.onlineFolderUrl = w.Utils.resolveVariable(window.wishlistV4.config.products.images.onlineFolderUrl);
+        }
+        return formatProducts(products, window.wishlistV4.config.products.formatActions);
+      })
+      .then((products) => {
+        products = modifyProductsForPlaylistIfNeeded(products);
+        window.wishlistV4.config.projectLogo = getMediaUrl(window.wishlistV4.config.projectLogo);
+
+        window.wishlistV4.products = {};
+        for (let i = 0; i < products.length; i++) {
+          const product = products[i];
+          product.brandLogo = getMediaUrl(product.brandLogo);
+          product.medias = getMedias(product.images);
+          product.descriptionLogos = getMediaUrls(product.descriptionLogos);
+          formatProductPages(product);
+          window.wishlistV4.products[product.sku] = product;
+        }
+      })
+      .then(() => {
+        const disableAutoRelatedProducts = window.wishlistV4.config.products.disableAutoRelatedProducts || (
+          window.wishlistV4.config.products.related &&
+          window.wishlistV4.config.products.related.automatic &&
+          window.wishlistV4.config.products.related.automatic.enabled === false
+        );
+
+        if (disableAutoRelatedProducts) {
+          return;
+        }
+
+        const isBidirectionalRelationDisabled = window.wishlistV4.config.products.related &&
+          window.wishlistV4.config.products.related.automatic &&
+          window.wishlistV4.config.products.related.automatic.bidirectional === false;
+
+        const relationProperties = window.wishlistV4.config.products.related?.automatic?.properties || [];
+
+        const productIds = Object.keys(window.wishlistV4.products);
+        productIds
+          .forEach(productId => autoAddToRelatedProducts(
+            productIds,
+            isBidirectionalRelationDisabled,
+            relationProperties,
+            productId
+          ));
+      })
+      .then(function () {
+        var shouldInitCarts = !isCartsInitialized();
+        if (shouldInitCarts) {
+          var previousCart = initCarts();
+          if (!window.wishlistV4.config.enableMultipleCarts) {
+            createCart('default', previousCart)
+          }
+        }
+      })
+      .catch(function (error) {
+        console.error('Missing/invalid config.json, products.json or translations.json. error:', error);
+      })
+      .then(handleHashParams)
+      .then(() => {
+        NIApi.event.registerPluginEvent('wishlistOpenProduct', (params) => wishlistV4.API.openProductPopup(params.sku, params.attributes));
+        NIApi.event.registerPluginEvent('wishlistAddProductToCart', (params) => wishlistV4.API.addProductInCart(params.sku, params.attributes, params.quantity || 1));
+        NIApi.event.registerPluginEvent('wishlistOpenProductExternalUrl', (params) => wishlistV4.API.openProductExternalUrl(params.sku));
+      }).then(() => {
+        wishlistV4.isLoaded = true;
+        w.Main.eventEmul.callEvent('wishlistLoaded');
+      });
+  };
+
+  const modifyProductsForPlaylistIfNeeded = function (products) {
+    const playlistManager = window.w.Main.playlistManager;
+    if (!playlistManager || playlistManager.isEnabled !== true) {
+      return products;
+    }
+
+    const pageIndexes = playlistManager.getPageIndexes();
+    const filteredProducts = products.filter(product => filterProductsForPlaylist(product, pageIndexes));
+    const modifiedProducts = filteredProducts.map(product => mapProductPagesToPlaylistPages(product, playlistManager));
+
+    return modifiedProducts;
+  };
+
+  const filterProductsForPlaylist = function (product, pageIndexes) {
+    if (!product.pages || product.pages.length === 0) {
+      return true;
+    }
+
+    return product.pages.some(page => pageIndexes.includes(page - 1));
+  }
+
+  const mapProductPagesToPlaylistPages = function (product, playlistManager) {
+    if (product.pages) {
+      product.pages = product.pages.map(page => playlistManager.getPlaylistedPageNumber(page));
+    }
+    return product;
+  }
+
+  const autoAddToRelatedProducts = function (productIds, isBidirectionalRelationDisabled, relationProperties, productId) {
+    const product = window.wishlistV4.products[productId];
+    if (!isBidirectionalRelationDisabled) {
+      if (Array.isArray(product.relatedProducts)) {
+        product.relatedProducts.forEach(relatedProductId => addToRelatedProducts(relatedProductId, productId));
+      }
+    }
+
+    productIds.forEach(comparedProductId => addRelatedProductsByProperties(productId, relationProperties, comparedProductId));
+  };
+
+  const addRelatedProductsByProperties = (productId, relationProperties, comparedProductId) => {
+    const isRelatedByProperty = relationProperties.some(property => areProductsRelatedByProperties(productId, comparedProductId, property));
+    if (isRelatedByProperty) {
+      addToRelatedProducts(productId, comparedProductId);
+    }
+  };
+
+  const areProductsRelatedByProperties = (productId, comparedProductId, property) => {
+    if (productId === comparedProductId) {
+      return false;
+    }
+
+    const product = window.wishlistV4.products[productId];
+    const productValue = product[property];
+    const comparedProduct = window.wishlistV4.products[comparedProductId];
+    const comparedProductValue = comparedProduct[property];
+    if (!productValue || !comparedProductValue) {
+      return false;
+    }
+
+    if (Array.isArray(productValue)) {
+      return productValue.some(value => comparedProductValue.includes(value));
+    }
+
+    return productValue === comparedProductValue;
+  }
+
+  const addToRelatedProducts = (productId, newRelatedProductId) => {
+    if (window.wishlistV4.products[productId]) {
+      const relatedProductIds = window.wishlistV4.products[productId].relatedProducts || [];
+      if (!relatedProductIds.includes(newRelatedProductId)) {
+        relatedProductIds.push(newRelatedProductId);
+      }
+
+      window.wishlistV4.products[productId].relatedProducts = relatedProductIds;
+    }
+  };
+
+  const handleHashParams = () => {
+    const hashParams = getHashValues(['wlSku', 'wlAttributes', 'wlSource', 'wlSelection']);
+
+    const shouldOpenProductPopup = hashParams.wlSku && !window.wishlistV4.config.general.hideProductPages;
+
+    const attributes = parseHashAttributes(hashParams.wlAttributes);
+    const source = hashParams.wlSource || 'publication';
+
+    if (shouldOpenProductPopup) {
+      window.wishlistV4.API.openProductPopup(hashParams.wlSku, attributes, source);
+    }
+
+    handleHashSelectionParam(hashParams.wlSelection, !shouldOpenProductPopup);
+  };
+
+  const getHashValues = keys =>
+    keys.reduce((acc, key) => {
+      acc[key] = getHashValue(key);
+      return acc;
+    }, {});
+
+  const getHashValue = key => {
+    const matches = location.hash.match(new RegExp(key + '=([^&]*)'));
+    return matches && matches.length === 2 ? decodeURIComponent(matches[1]) : null;
+  };
+
+  const parseHashAttributes = attributesString => {
+    if (!attributesString) {
+      return {};
+    }
+
+    try {
+      return JSON.parse(attributesString);
+    } catch (error) {
+      console.error('Error parsing hash param wlAttributes:', error);
+      return {};
+    }
+  };
+
+  const handleHashSelectionParam = (selectionParam, mustOpenCartPanel) => {
+    if (selectionParam) {
+      const cartProducts = getCartFromSelectionParam(selectionParam);
+      if (cartProducts) {
+        setCurrentCartProducts(cartProducts);
+        location.hash = location.hash.replace(/&?wlSelection=[^&]*/, '');
+        if (mustOpenCartPanel) {
+          window.wishlistV4.API.openCartPanel();
+        }
+      }
+    }
+  };
+
+  const getProductField = (product, field, isSlider = false) => {
+    if (!product || !field) {
+      return null;
+    }
+
+    switch (field.key) {
+      case 'firstImage':
+        const firstImageIndex = getFirstImageIndex(product.medias);
+        if (firstImageIndex === -1) {
+          return null;
+        }
+        return product.medias[firstImageIndex].url;
+      case 'medias':
+        return !isSlider ? product.medias[field.position - 1].url : product.medias.map(item => item.url);
+      case 'wpCustom':
+        field.key = field.customFieldName;
+      // fall through default case after replacing the key
+      default:
+        const value = product[field.key];
+        if (Array.isArray(value)) {
+          return !isSlider ? value[(field.position - 1) || 0] : value;
+        }
+        // if field is in an object with a property "url" (usually the case for media fields)
+        if (value && typeof value === 'object' && value.url) {
+          return value.url;
+        }
+        return value;
+    }
+  }
+
+  /* fetch() replacement because in android app, fetch() can't get local files */
+  var promiseXHRJSON = function (fileUrl) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', fileUrl);
+      xhr.onload = function () {
+        try {
+          resolve(JSON.parse(xhr.response));
+        } catch (error) {
+          reject({
+            status: xhr.status,
+            message: error
+          });
+        }
+      }
+      xhr.onerror = () => reject({
+        status: xhr.status,
+        message: xhr.statusText
+      });
+      xhr.send();
+    });
+  };
+
+  window.addEventListener('webpub-init', () => {
+    init();
+  });
+
+</script><style data-checksum="gSwcfnQR2httBdal4weYOOlCwlY3FxmTMZLs6k1W4" data-snippetid="main_css">
+#webpub-lightbox-wishlistV4Cart {
+  max-width: 520px;
+  right: 0;
+  left: auto;
+}
+
+#webpub-lightbox-wishlistV4Product .webpub-lightbox-theater-header {
+  display: none;
+}
+
+#webpub-lightbox-wishlistV4Product .webpub-lightbox-theater-footer {
+  display: none;
+}
+
+#webpub-lightbox-wishlistV4Product .webpub-lightbox-modale-content {
+    padding: 0;
+}
+
+@media (max-width: 990px) {
+  /* When the product popup starts being displayed on 1 column (950px width iframe + the 20px margin at the left and right) */
+  #webpub-lightbox-wishlistV4Product .webpub-lightbox-modale-content {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+</style><link rel="canonical" href="https://folders.intermarche.be/.2026-s45fr/" /></head>
+  <body style="background-color:#f3f3f3">
+    <script src="global_conf/globals.js"></script>
+  
+
+</body></html>
