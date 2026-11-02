@@ -37,3 +37,20 @@ def test_paging_survives_one_repeated_page():
     deals = store.collect()
     first = parse_page(HTML)
     assert len(deals) == 2 * len(first)
+
+
+def test_paging_keeps_pages_when_a_later_page_fails():
+    from collector.stores.delhaize import Delhaize, PROMO_URL
+
+    class FakeResp:
+        def __init__(self, text): self.text = text
+
+    class FakeClient:
+        def get(self, url):
+            if url == PROMO_URL:
+                return FakeResp(HTML)
+            raise RuntimeError("503 Service Unavailable")
+
+    store = Delhaize.__new__(Delhaize)
+    store.client = FakeClient()
+    assert len(store.collect()) == len(parse_page(HTML))

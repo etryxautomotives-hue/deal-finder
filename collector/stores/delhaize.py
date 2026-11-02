@@ -67,7 +67,14 @@ class Delhaize(Store):
         deals, seen, empty = [], set(), 0
         for page in range(MAX_PAGES):
             url = PROMO_URL if page == 0 else f"{PROMO_URL}?pageNumber={page}"
-            new = [d for d in parse_page(self.client.get(url).text, url) if d.source_url not in seen]
+            try:
+                html = self.client.get(url).text
+            except Exception as e:  # a busy server late in the walk shouldn't throw away the pages we already have
+                if page == 0:
+                    raise
+                log.warning("Delhaize: stopped at page %d (%s), keeping %d promotions", page, e, len(deals))
+                break
+            new = [d for d in parse_page(html, url) if d.source_url not in seen]
             if not new:
                 # the site sometimes serves an earlier page again; only stop after two pages in a row add nothing
                 empty += 1

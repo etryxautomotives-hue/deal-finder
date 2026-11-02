@@ -22,6 +22,7 @@ class PoliteClient:
 
     def __init__(self, delay: float = 5.0, user_agent: str = USER_AGENT):
         self.delay = delay
+        self.retry_pause = 30.0
         self.user_agent = user_agent
         self._robots: dict[str, urllib.robotparser.RobotFileParser] = {}
         self._last = 0.0
@@ -49,6 +50,11 @@ class PoliteClient:
             time.sleep(wait)
         self._last = time.monotonic()
         r = self.http.get(url)
+        if r.status_code in (429, 500, 502, 503, 504):  # busy: wait once, then try again
+            retry_after = r.headers.get("Retry-After", "")
+            time.sleep(min(int(retry_after), 120) if retry_after.isdigit() else self.retry_pause)
+            self._last = time.monotonic()
+            r = self.http.get(url)
         r.raise_for_status()
         return r
 
