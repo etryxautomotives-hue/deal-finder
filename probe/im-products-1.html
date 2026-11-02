@@ -1,0 +1,146 @@
+{
+  "project" : "$publication name$",
+  "projectLogo" : "https://fr.zone-secure.net/280309/2594003/sendForm/assets/logo_s.png",
+  "projectName" : "s45",
+  "projectUrl" : "https://folders.intermarche.be/.2026-s45fr/",
+  "templates" : {
+    "productPopup" : "../2594003/product/",
+    "cartPopup" : "../2594003/cart/",
+    "sendFormPopup" : "../2594003/sendForm/",
+    "searchPopup" : "../2594003/search/"
+  },
+  "contactForm" : {
+    "type" : "distributors",
+    "distributors" : {
+      "default" : {
+        "displayName" : "Intermarche Belqium @ Fullteam",
+        "emails" : [ "itm.digital@fullteam.eu" ],
+        "replyTo" : "itm.digital@fullteam.eu",
+        "fromName" : "Intermarche Belqium @ Fullteam",
+        "fromEmail" : "itm.digital@fullteam.eu"
+      }
+    },
+    "formFields" : [ [ {
+      "type" : "inputText",
+      "id" : "email",
+      "required" : true,
+      "verification" : "email"
+    } ], [ {
+      "type" : "distributorSelect",
+      "id" : "distributorSelect",
+      "required" : true
+    } ], [ {
+      "type" : "inputText",
+      "id" : "firstname",
+      "required" : true,
+      "verification" : ""
+    }, {
+      "type" : "inputText",
+      "id" : "lastname",
+      "required" : true,
+      "verification" : ""
+    } ], [ {
+      "type" : "textarea",
+      "id" : "comment",
+      "required" : false
+    } ] ]
+  },
+  "email" : {
+    "fromEmail" : "ddonchev@webpublication.fr",
+    "contact" : {
+      "subject" : "Sélection de produits"
+    },
+    "confirmation" : {
+      "subject" : "Votre Sélection de produits"
+    }
+  },
+  "products" : {
+    "related" : {
+      "automatic" : {
+        "enabled" : true,
+        "bidirectional" : true,
+        "properties" : [ ]
+      }
+    },
+    "share" : {
+      "message" : "Voici ma wishlist : ",
+      "hasHtmlPerProduct" : true
+    },
+    "images" : {
+      "folderUrl" : "${media}2730193/",
+      "isContained" : false
+    },
+    "currency" : "€",
+    "disableAutoRelatedProducts" : true,
+    "formatActions" : [ {
+      "action" : "rename",
+      "source" : "ref",
+      "destination" : "sku"
+    }, {
+      "action" : "rename",
+      "source" : "Nom produit",
+      "destination" : "title"
+    }, {
+      "action" : "rename",
+      "source" : "Logo marque",
+      "destination" : "brandLogo"
+    }, {
+      "action" : "number",
+      "source" : "Prix",
+      "destination" : "price"
+    }, {
+      "action" : "number",
+      "source" : "Prix barré",
+      "destination" : "previousPrice"
+    }, {
+      "action" : "rename",
+      "source" : "Descriptif",
+      "destination" : "description"
+    }, {
+      "action" : "array-split",
+      "source" : "page",
+      "separator" : "|",
+      "destination" : "pages"
+    }, {
+      "action" : "array-split",
+      "source" : "images",
+      "separator" : "|",
+      "destination" : "images"
+    }, {
+      "action" : "array-split",
+      "source" : "Picto",
+      "separator" : "|",
+      "destination" : "descriptionLogos"
+    }, {
+      "action" : "array-split",
+      "source" : "relatedProducts",
+      "separator" : " ",
+      "destination" : "relatedProducts"
+    }, {
+      "action" : "rename",
+      "source" : "groupe filtre",
+      "destination" : "variantGroupReference"
+    }, {
+      "action" : "object",
+      "source" : {
+        "@nom filtre 1" : "valeur filtre 1"
+      },
+      "destination" : "variantAttributes"
+    }, {
+      "action" : "pricesByQuantity",
+      "sourceQuantities" : [ "discountQuantity1", "discountQuantity2", "discountQuantity3" ],
+      "sourcePrices" : [ "discountPrice1", "discountPrice2", "discountPrice3" ],
+      "destination" : "pricesByQuantity"
+    } ]
+  },
+  "cart" : {
+    "shareMethods" : [ "email", "whatsapp" ]
+  },
+  "general" : {
+    "hideQuantities" : false,
+    "hideSKU" : false,
+    "hidePrices" : false,
+    "hideProductImage" : false,
+    "hideProductPages" : false
+  }
+}

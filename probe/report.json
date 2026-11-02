@@ -1,9 +1,25 @@
 {
- "intermarche-0": {
-  "url": "https://folders.intermarche.be/.2026-s45fr/",
-  "final_url": "https://folders.intermarche.be/.2026-s45fr/",
+ "im-products-0": {
+  "url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/products.json",
+  "final_url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/products.json",
   "status": 200,
-  "bytes": 90528,
+  "bytes": 110668,
+  "jsonld_blocks": 0,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": false,
+  "window_state": [],
+  "price_mentions": 4,
+  "api_urls": [],
+  "json_urls": [],
+  "server": "nginx",
+  "promo_links": []
+ },
+ "im-products-1": {
+  "url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/config.json",
+  "final_url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/config.json",
+  "status": 200,
+  "bytes": 3859,
   "jsonld_blocks": 0,
   "jsonld_products": 0,
   "next_data": false,
@@ -11,35 +27,88 @@
   "window_state": [],
   "price_mentions": 0,
   "api_urls": [],
-  "json_urls": [
-   "./publication/contents/templates/wishlistV4/config.json",
-   "./publication/contents/templates/wishlistV4/products.json",
-   "config.json,",
-   "products.json",
-   "promiseXHRJSON(`./publication/contents/templates/wishlistV4/products-${distributorId}-${key}.json`);",
-   "translations.json.",
-   "}.json`;"
-  ],
+  "json_urls": [],
   "server": "nginx",
+  "promo_links": []
+ },
+ "im-index-0": {
+  "url": "https://www.intermarche.be/nl/folders/",
+  "final_url": "https://www.intermarche.be/nl/folders/",
+  "status": 200,
+  "bytes": 127345,
+  "jsonld_blocks": 1,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": false,
+  "window_state": [],
+  "price_mentions": 0,
+  "api_urls": [
+   "https://api.w.org/",
+   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
+   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
+   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
+  ],
+  "json_urls": [
+   "https://www.intermarche.be/files/plugins/gravityforms/js/jquery.json.min.js?ver=3.1.2"
+  ],
+  "server": "cloudflare",
   "promo_links": [
-   "https://folders.intermarche.be/.2026-s45fr/"
+   "https://www.intermarche.be/folders/",
+   "https://www.intermarche.be/nl/folders/",
+   "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
+   "https://www.intermarche.be/nl/folders/feed/",
+   "https://www.intermarche.be/nl/folders/les-offres-du-mois-de-novembre-avec-la-carte-intermarche/",
+   "https://www.intermarche.be/nl/folders/ontdek-de-folder-van-28-07-26/",
+   "https://www.intermarche.be/nl/folders/ontdek-onze-voordelige-slagersprijzen/",
+   "https://www.intermarche.be/nl/onze-acties/",
+   "https://www.intermarche.be/nl/onze-acties/kerstcheque-26/",
+   "https://www.intermarche.be/nl/onze-acties/verjaardag/"
   ]
  },
- "intermarche-1": {
-  "url": "https://folders.intermarche.be/.2026-s45nl/",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://folders.intermarche.be/.2026-s45nl/'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
+ "im-index-1": {
+  "url": "https://www.intermarche.be/folders/",
+  "final_url": "https://www.intermarche.be/folders/",
+  "status": 200,
+  "bytes": 128354,
+  "jsonld_blocks": 1,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": false,
+  "window_state": [],
+  "price_mentions": 0,
+  "api_urls": [
+   "https://api.w.org/",
+   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
+   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
+   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
+  ],
+  "json_urls": [
+   "https://www.intermarche.be/files/plugins/gravityforms/js/jquery.json.min.js?ver=3.1.2"
+  ],
+  "server": "cloudflare",
+  "promo_links": [
+   "https://www.intermarche.be/files/uploads/2026/09/2026-S41_FOLDER-FR.png.webp",
+   "https://www.intermarche.be/folders",
+   "https://www.intermarche.be/folders/",
+   "https://www.intermarche.be/folders/decouvrez-nos-tarifs-economiques-boucherie/",
+   "https://www.intermarche.be/folders/decouvrez-notre-folder-du-03-11-26/",
+   "https://www.intermarche.be/folders/decouvrez-notre-folder-du-28-07-26/",
+   "https://www.intermarche.be/folders/feed/",
+   "https://www.intermarche.be/folders/les-offres-du-mois-de-novembre-avec-la-carte-intermarche/",
+   "https://www.intermarche.be/nl/folders/"
+  ]
  },
  "spar-0": {
-  "url": "https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026",
-  "final_url": "https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026",
+  "url": "https://www.spar.be/promoties",
+  "final_url": "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026",
   "status": 200,
-  "bytes": 56371,
+  "bytes": 56423,
   "jsonld_blocks": 0,
   "jsonld_products": 0,
   "next_data": false,
   "nuxt": false,
   "window_state": [],
-  "price_mentions": 2,
+  "price_mentions": 0,
   "api_urls": [],
   "json_urls": [],
   "server": "cloudflare",
@@ -48,136 +117,6 @@
    "https://www.spar.be/promoties",
    "https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026",
    "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026"
-  ]
- },
- "jumbo-0": {
-  "url": "https://www.jumbo.com/aanbiedingen/nu",
-  "final_url": "https://www.jumbo.com/aanbiedingen/nu",
-  "status": 200,
-  "bytes": 780155,
-  "jsonld_blocks": 0,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": true,
-  "window_state": [
-   "__NUXT__"
-  ],
-  "price_mentions": 0,
-  "api_urls": [],
-  "json_urls": [],
-  "server": "Apache",
-  "promo_links": [
-   "https://www.jumbo.com/INTERSHOP/static/WFS/Jumbo-Grocery-Site/-/Jumbo-Grocery/nl_NL/Images_Aanbiedingen/2026/Weekaanbiedingen/Week%2044/2026_WK44__62.png",
-   "https://www.jumbo.com/_nuxt/assets/logo-mass-promotions-CUQvRFgE.svg",
-   "https://www.jumbo.com/aanbiedingen/alle-bokbieren/3021086",
-   "https://www.jumbo.com/aanbiedingen/alle-chocomel/3021589",
-   "https://www.jumbo.com/aanbiedingen/alle-hak-of-pink-lady-appelmoes-knijpfruit-of-peulvruchten-in-pak-of-zak/3021531",
-   "https://www.jumbo.com/aanbiedingen/alle-jan/3021707",
-   "https://www.jumbo.com/aanbiedingen/alle-jumbo-airfryer-oven-maaltijden/3021362",
-   "https://www.jumbo.com/aanbiedingen/alle-jumbos-verse-woksauzen/3021410",
-   "https://www.jumbo.com/aanbiedingen/alle-old-amsterdam-kaas/3021474",
-   "https://www.jumbo.com/aanbiedingen/alle-vivera/3021682",
-   "https://www.jumbo.com/aanbiedingen/alle-zuivelhoeve/3021607",
-   "https://www.jumbo.com/aanbiedingen/avocado/3023321",
-   "https://www.jumbo.com/aanbiedingen/bezorgen",
-   "https://www.jumbo.com/aanbiedingen/biologische-pompoen-of-flespompoen/3023322",
-   "https://www.jumbo.com/aanbiedingen/blauwe-bessen/3023361",
-   "https://www.jumbo.com/aanbiedingen/bleekselderij/3023270",
-   "https://www.jumbo.com/aanbiedingen/chocotaartje-pistachetaart-of-limited-edition-caramel-chocotaart/3021534",
-   "https://www.jumbo.com/aanbiedingen/dreft-platinum-plus-of-miracle/3021593",
-   "https://www.jumbo.com/aanbiedingen/galia-meloen/3023274",
-   "https://www.jumbo.com/aanbiedingen/gemengd-gehakt/3022981",
-   "https://www.jumbo.com/aanbiedingen/grill-en-gemak/3013645",
-   "https://www.jumbo.com/aanbiedingen/hamburgers/3013651",
-   "https://www.jumbo.com/aanbiedingen/jumbo-gepaneerde-vis/3021701",
-   "https://www.jumbo.com/aanbiedingen/jumbo-oosterse-maaltijden/3013664",
-   "https://www.jumbo.com/aanbiedingen/jumbo-ovenschotels/3021300",
-   "https://www.jumbo.com/aanbiedingen/jumbo-rookworst/3021702",
-   "https://www.jumbo.com/aanbiedingen/jumbo-stamppotgroente-stamppotaardappelen-spekreepjes-of-hamblokjes/3021523",
-   "https://www.jumbo.com/aanbiedingen/jumbo-verse-soep/3019566",
-   "https://www.jumbo.com/aanbiedingen/kaki/3023344",
-   "https://www.jumbo.com/aanbiedingen/kanzi-appels/3023327",
-   "https://www.jumbo.com/aanbiedingen/kip-schnitzel-kip-krokant-schnitzel-kip-sate-schnitzel-kip-cordon-bleu-kip-burger-kip-donut-of-kip-gehaktbal/3013649",
-   "https://www.jumbo.com/aanbiedingen/kipreepjes-of-flakes/3016885",
-   "https://www.jumbo.com/aanbiedingen/mandarijnen/3023343",
-   "https://www.jumbo.com/aanbiedingen/maza/3021661",
-   "https://www.jumbo.com/aanbiedingen/nu",
-   "https://www.jumbo.com/aanbiedingen/nu#folder",
-   "https://www.jumbo.com/aanbiedingen/page-vochtig-toiletpapier/3021558",
-   "https://www.jumbo.com/aanbiedingen/pitloze-witte-druiven/3023342",
-   "https://www.jumbo.com/aanbiedingen/prei/3023314",
-   "https://www.jumbo.com/aanbiedingen/sla-melanges/3021562",
-   "https://www.jumbo.com/aanbiedingen/verse-sperziebonen-of-snijbonen/3021546",
-   "https://www.jumbo.com/aanbiedingen/verspakket-tomatensoep-erwtensoep-griekse-gehaktschotel-pasta-pomodoro-of-lasagne/3021420",
-   "https://www.jumbo.com/aanbiedingen/witlof/3023234",
-   "https://www.jumbo.com/aanbiedingen/zespri-kiwi-sungold/3023317",
-   "https://www.jumbo.com/acties",
-   "https://www.jumbo.com/acties/bieraanbieding",
-   "https://www.jumbo.com/acties/fijnweekendvoordeel",
-   "https://www.jumbo.com/acties/kies-en-mix",
-   "https://www.jumbo.com/acties/weekaanbiedingen"
-  ]
- },
- "jumbo-1": {
-  "url": "https://www.jumbo.com/",
-  "final_url": "https://www.jumbo.com/",
-  "status": 200,
-  "bytes": 783757,
-  "jsonld_blocks": 1,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": true,
-  "window_state": [
-   "__NUXT__"
-  ],
-  "price_mentions": 20,
-  "api_urls": [],
-  "json_urls": [],
-  "server": "Apache",
-  "promo_links": [
-   "https://www.aanbiedersmedicijnen.nl/aanbieders/aanbiederslijst/jumbo-supermarkten-b.v/index",
-   "https://www.jumbo.com/_nuxt/assets/logo-mass-promotions-CUQvRFgE.svg",
-   "https://www.jumbo.com/aanbiedingen/alle-jan/3021707?cb=cta_card1_wk44",
-   "https://www.jumbo.com/aanbiedingen/bezorgen",
-   "https://www.jumbo.com/aanbiedingen/gratis-ontbijtgranen-blik-bij-aankoop-van-2-verpakkingen-jumbos-ontbijtgranen/3023115",
-   "https://www.jumbo.com/aanbiedingen/nu",
-   "https://www.jumbo.com/aanbiedingen/nu?cb=cta_card2_wk44",
-   "https://www.jumbo.com/acties",
-   "https://www.jumbo.com/acties/bestek?cb=cta_card3_wk44",
-   "https://www.jumbo.com/acties/bieraanbieding",
-   "https://www.jumbo.com/acties/fijnweekendvoordeel",
-   "https://www.jumbo.com/acties/kies-en-mix",
-   "https://www.jumbo.com/acties/weekaanbiedingen",
-   "https://www.jumbo.com/service/terugroepactie"
-  ]
- },
- "ah-0": {
-  "url": "https://www.ah.be/bonus",
-  "error": "HTTPStatusError(\"Client error '403 Forbidden' for url 'https://www.ah.be/bonus'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403\")"
- },
- "colruyt-0": {
-  "url": "https://www.colruyt.be/nl/promoties",
-  "error": "HTTPStatusError(\"Client error '405 Method Not Allowed' for url 'https://www.colruyt.be/nl/promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405\")"
- },
- "aldi-0": {
-  "url": "https://www.aldi.be/nl/aanbiedingen.html",
-  "final_url": "https://www.aldi.be/aanbiedingen.html",
-  "status": 200,
-  "bytes": 431569,
-  "jsonld_blocks": 0,
-  "jsonld_products": 0,
-  "next_data": true,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [
-   "https://www.aldi.be/producten/huishouden/zakdoekjes-toiletpapier-en-keukenpapier.html"
-  ],
-  "json_urls": [],
-  "server": null,
-  "promo_links": [
-   "https://www.aldi.be/aanbiedingen.html",
-   "https://www.aldi.be/fr/offres.html"
   ]
  }
 }
