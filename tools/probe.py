@@ -15,14 +15,11 @@ from collector.stores.base import PoliteClient
 
 OUT = Path("probe")
 CANDIDATES = {
-    "aldi": ["https://www.aldi.be/nl/onze-aanbiedingen.html", "https://www.aldi.be/nl/aanbiedingen.html"],
-    "lidl": ["https://www.lidl.be/nl", "https://www.lidl.be/c/nl-BE/promoties/s10008381"],
-    "delhaize": ["https://www.delhaize.be/nl/promotions", "https://www.delhaize.be/nl/promos"],
-    "ah": ["https://www.ah.be/bonus"],
-    "intermarche": ["https://www.intermarche.be/nl/promoties", "https://www.intermarche.be/nl"],
-    "colruyt": ["https://www.colruyt.be/nl/promoties"],
-    "spar": ["https://www.spar.be/nl/promoties", "https://www.spar.be"],
-    "okay": ["https://www.okay.be/nl/promoties"],
+    "lidl": ["https://www.lidl.be/", "https://www.lidl.be/c/nl-BE/aanbiedingen-deze-week/a10008785"],
+    "delhaize": ["https://www.delhaize.be/", "https://www.delhaize.be/nl/shop/Promoties"],
+    "spar": ["https://www.spar.be/promoties"],
+    "intermarche": ["https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/"],
+    "carrefour": ["https://www.carrefour.be/robots.txt"],
 }
 SITEMAPS = {
     "lidl": "https://www.lidl.be/static/sitemap.xml",
