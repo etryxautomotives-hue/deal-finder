@@ -16,6 +16,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m collector.run aldi lidl delhaize 2>&1 | tee probe-run.log
       - run: python -m collector.locations 2>&1 | tail -5 | tee -a probe-run.log || true
+      - run: python tools/thumbs.py 2>&1 | tail -5 | tee -a probe-run.log || true
       - run: |
           mkdir -p probe; mv probe-run.log probe/; cp data/*.json probe/ 2>/dev/null || true
           git config user.name "deal-collector"; git config user.email "actions@users.noreply.github.com"
