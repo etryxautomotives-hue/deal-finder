@@ -1,25 +1,17 @@
 {
- "im-products-0": {
-  "url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/products.json",
-  "final_url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/products.json",
-  "status": 200,
-  "bytes": 110668,
-  "jsonld_blocks": 0,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 4,
-  "api_urls": [],
-  "json_urls": [],
-  "server": "nginx",
-  "promo_links": []
+ "im-img-0": {
+  "url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/media/2730193/24710470.webp",
+  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://folders.intermarche.be/.2026-s45fr/publication/contents/media/2730193/24710470.webp'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
  },
- "im-products-1": {
-  "url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/config.json",
-  "final_url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/config.json",
+ "im-img-1": {
+  "url": "https://folders.intermarche.be/.2026-s45fr/publication/contents/media-epub/2730193/24710470.webp",
+  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://folders.intermarche.be/.2026-s45fr/publication/contents/media-epub/2730193/24710470.webp'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
+ },
+ "im-img-2": {
+  "url": "https://fr.zone-secure.net/863887/2730193/24710470.webp",
+  "final_url": "https://fr.zone-secure.net/863887/2730193/24710470.webp",
   "status": 200,
-  "bytes": 3859,
+  "bytes": 251945,
   "jsonld_blocks": 0,
   "jsonld_products": 0,
   "next_data": false,
@@ -29,94 +21,7 @@
   "api_urls": [],
   "json_urls": [],
   "server": "nginx",
-  "promo_links": []
- },
- "im-index-0": {
-  "url": "https://www.intermarche.be/nl/folders/",
-  "final_url": "https://www.intermarche.be/nl/folders/",
-  "status": 200,
-  "bytes": 127345,
-  "jsonld_blocks": 1,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [
-   "https://api.w.org/",
-   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
-   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
-   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
-  ],
-  "json_urls": [
-   "https://www.intermarche.be/files/plugins/gravityforms/js/jquery.json.min.js?ver=3.1.2"
-  ],
-  "server": "cloudflare",
-  "promo_links": [
-   "https://www.intermarche.be/folders/",
-   "https://www.intermarche.be/nl/folders/",
-   "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
-   "https://www.intermarche.be/nl/folders/feed/",
-   "https://www.intermarche.be/nl/folders/les-offres-du-mois-de-novembre-avec-la-carte-intermarche/",
-   "https://www.intermarche.be/nl/folders/ontdek-de-folder-van-28-07-26/",
-   "https://www.intermarche.be/nl/folders/ontdek-onze-voordelige-slagersprijzen/",
-   "https://www.intermarche.be/nl/onze-acties/",
-   "https://www.intermarche.be/nl/onze-acties/kerstcheque-26/",
-   "https://www.intermarche.be/nl/onze-acties/verjaardag/"
-  ]
- },
- "im-index-1": {
-  "url": "https://www.intermarche.be/folders/",
-  "final_url": "https://www.intermarche.be/folders/",
-  "status": 200,
-  "bytes": 128354,
-  "jsonld_blocks": 1,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [
-   "https://api.w.org/",
-   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
-   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
-   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
-  ],
-  "json_urls": [
-   "https://www.intermarche.be/files/plugins/gravityforms/js/jquery.json.min.js?ver=3.1.2"
-  ],
-  "server": "cloudflare",
-  "promo_links": [
-   "https://www.intermarche.be/files/uploads/2026/09/2026-S41_FOLDER-FR.png.webp",
-   "https://www.intermarche.be/folders",
-   "https://www.intermarche.be/folders/",
-   "https://www.intermarche.be/folders/decouvrez-nos-tarifs-economiques-boucherie/",
-   "https://www.intermarche.be/folders/decouvrez-notre-folder-du-03-11-26/",
-   "https://www.intermarche.be/folders/decouvrez-notre-folder-du-28-07-26/",
-   "https://www.intermarche.be/folders/feed/",
-   "https://www.intermarche.be/folders/les-offres-du-mois-de-novembre-avec-la-carte-intermarche/",
-   "https://www.intermarche.be/nl/folders/"
-  ]
- },
- "spar-0": {
-  "url": "https://www.spar.be/promoties",
-  "final_url": "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026",
-  "status": 200,
-  "bytes": 56423,
-  "jsonld_blocks": 0,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [],
-  "json_urls": [],
-  "server": "cloudflare",
-  "promo_links": [
-   "https://www.spar.be/acties",
-   "https://www.spar.be/promoties",
-   "https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026",
-   "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026"
-  ]
+  "promo_links": [],
+  "type": "image/webp"
  }
 }
