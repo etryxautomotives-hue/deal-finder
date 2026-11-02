@@ -1,104 +1,57 @@
 {
- "aldi-0": {
-  "url": "https://www.aldi.be/nl/onze-aanbiedingen.html",
-  "final_url": "https://www.aldi.be/",
-  "status": 200,
-  "bytes": 121016,
-  "jsonld_blocks": 1,
-  "jsonld_products": 0,
-  "next_data": true,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [
-   "https://www.aldi.be/producten/huishouden/zakdoekjes-toiletpapier-en-keukenpapier.html"
-  ],
-  "promo_links": []
- },
- "aldi-1": {
-  "url": "https://www.aldi.be/nl/aanbiedingen.html",
-  "final_url": "https://www.aldi.be/aanbiedingen.html",
-  "status": 200,
-  "bytes": 431569,
-  "jsonld_blocks": 0,
-  "jsonld_products": 0,
-  "next_data": true,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [
-   "https://www.aldi.be/producten/huishouden/zakdoekjes-toiletpapier-en-keukenpapier.html"
-  ],
-  "promo_links": [
-   "https://www.aldi.be/aanbiedingen.html",
-   "https://www.aldi.be/fr/offres.html"
-  ]
- },
  "lidl-0": {
-  "url": "https://www.lidl.be/nl",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.lidl.be/nl'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "lidl-1": {
-  "url": "https://www.lidl.be/c/nl-BE/promoties/s10008381",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.lidl.be/c/nl-BE/promoties/s10008381'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "delhaize-0": {
-  "url": "https://www.delhaize.be/nl/promotions",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.delhaize.be/nl/promotions'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "delhaize-1": {
-  "url": "https://www.delhaize.be/nl/promos",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.delhaize.be/nl/promos'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "ah-0": {
-  "url": "https://www.ah.be/bonus",
-  "error": "HTTPStatusError(\"Client error '403 Forbidden' for url 'https://www.ah.be/bonus'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403\")"
- },
- "intermarche-0": {
-  "url": "https://www.intermarche.be/nl/promoties",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.intermarche.be/nl/promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "intermarche-1": {
-  "url": "https://www.intermarche.be/nl",
-  "final_url": "https://www.intermarche.be/nl/",
+  "url": "https://www.lidl.be/",
+  "final_url": "https://www.lidl.be/",
   "status": 200,
-  "bytes": 225899,
+  "bytes": 509118,
   "jsonld_blocks": 1,
   "jsonld_products": 0,
   "next_data": false,
   "nuxt": false,
   "window_state": [],
-  "price_mentions": 7,
-  "api_urls": [
-   "https://api.w.org/",
-   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
-   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
-   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
-  ],
+  "price_mentions": 0,
+  "api_urls": [],
   "promo_links": [
-   "https://www.intermarche.be/nl/folders/",
-   "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
-   "https://www.intermarche.be/nl/folders/les-offres-du-mois-de-novembre-avec-la-carte-intermarche/",
-   "https://www.intermarche.be/nl/folders/ontdek-onze-voordelige-slagersprijzen/",
-   "https://www.intermarche.be/nl/onze-acties/",
-   "https://www.intermarche.be/nl/onze-acties/action-epargne-berghoff-26/",
-   "https://www.intermarche.be/nl/onze-acties/kerstcheque-26/",
-   "https://www.intermarche.be/nl/onze-acties/verjaardag/"
+   "https://folder-fr.lidl.be/fr-folder-02-11-07-11/page/1",
+   "https://folder-fr.lidl.be/fr-folder-02-11-07-11/page/8-9",
+   "https://www.lidl.be/c/fr-BE/offres-du-jour/s10062047",
+   "https://www.lidl.be/c/fr-BE/promos/s10077610",
+   "https://www.lidl.be/c/fr-BE/promotions-cette-semaine/a10082242",
+   "https://www.lidl.be/q/fr-BE/query/promo"
   ]
  },
- "colruyt-0": {
-  "url": "https://www.colruyt.be/nl/promoties",
-  "error": "HTTPStatusError(\"Client error '405 Method Not Allowed' for url 'https://www.colruyt.be/nl/promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405\")"
+ "lidl-1": {
+  "url": "https://www.lidl.be/c/nl-BE/aanbiedingen-deze-week/a10008785",
+  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.lidl.be/c/nl-BE/aanbiedingen-deze-week/a10008785'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
+ },
+ "delhaize-0": {
+  "url": "https://www.delhaize.be/",
+  "final_url": "https://www.delhaize.be/",
+  "status": 200,
+  "bytes": 324598,
+  "jsonld_blocks": 3,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": false,
+  "window_state": [],
+  "price_mentions": 13,
+  "api_urls": [],
+  "promo_links": [
+   "https://www.delhaize.be/folderpage",
+   "https://www.delhaize.be/nl/Promolandingpage",
+   "https://www.delhaize.be/nl/folder",
+   "https://www.delhaize.be/nl/folder?cmpname=folder-of-the-week-1-2"
+  ]
+ },
+ "delhaize-1": {
+  "url": "https://www.delhaize.be/nl/shop/Promoties",
+  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.delhaize.be/nl/shop/Promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
  },
  "spar-0": {
-  "url": "https://www.spar.be/nl/promoties",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.spar.be/nl/promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "spar-1": {
-  "url": "https://www.spar.be",
-  "final_url": "https://www.spar.be",
+  "url": "https://www.spar.be/promoties",
+  "final_url": "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026",
   "status": 200,
-  "bytes": 70412,
+  "bytes": 56423,
   "jsonld_blocks": 0,
   "jsonld_products": 0,
   "next_data": false,
@@ -108,12 +61,42 @@
   "api_urls": [],
   "promo_links": [
    "https://www.spar.be/acties",
-   "https://www.spar.be/promoties"
+   "https://www.spar.be/promoties",
+   "https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026",
+   "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026"
   ]
  },
- "okay-0": {
-  "url": "https://www.okay.be/nl/promoties",
-  "error": "HTTPStatusError(\"Client error '405 Method Not Allowed' for url 'https://www.okay.be/nl/promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405\")"
+ "intermarche-0": {
+  "url": "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
+  "final_url": "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
+  "status": 200,
+  "bytes": 83130,
+  "jsonld_blocks": 1,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": false,
+  "window_state": [],
+  "price_mentions": 0,
+  "api_urls": [
+   "https://api.w.org/",
+   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
+   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
+   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
+  ],
+  "promo_links": [
+   "https://www.intermarche.be/folders/decouvrez-notre-folder-du-03-11-26/",
+   "https://www.intermarche.be/nl/folders/",
+   "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
+   "https://www.intermarche.be/nl/onze-acties/",
+   "https://www.intermarche.be/nl/onze-acties/kerstcheque-26/",
+   "https://www.intermarche.be/nl/onze-acties/verjaardag/",
+   "https://www.intermarche.be/nl/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.intermarche.be%2Fnl%2Ffolders%2Fdecouvrez-notre-folder-du-03-11-26%2F",
+   "https://www.intermarche.be/nl/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.intermarche.be%2Fnl%2Ffolders%2Fdecouvrez-notre-folder-du-03-11-26%2F&#038;format=xml"
+  ]
+ },
+ "carrefour-0": {
+  "url": "https://www.carrefour.be/robots.txt",
+  "error": "PermissionError('robots.txt disallows https://www.carrefour.be/robots.txt')"
  },
  "sitemap-lidl": {
   "count": 6,
