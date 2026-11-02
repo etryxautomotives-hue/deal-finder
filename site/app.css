@@ -475,6 +475,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* account */
 .accbtn{width:var(--tap);height:var(--tap);border:0;border-radius:50%;background:transparent;display:grid;place-items:center;position:relative}
 .accbtn:hover{background:var(--soft)}
+.accbtn:has(.lbl:not(:empty)){width:auto;gap:6px;padding:0 var(--s3) 0 10px;border:1.5px solid var(--ink);border-radius:var(--pill);display:inline-flex;align-items:center;font-size:var(--t-sm);font-weight:600;white-space:nowrap}
+.accbtn .lbl:empty{display:none}
 .accbtn.in::after{content:"";position:absolute;right:8px;bottom:9px;width:9px;height:9px;border-radius:50%;background:var(--lime-d);box-shadow:0 0 0 2px var(--bg)}
 .acc .muted{color:var(--muted);font-size:var(--t-sm);margin:0 0 var(--s4)}
 .acc .small{font-size:12.5px;margin:var(--s3) 0 0}
