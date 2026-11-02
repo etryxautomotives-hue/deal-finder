@@ -1,20 +1,47 @@
-2026-11-02 19:25:04,694 INFO HTTP Request: GET https://www.aldi.be/robots.txt "HTTP/1.1 200 OK"
-2026-11-02 19:25:05,773 INFO HTTP Request: GET https://www.aldi.be/nl/aanbiedingen.html "HTTP/1.1 301 Moved Permanently"
-2026-11-02 19:25:06,789 INFO HTTP Request: GET https://www.aldi.be/aanbiedingen.html "HTTP/1.1 200 OK"
-2026-11-02 19:25:06,986 INFO Aldi: 83 deals
-2026-11-02 19:25:07,416 INFO HTTP Request: GET https://www.lidl.be/robots.txt "HTTP/1.1 200 OK"
-2026-11-02 19:25:09,730 INFO HTTP Request: GET https://www.lidl.be/c/nl-BE/store/acties-deze-week/a10082242 "HTTP/1.1 200 OK"
-2026-11-02 19:25:09,779 INFO Lidl: 21 deals
-2026-11-02 19:25:10,453 INFO HTTP Request: GET https://www.delhaize.be/robots.txt "HTTP/1.1 200 OK"
-2026-11-02 19:25:18,401 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage "HTTP/1.1 200 OK"
-2026-11-02 19:25:24,710 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=1 "HTTP/1.1 200 OK"
-2026-11-02 19:25:24,792 INFO Delhaize: 20 promotions over 2 pages
-2026-11-02 19:25:24,795 INFO Delhaize: 20 deals
-2026-11-02 19:25:24,808 INFO saved 124 deals, failed stores: none
-2026-11-02 19:26:11,297 INFO HTTP Request: POST https://overpass-api.de/api/interpreter "HTTP/1.1 200 OK"
-2026-11-02 19:26:13,974 INFO saved 3338 stores
-fail https://imgproxy-retcat.assets.schwarz/roWpSnsfJ2pPW2aG3d-MDyinpRjZzRuA5zcbv6Yukf8/sm:0/exar:1:ce/w:427/h:320/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzE4REI1ODRCQ0FGQ0NDMkU5OUY0NTVFMz/UyQjk3MDc0MzRCRDQwNDI1QkZBQzBBNzJBNTc0NzRGN0IzQjAyMTgucG5n.png Client error '403 Forbidden' for url 'https://imgproxy-retcat.assets.schwarz/roWpSnsfJ2pPW2aG3d-MDyinpRjZzRuA5zcbv6Yukf8/sm:0/exar:1:ce/w:320/h:240/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzE4REI1ODRCQ0FGQ0NDMkU5OUY0NTVFMz/UyQjk3MDc0MzRCRDQwNDI1QkZBQzBBNzJBNTc0NzRGN0IzQjAyMTgucG5n.png'
-For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
-fail https://imgproxy-retcat.assets.schwarz/MLClNjvuGL9ubQstmAm8h2vHlOGKKY5RC1Q-yw1M-ko/sm:0/exar:1:ce/w:427/h:320/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzYwRjU2ODJFRjc0MzM0NTMwRkM5MzQwQU/VEMjRBRDJGQjhFODQ0QkRGMTIyNjczOUVENjVDQkZFNTYwRDYxMkEucG5n.png Client error '403 Forbidden' for url 'https://imgproxy-retcat.assets.schwarz/MLClNjvuGL9ubQstmAm8h2vHlOGKKY5RC1Q-yw1M-ko/sm:0/exar:1:ce/w:320/h:240/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzYwRjU2ODJFRjc0MzM0NTMwRkM5MzQwQU/VEMjRBRDJGQjhFODQ0QkRGMTIyNjczOUVENjVDQkZFNTYwRDYxMkEucG5n.png'
-For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
-103 thumbs
+2026-11-02 19:33:14,250 INFO HTTP Request: GET https://www.aldi.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:33:15,196 INFO HTTP Request: GET https://www.aldi.be/nl/aanbiedingen.html "HTTP/1.1 301 Moved Permanently"
+2026-11-02 19:33:16,205 INFO HTTP Request: GET https://www.aldi.be/aanbiedingen.html "HTTP/1.1 200 OK"
+2026-11-02 19:33:16,231 INFO Aldi: 83 deals
+2026-11-02 19:33:16,702 INFO HTTP Request: GET https://www.lidl.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:33:19,378 INFO HTTP Request: GET https://www.lidl.be/c/nl-BE/store/acties-deze-week/a10082242 "HTTP/1.1 200 OK"
+2026-11-02 19:33:19,450 INFO Lidl: 21 deals
+2026-11-02 19:33:21,096 INFO HTTP Request: GET https://www.delhaize.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:33:24,639 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage "HTTP/1.1 200 OK"
+2026-11-02 19:33:29,384 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=1 "HTTP/1.1 200 OK"
+2026-11-02 19:33:39,358 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=2 "HTTP/1.1 200 OK"
+2026-11-02 19:33:44,813 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=3 "HTTP/1.1 200 OK"
+2026-11-02 19:33:49,047 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=4 "HTTP/1.1 200 OK"
+2026-11-02 19:33:56,460 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=5 "HTTP/1.1 200 OK"
+2026-11-02 19:34:04,998 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=6 "HTTP/1.1 200 OK"
+2026-11-02 19:34:11,259 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=7 "HTTP/1.1 200 OK"
+2026-11-02 19:34:16,943 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=8 "HTTP/1.1 200 OK"
+2026-11-02 19:34:21,675 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=9 "HTTP/1.1 200 OK"
+2026-11-02 19:34:27,999 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=10 "HTTP/1.1 200 OK"
+2026-11-02 19:34:35,406 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=11 "HTTP/1.1 200 OK"
+2026-11-02 19:34:40,769 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=12 "HTTP/1.1 200 OK"
+2026-11-02 19:34:45,761 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=13 "HTTP/1.1 200 OK"
+2026-11-02 19:34:56,236 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=14 "HTTP/1.1 200 OK"
+2026-11-02 19:35:01,275 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=15 "HTTP/1.1 200 OK"
+2026-11-02 19:35:06,707 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=16 "HTTP/1.1 200 OK"
+2026-11-02 19:35:07,426 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=17 "HTTP/1.1 503 Service Unavailable"
+2026-11-02 19:35:07,427 ERROR Delhaize failed
+Traceback (most recent call last):
+  File "/home/runner/work/deal-finder/deal-finder/collector/run.py", line 77, in main
+    deals = [enrich(d) for d in cls(client).collect()]
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deal-finder/deal-finder/collector/stores/delhaize.py", line 70, in collect
+    new = [d for d in parse_page(self.client.get(url).text, url) if d.source_url not in seen]
+                                 ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/deal-finder/deal-finder/collector/stores/base.py", line 52, in get
+    r.raise_for_status()
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_models.py", line 763, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '503 Service Unavailable' for url 'https://www.delhaize.be/nl/Promolandingpage?pageNumber=17'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
+2026-11-02 19:35:07,441 INFO saved 104 deals, failed stores: ['Delhaize']
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504
+2026-11-02 19:38:01,869 INFO HTTP Request: POST https://maps.mail.ru/osm/tools/overpass/api/interpreter "HTTP/1.1 504 Gateway Timeout"
+2026-11-02 19:38:01,869 WARNING https://maps.mail.ru/osm/tools/overpass/api/interpreter failed: Server error '504 Gateway Timeout' for url 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504
+2026-11-02 19:38:01,869 ERROR only 0 stores found, keeping the old file
+104 thumbs
