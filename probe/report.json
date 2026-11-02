@@ -1,58 +1,119 @@
 {
  "lidl-0": {
-  "url": "https://www.lidl.be/",
-  "final_url": "https://www.lidl.be/",
+  "url": "https://www.lidl.be/c/fr-BE/promotions-cette-semaine/a10082242",
+  "final_url": "https://www.lidl.be/c/fr-BE/store/actions-cette-semaine/a10082242",
   "status": 200,
-  "bytes": 509118,
+  "bytes": 979496,
   "jsonld_blocks": 1,
   "jsonld_products": 0,
   "next_data": false,
   "nuxt": false,
   "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [],
+  "price_mentions": 70,
+  "api_urls": [
+   "https://imgproxy-retcat.assets.schwarz/9kWhxoOriEKO8omBWPkj3XRGCh7osPNJJnlG_kijCRQ/sm:0/exar:1:ce/w:427/h:320/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50L0RDNkRGNkU4RkREQjIxQTYzMzdFOTYxNT/ZBMDA1MDAxRTQ1NTUyNEUyNEVGRUJBODM4MTI4NjEyN0Q1QjVBQUYucG5n.png&quot;,&quot;accessibility&quot;:&quot;Papier",
+   "https://imgproxy-retcat.assets.schwarz/LH2wnh48mvmxeGuZun-eX5fyEQNEQmXiDsEDMz3FRAA/sm:0/exar:1:ce/w:427/h:320/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50L0M2MzE3RjEyM0U1NEQxMjA4NDFBNDk5Mz/VBMUJDOTJCNzg0MzQzRDk2RkY1NjY2MTE4QTZCRTI1OUM1QkMwODcucG5n.png&quot;,&quot;accessibility&quot;:&quot;Papier"
+  ],
   "promo_links": [
    "https://folder-fr.lidl.be/fr-folder-02-11-07-11/page/1",
-   "https://folder-fr.lidl.be/fr-folder-02-11-07-11/page/8-9",
-   "https://www.lidl.be/c/fr-BE/offres-du-jour/s10062047",
-   "https://www.lidl.be/c/fr-BE/promos/s10077610",
    "https://www.lidl.be/c/fr-BE/promotions-cette-semaine/a10082242",
+   "https://www.lidl.be/c/nl-BE/store/acties-deze-week/a10082242",
    "https://www.lidl.be/q/fr-BE/query/promo"
   ]
  },
  "lidl-1": {
-  "url": "https://www.lidl.be/c/nl-BE/aanbiedingen-deze-week/a10008785",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.lidl.be/c/nl-BE/aanbiedingen-deze-week/a10008785'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
+  "url": "https://www.lidl.be/c/fr-BE/promos/s10077610",
+  "final_url": "https://www.lidl.be/q/fr-BE/query/promo",
+  "status": 200,
+  "bytes": 1288760,
+  "jsonld_blocks": 1,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": true,
+  "window_state": [
+   "__NUXT__"
+  ],
+  "price_mentions": 0,
+  "api_urls": [
+   "https://www.lidl.be/assets/819966a7e7138c52aca9ac327c684b3e.jpeg&quot;,&quot;name&quot;:&quot;LIVARNO®&quot;,&quot;url&quot;:&quot;/q/search?q=livarno&quot;,&quot;id&quot;:&quot;LIVA&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/livarno-sapin-de-noel-artificiel-180-cm/p100411576&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/livarno-sapin-de-noel-artificiel-180-cm/p100411576&quot;,&quot;category&quot;:&quot;Assortiment/Habitat/Décoration/Sapin",
+   "https://www.lidl.be/assets/819966a7e7138c52aca9ac327c684b3e.jpeg&quot;,&quot;name&quot;:&quot;LIVARNO®&quot;,&quot;url&quot;:&quot;/q/search?q=livarno&quot;,&quot;id&quot;:&quot;LIVA&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/livarno-tapis-pliable-160-x-230-cm/p100411702&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/livarno-tapis-pliable-160-x-230-cm/p100411702&quot;,&quot;category&quot;:&quot;Assortiment/Habitat/Tapis/Tapis",
+   "https://www.lidl.be/assets/e04092d839176694263798baaca7efe5.png&quot;,&quot;name&quot;:&quot;PARKSIDE®&quot;,&quot;url&quot;:&quot;/q/search?q=parkside&quot;,&quot;id&quot;:&quot;PARK&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/parkside-aspirateur-eau-et-poussiere-sans-fil-pawd20-avec-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800014050&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/parkside-aspirateur-eau-et-poussiere-sans-fil-pawd20-avec-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800014050&quot;,&quot;category&quot;:&quot;Assortiment/Bricoler/Atelier/Appareils",
+   "https://www.lidl.be/assets/e04092d839176694263798baaca7efe5.png&quot;,&quot;name&quot;:&quot;PARKSIDE®&quot;,&quot;url&quot;:&quot;/q/search?q=parkside&quot;,&quot;id&quot;:&quot;PARK&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/parkside-boulonneuse-a-chocs-sans-fil-20-v-passk20-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800013877&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/parkside-boulonneuse-a-chocs-sans-fil-20-v-passk20-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800013877&quot;,&quot;category&quot;:&quot;Assortiment/Bricoler/Atelier/Batteries",
+   "https://www.lidl.be/assets/gcp0fc9911fda4b431582cd2ce78346f477.png&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp96eb136ee4fc453fac1aec4f04da5c38.png&quot;}}]}],&quot;keyfacts&quot;:{&quot;analyticsCategory&quot;:&quot;Assortiment/Habitat/Décoration/Sapin",
+   "https://www.lidl.be/assets/gcp304fabbc3462487382295f50f0e706c1.png&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcpf4028ea337f64545b9bb0d0034abb216.png&quot;}}]},{&quot;accessibility&quot;:&quot;Tapis",
+   "https://www.lidl.be/assets/gcp605ee2b88d19448981e51e14559cb614.jpg&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp85401eb7e6934832bc4b0c1bd1333984.jpg&quot;}},{&quot;ratio&quot;:&quot;3:4&quot;,&quot;sizes&quot;:{&quot;mediumUrl&quot;:&quot;https://www.lidl.be/assets/gcp9d432cd7daeb47278c95107cfd0fc46f.jpg&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp6775e2d25b344569b4b17b5b5b7abd3c.jpg&quot;}}]}],&quot;keyfacts&quot;:{&quot;analyticsCategory&quot;:&quot;Assortiment/Habitat/Tapis/Tapis",
+   "https://www.lidl.be/assets/gcp6bf6e9dcec5e496aa00b6088b48ce904.jpg&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp7ea27bcf36fb4308af759df57131c668.jpg&quot;}}]},{&quot;accessibility&quot;:&quot;Tapis",
+   "https://www.lidl.be/assets/gcp85401eb7e6934832bc4b0c1bd1333984.jpg&quot;,&quot;accessibility&quot;:&quot;Tapis",
+   "https://www.lidl.be/assets/gcpf4028ea337f64545b9bb0d0034abb216.png&quot;,&quot;accessibility&quot;:&quot;Tapis"
+  ],
+  "promo_links": [
+   "https://www.lidl.be/c/fr-BE/promotions-cette-semaine/a10082242",
+   "https://www.lidl.be/q/fr-BE/query/promo"
+  ]
+ },
+ "lidl-2": {
+  "url": "https://www.lidl.be/c/fr-BE/offres-du-jour/s10062047",
+  "final_url": "https://www.lidl.be/c/fr-BE/offres-du-jour/s10062047",
+  "status": 200,
+  "bytes": 1401580,
+  "jsonld_blocks": 1,
+  "jsonld_products": 0,
+  "next_data": false,
+  "nuxt": true,
+  "window_state": [
+   "__NUXT__"
+  ],
+  "price_mentions": 0,
+  "api_urls": [
+   "https://www.lidl.be/assets/819966a7e7138c52aca9ac327c684b3e.jpeg&quot;,&quot;name&quot;:&quot;LIVARNO®&quot;,&quot;url&quot;:&quot;/q/search?q=livarno&quot;,&quot;id&quot;:&quot;LIVA&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/livarno-sapin-de-noel-artificiel-180-cm/p100411576&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/livarno-sapin-de-noel-artificiel-180-cm/p100411576&quot;,&quot;categorySecondaryPath&quot;:&quot;0/31/3175/317521&quot;,&quot;cutoutimageV2&quot;:[],&quot;dealOfDay&quot;:{&quot;active&quot;:false},&quot;designTheme&quot;:&quot;default&quot;,&quot;disclaimers&quot;:[{&quot;id&quot;:&quot;code_100411576_eb516809&quot;,&quot;type&quot;:&quot;CODE&quot;,&quot;value&quot;:&quot;Basic&quot;}],&quot;displayFreeDelivery&quot;:false,&quot;energyLabels&quot;:[],&quot;erpNumber&quot;:&quot;100411576&quot;,&quot;flashSales&quot;:false,&quot;fullTitle&quot;:&quot;LIVARNO®",
+   "https://www.lidl.be/assets/819966a7e7138c52aca9ac327c684b3e.jpeg&quot;,&quot;name&quot;:&quot;LIVARNO®&quot;,&quot;url&quot;:&quot;/q/search?q=livarno&quot;,&quot;id&quot;:&quot;LIVA&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/livarno-tapis-pliable-160-x-230-cm/p100411702&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/livarno-tapis-pliable-160-x-230-cm/p100411702&quot;,&quot;categorySecondaryPath&quot;:&quot;0/31/3180/318018&quot;,&quot;cutoutimageV2&quot;:[],&quot;dealOfDay&quot;:{&quot;active&quot;:false},&quot;designTheme&quot;:&quot;default&quot;,&quot;disclaimers&quot;:[{&quot;id&quot;:&quot;code_100411702_178113bb&quot;,&quot;type&quot;:&quot;CODE&quot;,&quot;value&quot;:&quot;Basic&quot;}],&quot;displayFreeDelivery&quot;:false,&quot;energyLabels&quot;:[],&quot;erpNumber&quot;:&quot;100411702&quot;,&quot;flashSales&quot;:false,&quot;fullTitle&quot;:&quot;LIVARNO®",
+   "https://www.lidl.be/assets/e04092d839176694263798baaca7efe5.png&quot;,&quot;name&quot;:&quot;PARKSIDE®&quot;,&quot;url&quot;:&quot;/q/search?q=parkside&quot;,&quot;id&quot;:&quot;PARK&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/parkside-aspirateur-eau-et-poussiere-sans-fil-pawd20-avec-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800014050&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/parkside-aspirateur-eau-et-poussiere-sans-fil-pawd20-avec-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800014050&quot;,&quot;categorySecondaryPath&quot;:&quot;0/41/4111/411121/41112110&quot;,&quot;cutoutimageV2&quot;:[],&quot;dealOfDay&quot;:{&quot;active&quot;:false},&quot;designTheme&quot;:&quot;default&quot;,&quot;disclaimers&quot;:[{&quot;id&quot;:&quot;code_800014050_60ac6fd2&quot;,&quot;type&quot;:&quot;CODE&quot;,&quot;value&quot;:&quot;Basic&quot;}],&quot;displayFreeDelivery&quot;:true,&quot;energyLabels&quot;:[],&quot;erpNumber&quot;:&quot;800014050&quot;,&quot;flashSales&quot;:false,&quot;fullTitle&quot;:&quot;PARKSIDE®",
+   "https://www.lidl.be/assets/e04092d839176694263798baaca7efe5.png&quot;,&quot;name&quot;:&quot;PARKSIDE®&quot;,&quot;url&quot;:&quot;/q/search?q=parkside&quot;,&quot;id&quot;:&quot;PARK&quot;,&quot;showBrand&quot;:true},&quot;canonicalPath&quot;:&quot;/p/fr-BE/parkside-boulonneuse-a-chocs-sans-fil-20-v-passk20-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800013877&quot;,&quot;canonicalUrl&quot;:&quot;/p/fr-BE/parkside-boulonneuse-a-chocs-sans-fil-20-v-passk20-batterie-4-ah-pap204-et-chargeur-rapide-4-5-a-plg20/p800013877&quot;,&quot;categorySecondaryPath&quot;:&quot;0/41/4111/411119/41111998&quot;,&quot;cutoutimageV2&quot;:[],&quot;dealOfDay&quot;:{&quot;active&quot;:false},&quot;designTheme&quot;:&quot;default&quot;,&quot;disclaimers&quot;:[{&quot;id&quot;:&quot;code_800013877_511f4be7&quot;,&quot;type&quot;:&quot;CODE&quot;,&quot;value&quot;:&quot;Basic&quot;}],&quot;displayFreeDelivery&quot;:true,&quot;energyLabels&quot;:[],&quot;erpNumber&quot;:&quot;800013877&quot;,&quot;flashSales&quot;:false,&quot;fullTitle&quot;:&quot;PARKSIDE®",
+   "https://www.lidl.be/assets/gcp0fc9911fda4b431582cd2ce78346f477.png&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp96eb136ee4fc453fac1aec4f04da5c38.png&quot;}}]}],&quot;keyfacts&quot;:{&quot;analyticsCategory&quot;:&quot;Assortiment/Habitat/Décoration/Sapin",
+   "https://www.lidl.be/assets/gcp304fabbc3462487382295f50f0e706c1.png&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcpf4028ea337f64545b9bb0d0034abb216.png&quot;}}]},{&quot;accessibility&quot;:&quot;Tapis",
+   "https://www.lidl.be/assets/gcp605ee2b88d19448981e51e14559cb614.jpg&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp85401eb7e6934832bc4b0c1bd1333984.jpg&quot;}},{&quot;ratio&quot;:&quot;3:4&quot;,&quot;sizes&quot;:{&quot;mediumUrl&quot;:&quot;https://www.lidl.be/assets/gcp9d432cd7daeb47278c95107cfd0fc46f.jpg&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp6775e2d25b344569b4b17b5b5b7abd3c.jpg&quot;}}]}],&quot;keyfacts&quot;:{&quot;analyticsCategory&quot;:&quot;Assortiment/Habitat/Tapis/Tapis",
+   "https://www.lidl.be/assets/gcp6bf6e9dcec5e496aa00b6088b48ce904.jpg&quot;,&quot;smallUrl&quot;:&quot;https://www.lidl.be/assets/gcp7ea27bcf36fb4308af759df57131c668.jpg&quot;}}]},{&quot;accessibility&quot;:&quot;Tapis",
+   "https://www.lidl.be/assets/gcp85401eb7e6934832bc4b0c1bd1333984.jpg&quot;,&quot;accessibility&quot;:&quot;Tapis",
+   "https://www.lidl.be/assets/gcpf4028ea337f64545b9bb0d0034abb216.png&quot;,&quot;accessibility&quot;:&quot;Tapis"
+  ],
+  "promo_links": [
+   "https://www.lidl.be/c/fr-BE/offres-du-jour/s10062047",
+   "https://www.lidl.be/c/fr-BE/promotions-cette-semaine/a10082242",
+   "https://www.lidl.be/q/fr-BE/query/promo"
+  ]
  },
  "delhaize-0": {
-  "url": "https://www.delhaize.be/",
-  "final_url": "https://www.delhaize.be/",
+  "url": "https://www.delhaize.be/nl/Promolandingpage",
+  "final_url": "https://www.delhaize.be/nl/Promolandingpage",
   "status": 200,
-  "bytes": 324598,
+  "bytes": 456760,
   "jsonld_blocks": 3,
   "jsonld_products": 0,
   "next_data": false,
   "nuxt": false,
   "window_state": [],
-  "price_mentions": 13,
+  "price_mentions": 40,
   "api_urls": [],
   "promo_links": [
+   "https://www.delhaize.be/Promolandingpage",
    "https://www.delhaize.be/folderpage",
+   "https://www.delhaize.be/gratis-delivery?intcmp=Ban_DLL-Be_2024W30_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_freedeliveryB_NA",
+   "https://www.delhaize.be/my-account/personal-offers?intcmp=Ban_DLL-Be_2024W30_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_edeals&amp;cmpname=ic-edeals-promolandingpage",
+   "https://www.delhaize.be/my-account/personal-offers?intcmp=Ban_DLL-Be_2024W30_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_edealsB_NA",
    "https://www.delhaize.be/nl/Promolandingpage",
    "https://www.delhaize.be/nl/folder",
-   "https://www.delhaize.be/nl/folder?cmpname=folder-of-the-week-1-2"
+   "https://www.delhaize.be/nl/gratis-delivery?intcmp=Ban_DLL-Be_2024W30_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_FreeDelivery_NA&amp;cmpname=ic-free-delivery-promolandingpage",
+   "https://www.delhaize.be/nl/opruiming?intcmp=Ban_DLL-Be_2025W16_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_Destockage_NA&amp;cmpname=ic-destockage-promolandingpage",
+   "https://www.delhaize.be/online-stock-deals?intcmp=Ban_DLL-Be_2024W30_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_OSDB_NA",
+   "https://www.delhaize.be/online-stock-deals?intcmp=Ban_DLL-Be_2024W30_NA_Banner_Be_nl_Campaign_BannerEcom_Promolandingpage_OSD_NA&amp;cmpname=ic-osd-promolandingpage"
   ]
  },
  "delhaize-1": {
-  "url": "https://www.delhaize.be/nl/shop/Promoties",
-  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://www.delhaize.be/nl/shop/Promoties'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
- },
- "spar-0": {
-  "url": "https://www.spar.be/promoties",
-  "final_url": "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026",
+  "url": "https://www.delhaize.be/nl/folder",
+  "final_url": "https://www.delhaize.be/nl/folder",
   "status": 200,
-  "bytes": 56423,
-  "jsonld_blocks": 0,
+  "bytes": 173758,
+  "jsonld_blocks": 3,
   "jsonld_products": 0,
   "next_data": false,
   "nuxt": false,
@@ -60,60 +121,11 @@
   "price_mentions": 0,
   "api_urls": [],
   "promo_links": [
-   "https://www.spar.be/acties",
-   "https://www.spar.be/promoties",
-   "https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026",
-   "https://www.spar.be/promoties/overzicht/22-10-2026-tot-04-11-2026"
-  ]
- },
- "intermarche-0": {
-  "url": "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
-  "final_url": "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
-  "status": 200,
-  "bytes": 83130,
-  "jsonld_blocks": 1,
-  "jsonld_products": 0,
-  "next_data": false,
-  "nuxt": false,
-  "window_state": [],
-  "price_mentions": 0,
-  "api_urls": [
-   "https://api.w.org/",
-   "https://www.google.com/recaptcha/api.js?render=6LdNPQorAAAAAIeu5Z4C3su-7G-ndeVqkpuqv2p3&#038;ver=2.2.2",
-   "https://www.intermarche.be/files/plugins/cookiebot/assets/js/frontend/cb_frame/cookiebot-wp-consent-level-api-integration.js?ver=4.7.3",
-   "https://www.intermarche.be/files/plugins/wp-consent-api/assets/js/wp-consent-api.min.js?ver=2.1.0"
-  ],
-  "promo_links": [
-   "https://www.intermarche.be/folders/decouvrez-notre-folder-du-03-11-26/",
-   "https://www.intermarche.be/nl/folders/",
-   "https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/",
-   "https://www.intermarche.be/nl/onze-acties/",
-   "https://www.intermarche.be/nl/onze-acties/kerstcheque-26/",
-   "https://www.intermarche.be/nl/onze-acties/verjaardag/",
-   "https://www.intermarche.be/nl/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.intermarche.be%2Fnl%2Ffolders%2Fdecouvrez-notre-folder-du-03-11-26%2F",
-   "https://www.intermarche.be/nl/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.intermarche.be%2Fnl%2Ffolders%2Fdecouvrez-notre-folder-du-03-11-26%2F&#038;format=xml"
-  ]
- },
- "carrefour-0": {
-  "url": "https://www.carrefour.be/robots.txt",
-  "error": "PermissionError('robots.txt disallows https://www.carrefour.be/robots.txt')"
- },
- "sitemap-lidl": {
-  "count": 6,
-  "promo": [],
-  "sub": [
-   "https://www.lidl.be/s/fr-BE/magasins/sitemap.xml",
-   "https://www.lidl.be/s/nl-BE/winkels/sitemap.xml"
-  ]
- },
- "sitemap-aldi": {
-  "count": 4,
-  "promo": [],
-  "sub": [
-   "https://www.aldi.be/sitemaps/.aldi-nord-sitemap-pages.xml",
-   "https://www.aldi.be/sitemaps/.aldi-nord-sitemap-products.xml",
-   "https://www.aldi.be/sitemaps/.aldi-nord-sitemap-stores.xml",
-   "https://www.aldi.be/sitemaps/.aldi-nord-sitemap-faq.xml"
+   "https://www.delhaize.be/Promolandingpage",
+   "https://www.delhaize.be/folderpage",
+   "https://www.delhaize.be/nl/Promolandingpage",
+   "https://www.delhaize.be/nl/folder",
+   "https://www.delhaize.be/nl/folder-volgende-week?cmpname=related_publication_folder_nextweek_nl"
   ]
  }
 }
