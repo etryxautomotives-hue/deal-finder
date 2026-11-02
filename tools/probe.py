@@ -15,10 +15,9 @@ from collector.stores.base import PoliteClient
 
 OUT = Path("probe")
 CANDIDATES = {
-    "im-products": ["https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/products.json",
-                    "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/config.json"],
-    "im-index": ["https://www.intermarche.be/nl/folders/", "https://www.intermarche.be/folders/"],
-    "spar": ["https://www.spar.be/promoties"],
+    "im-img": ["https://folders.intermarche.be/.2026-s45fr/publication/contents/media/2730193/24710470.webp",
+               "https://folders.intermarche.be/.2026-s45fr/publication/contents/media-epub/2730193/24710470.webp",
+               "https://fr.zone-secure.net/863887/2730193/24710470.webp"],
 }
 SITEMAPS = {}
 PROMO_WORDS = re.compile(r"promo|aanbied|bonus|actie|offre|folder", re.I)
@@ -50,6 +49,7 @@ def main() -> int:
             try:
                 r = c.get(url)
                 report[key] = summarize(url, r)
+                report[key]["type"] = r.headers.get("content-type")
                 (OUT / f"{key}.html").write_text(r.text[:8_000_000])
             except Exception as e:  # noqa: BLE001
                 report[key] = {"url": url, "error": repr(e)[:300]}
