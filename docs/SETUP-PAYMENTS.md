@@ -58,7 +58,7 @@ Then in Stripe: **Developers → Webhooks → Add endpoint**
 
 ## 4. Test it
 
-1. Push `site/config.js` with the two keys; wait for the site to redeploy.
+1. In `site/config.js`, set `payments: true` (sign-in already works without it; this turns on selling and locking Plus), push, and wait for the site to redeploy.
 2. On the site, click the person icon → sign in with your email → click the link in the email.
 3. Tarieven → *Start mijn gratis proefperiode* → Stripe's page opens → no card asked → back on the site the account says "Plus, gratis proefperiode tot …".
 4. In Stripe test mode, use card `4242 4242 4242 4242` (any future date, any CVC) to try paying, and *Beheer abonnement* to try cancelling.

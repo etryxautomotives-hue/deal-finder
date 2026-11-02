@@ -1,6 +1,6 @@
 // Shared helpers for the three payment functions. Secrets are set with `supabase secrets set` (see docs/SETUP-PAYMENTS.md).
 import Stripe from "npm:stripe@16.12.0";
-import { createClient } from "npm:@supabase/supabase-js@2.45.4";
+import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 
 export const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, { httpClient: Stripe.createFetchHttpClient() });
 export const cryptoProvider = Stripe.createSubtleCryptoProvider();

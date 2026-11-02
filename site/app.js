@@ -605,7 +605,7 @@ function bind() {
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
     if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); return; }
-    if ("soon" in el.dataset) { if (ACC.on) startTrial(); else toast(t().soon); return; }
+    if ("soon" in el.dataset) { if (PAY()) startTrial(); else toast(t().soon); return; }
     if ("account" in el.dataset) { openAccount(); return; }
     if ("portal" in el.dataset) { openPortal(); return; }
     if ("logout" in el.dataset) { signOut(); return; }
@@ -914,10 +914,11 @@ function bindRecipes() {
 // ---------- accounts and payments (on only when config.js has the Supabase keys) ----------
 const CFG = window.DK_CONFIG || {};
 const ACC = { on: !!(CFG.supabaseUrl && CFG.supabaseAnonKey), sb: null, user: null, profile: null, pulling: false };
+const PAY = () => ACC.on && CFG.payments === true;  // Plus is only sold (and locked) once Stripe is connected
 const isPlus = () => ["trialing", "active"].includes(ACC.profile?.subscription_status);
 // Free: every deal, my list, one own recipe. Plus: unlimited recipes and the weekly plan.
 function allowed(feature) {
-  if (!ACC.on || isPlus()) return true;
+  if (!PAY() || isPlus()) return true;
   openAccount(feature);
   return false;
 }
@@ -928,7 +929,7 @@ async function initAccounts() {
   const btn = $("#accBtn");
   if (!ACC.on) return;               // no keys yet: the site works exactly as before, without accounts
   btn.hidden = false;
-  try { await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"); }
+  try { await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"); }
   catch { ACC.on = false; btn.hidden = true; return; }  // can't reach the login service: carry on without accounts
   ACC.sb = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey);
   ACC.sb.auth.onAuthStateChange((_e, session) => { setUser(session?.user || null); });
@@ -1010,7 +1011,7 @@ function openAccount(why) {
   } else {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd></dl>
-      <div class="cta">${isPlus() || ACC.profile?.subscription_status === "past_due"
+      <div class="cta">${!PAY() ? "" : isPlus() || ACC.profile?.subscription_status === "past_due"
         ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
         : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
         <button type="button" class="btn ghost" data-logout>${L.accLogout}</button></div>
