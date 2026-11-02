@@ -15,16 +15,11 @@ from collector.stores.base import PoliteClient
 
 OUT = Path("probe")
 CANDIDATES = {
-    "lidl": ["https://www.lidl.be/", "https://www.lidl.be/c/nl-BE/aanbiedingen-deze-week/a10008785"],
-    "delhaize": ["https://www.delhaize.be/", "https://www.delhaize.be/nl/shop/Promoties"],
-    "spar": ["https://www.spar.be/promoties"],
-    "intermarche": ["https://www.intermarche.be/nl/folders/decouvrez-notre-folder-du-03-11-26/"],
-    "carrefour": ["https://www.carrefour.be/robots.txt"],
+    "lidl": ["https://www.lidl.be/c/fr-BE/promotions-cette-semaine/a10082242", "https://www.lidl.be/c/fr-BE/promos/s10077610",
+             "https://www.lidl.be/c/fr-BE/offres-du-jour/s10062047"],
+    "delhaize": ["https://www.delhaize.be/nl/Promolandingpage", "https://www.delhaize.be/nl/folder"],
 }
-SITEMAPS = {
-    "lidl": "https://www.lidl.be/static/sitemap.xml",
-    "aldi": "https://www.aldi.be/.aldi-nord-sitemap.xml",
-}
+SITEMAPS = {}
 PROMO_WORDS = re.compile(r"promo|aanbied|bonus|actie|offre|folder", re.I)
 
 
