@@ -1,6 +1,6 @@
 # deal'ke design rules
 
-The rules the site follows, why, and where each one lives in the code. The look itself (warm off-white, one muted green, Fraunces + DM Sans, square corners, no shadows) is the "calm and premium" direction Miro chose on 28 Oct 2026.
+The rules the site follows, why, and where each one lives in the code. The look itself copies Miro's own Base44 app (2 Nov 2026): warm cream page, white cards with 14 px corners and soft shadows, lime for every action, mustard for the big moments, Libre Baskerville headings with Inter for everything else.
 
 ## Spacing
 
@@ -18,7 +18,7 @@ The rules the site follows, why, and where each one lives in the code. The look 
 | One modular scale, ratio 1.25 (major third) from 16 px: 13 · 16 · 20 · 25 · 31 · 39 · 49 · 61 | `--t-xs`…`--t-5xl` | Tim Brown, *More Meaningful Typography* (A List Apart); [type-scale.com](https://type-scale.com) |
 | Body text at least 16 px, line height about 1.5 | `body{font-size:16px;line-height:1.6}`; inputs 16 px+ so iPhones don't zoom | [WCAG 1.4.12 Text Spacing](https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html) |
 | Lines 45 to 75 characters | Hero lead capped at 34ch (large text), footer at 75ch | [Baymard: line length](https://baymard.com/blog/line-length-readability); Bringhurst |
-| Two families only: a serif for display and prices, a sans for everything else | Fraunces / DM Sans | Standard pairing practice: contrast in structure, harmony in proportion |
+| Two families only: a serif for headings, a sans for text and prices | Libre Baskerville / Inter | Standard pairing practice: contrast in structure, harmony in proportion |
 | Small uppercase labels get +0.08em tracking | `.tool-lbl`, `.tag`, buttons | Caps need extra letter spacing to stay legible |
 | Prices use tabular figures so digits line up | `font-variant-numeric: tabular-nums` | |
 
@@ -26,9 +26,9 @@ The rules the site follows, why, and where each one lives in the code. The look 
 
 | Rule | In the site | Source |
 |---|---|---|
-| 60-30-10: background 60%, photo areas and lines 30%, accent 10% | `--bg`, `--photo`/`--line`, `--accent` | Interior design rule, widely used in UI |
-| One accent, used only for what matters (prices, savings, active state) | Muted green `#2F5D50` | [Von Restorff effect](https://lawsofux.com/von-restorff-effect/): the thing that differs gets noticed |
-| Text contrast at least 4.5:1 | Muted text `#6E6862` on `#FAF8F5` is 5.2:1 (4.6:1 on the photo areas); green on off-white 7.1:1 | [WCAG 1.4.3 Contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) |
+| 60-30-10: cream page 60%, white cards 30%, lime and mustard 10% | `--bg`, `--card`, `--lime`/`--mustard` | Interior design rule, widely used in UI |
+| Accents mean one thing each: lime = act (add, my list, active filter, saving), mustard = the one big step (hero button, week band) | Lime `#C6F135`, mustard `#D9A23A` | [Von Restorff effect](https://lawsofux.com/von-restorff-effect/): the thing that differs gets noticed |
+| Text contrast at least 4.5:1 (3:1 for large headings) | Muted text `#69655B`: 5.3:1 on cream, 5.8:1 on white; ink on lime 13.9:1, on mustard 8.0:1; savings text `#2E4300` on pale lime 9.9:1; the mustard headline word uses a darker `#B07F1E` (3.2:1, large text) | [WCAG 1.4.3 Contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) |
 
 ## Speed and effort (the "time is money" rules)
 

@@ -13,7 +13,7 @@ const T = {
     persons: n => `${n} pers.`, minutes: n => n >= 60 ? `${Math.floor(n / 60)} u${n % 60 ? " " + (n % 60) : ""}` : `${n} min`,
     onPromo: (a, b) => `${a} van ${b} ingrediënten in promo`, toBuy: n => `${n} te kopen`, haveIt: "Heb ik",
     noDeal: "Geen promo deze week", addMissing: "Zet ontbrekende op mijn lijst", addedMissing: n => `${n} promo's op je lijst gezet`,
-    plan: "Plan deze week", planned: "Gepland", planTitle: "Deze week koken", planSum: (r, n, e) => `${r} recepten · ${n} ingrediënten in promo · ongeveer ${e}`,
+    plan: "Plan deze week", planned: "Gepland", planTitle: "Deze week koken", planSum: (r, n, e) => `${r} ${r === 1 ? "recept" : "recepten"} · ${n} ingrediënten in promo · ongeveer ${e}`,
     planAdd: "Alles op mijn lijst", deleteRecipe: "Verwijder recept", mine: "Eigen recept", allHave: "Je hebt alles in huis.",
     skip: "Naar de promoties", search: "Wat zoek je? Bv. melk, gehakt, Coca-Cola", myList: "Mijn lijst",
     heroH: "Goed eten,<br><em>voor minder.</em>",
@@ -48,7 +48,7 @@ const T = {
     persons: n => `${n} pers.`, minutes: n => n >= 60 ? `${Math.floor(n / 60)} h${n % 60 ? " " + (n % 60) : ""}` : `${n} min`,
     onPromo: (a, b) => `${a} ingrédients sur ${b} en promo`, toBuy: n => `${n} à acheter`, haveIt: "Je l’ai",
     noDeal: "Pas de promo cette semaine", addMissing: "Ajouter ce qui manque à ma liste", addedMissing: n => `${n} promos ajoutées à votre liste`,
-    plan: "Au menu cette semaine", planned: "Au menu", planTitle: "Au menu cette semaine", planSum: (r, n, e) => `${r} recettes · ${n} ingrédients en promo · environ ${e}`,
+    plan: "Au menu cette semaine", planned: "Au menu", planTitle: "Au menu cette semaine", planSum: (r, n, e) => `${r} ${r === 1 ? "recette" : "recettes"} · ${n} ingrédients en promo · environ ${e}`,
     planAdd: "Tout ajouter à ma liste", deleteRecipe: "Supprimer la recette", mine: "Ma recette", allHave: "Vous avez tout.",
     skip: "Aller aux promos", search: "Que cherchez-vous ? Ex. lait, haché, Coca-Cola", myList: "Ma liste",
     heroH: "Bien manger,<br><em>pour moins.</em>",
@@ -83,7 +83,7 @@ const T = {
     persons: n => `serves ${n}`, minutes: n => n >= 60 ? `${Math.floor(n / 60)} h${n % 60 ? " " + (n % 60) : ""}` : `${n} min`,
     onPromo: (a, b) => `${a} of ${b} ingredients on offer`, toBuy: n => `${n} to buy`, haveIt: "Have it",
     noDeal: "No deal this week", addMissing: "Add missing to my list", addedMissing: n => `${n} deals added to your list`,
-    plan: "Cook this week", planned: "Planned", planTitle: "Cooking this week", planSum: (r, n, e) => `${r} recipes · ${n} ingredients on offer · about ${e}`,
+    plan: "Cook this week", planned: "Planned", planTitle: "Cooking this week", planSum: (r, n, e) => `${r} ${r === 1 ? "recipe" : "recipes"} · ${n} ingredients on offer · about ${e}`,
     planAdd: "Add all to my list", deleteRecipe: "Delete recipe", mine: "My recipe", allHave: "You have everything.",
     skip: "Skip to deals", search: "What are you looking for? E.g. milk, mince, Coca-Cola", myList: "My list",
     heroH: "Good food,<br><em>for less.</em>",
@@ -112,6 +112,82 @@ const T = {
     km: "km",
   },
 };
+// Text for the Base44-style layout (hero, week band, store lists, pricing)
+Object.assign(T.nl, {
+  navHome: "Home", navPricing: "Tarieven",
+  eyebrow: c => `België · ${c} ketens · één eerlijke prijs per kg`,
+  heroH: "Betaal minder voor <em>dezelfde</em> boodschappen.",
+  heroSub: (c, r) => `Elke promo van ${c} Belgische supermarkten binnen ${r} km, gesorteerd op de echte prijs per kg. Elke ochtend bijgewerkt, nog voor de winkels opengaan.`,
+  heroGo: pc => pc ? `Toon deals van deze week bij ${pc}` : "Toon deals van deze week",
+  trial: "Start mijn gratis proefperiode van 14 dagen", trialNote: "14 dagen gratis, geen kaart nodig.",
+  biggest: (p, n, pr) => `Grootste korting nu: <b>−${p}%</b> op ${n} bij ${pr}.`,
+  pvTitle: "Deals van deze week", previewCap: "Dit is de echte app, live met de deals van deze week.",
+  trustbar: (n, c) => `<b>${n}</b> deals vanochtend gecontroleerd bij <b>${c}</b> ketens`,
+  avgSave: v => `${v} gemiddelde besparing per deal`,
+  week: n => `Deals van week ${n}`, bandSub: (n, c) => `${n} deals · ${c} ketens · elke ochtend vernieuwd`, upTo: "tot",
+  allStores: "Alle winkels", youSave: v => `Je bespaart ${v}`, promo: "Promo",
+  recipesTitle: "Kook voor minder", recipesSub: "Kies wat je deze week wil koken en vink af wat je thuis hebt. Wij zoeken de rest enkel in de deals van deze week.",
+  startHere: "Begin hier", bestStore: "Beste winkel", ofItems: (a, b) => `${a} van ${b} producten`, totalSave: v => `Totale besparing: ${v}`,
+  listSub: "Eén lijst per winkel. Begin bij de winkel waar je het meest bespaart.",
+  prTitle: "Probeer alles 14 dagen gratis",
+  prSub: (c, r) => `Elke promo van ${c} Belgische ketens binnen ${r} km, vergeleken op de echte prijs per kg, met recepten en één boodschappenlijst per winkel.`,
+  free: "Gratis", freeSub: "Bekijk en vergelijk alle deals.", plus: "Plus", plusSub: "€ 4,99 per maand na je proefperiode. Altijd opzegbaar.",
+  perMonth: "/ maand", trialBadge: "14 dagen gratis",
+  freeList: c => [`Alle deals van de week van ${c} ketens`, "Mijn lijst met de goedkoopste winkel per product", "1 eigen recept"],
+  plusList: c => [`Alle deals van de week van ${c} ketens`, "Mijn lijst met de goedkoopste winkel per product", "Eigen recepten, onbeperkt", "Eén boodschappenlijst per winkel", "Echte prijs per kg of liter vergeleken", "Je vorige keuzes onthouden, gemarkeerd als ze terug in promo zijn"],
+  freeBtn: "Gratis deals bekijken", soon: "Accounts en betalen komen binnenkort. Tot dan is alles gratis.",
+});
+T.nl.sorts.value = "Goedkoopst per kg / L";
+Object.assign(T.fr, {
+  navHome: "Accueil", navPricing: "Tarifs",
+  eyebrow: c => `Belgique · ${c} enseignes · un prix honnête au kilo`,
+  heroH: "Payez moins pour <em>les mêmes</em> courses.",
+  heroSub: (c, r) => `Toutes les promos de ${c} supermarchés belges à moins de ${r} km, triées sur le vrai prix au kilo. Mises à jour chaque matin, avant l’ouverture des magasins.`,
+  heroGo: pc => pc ? `Voir les promos de la semaine à ${pc}` : "Voir les promos de la semaine",
+  trial: "Commencer mon essai gratuit de 14 jours", trialNote: "14 jours gratuits, sans carte.",
+  biggest: (p, n, pr) => `Plus grosse remise : <b>−${p} %</b> sur ${n} chez ${pr}.`,
+  pvTitle: "Promos de la semaine", previewCap: "C’est la vraie application, avec les promos de cette semaine.",
+  trustbar: (n, c) => `<b>${n}</b> promos vérifiées ce matin dans <b>${c}</b> enseignes`,
+  avgSave: v => `${v} d’économie moyenne par promo`,
+  week: n => `Promos de la semaine ${n}`, bandSub: (n, c) => `${n} promos · ${c} enseignes · mises à jour chaque matin`, upTo: "jusqu’à",
+  allStores: "Tous les magasins", youSave: v => `Vous économisez ${v}`, promo: "Promo",
+  recipesTitle: "Cuisiner pour moins", recipesSub: "Choisissez ce que vous cuisinez cette semaine et cochez ce que vous avez. On cherche le reste uniquement dans les promos de la semaine.",
+  startHere: "Commencez ici", bestStore: "Meilleur magasin", ofItems: (a, b) => `${a} produits sur ${b}`, totalSave: v => `Économie totale : ${v}`,
+  listSub: "Une liste par magasin. Commencez là où vous économisez le plus.",
+  prTitle: "Essayez tout gratuitement pendant 14 jours",
+  prSub: (c, r) => `Toutes les promos de ${c} enseignes belges à moins de ${r} km, comparées au vrai prix au kilo, avec des recettes et une liste de courses par magasin.`,
+  free: "Gratuit", freeSub: "Voir et comparer toutes les promos.", plus: "Plus", plusSub: "4,99 € par mois après l’essai. Résiliable à tout moment.",
+  perMonth: "/ mois", trialBadge: "14 jours gratuits",
+  freeList: c => [`Toutes les promos de la semaine de ${c} enseignes`, "Ma liste avec le magasin le moins cher par produit", "1 recette perso"],
+  plusList: c => [`Toutes les promos de la semaine de ${c} enseignes`, "Ma liste avec le magasin le moins cher par produit", "Recettes perso illimitées", "Une liste de courses par magasin", "Vrai prix au kilo ou au litre comparé", "Vos choix mémorisés, signalés quand ils repassent en promo"],
+  freeBtn: "Voir les promos gratuites", soon: "Les comptes et le paiement arrivent bientôt. D’ici là, tout est gratuit.",
+});
+T.fr.sorts.value = "Moins cher au kg / L";
+Object.assign(T.en, {
+  navHome: "Home", navPricing: "Pricing",
+  eyebrow: c => `Belgium · ${c} chains · one honest price per kg`,
+  heroH: "Pay less for <em>the same</em> groceries.",
+  heroSub: (c, r) => `Every deal from ${c} Belgian supermarkets within ${r} km, sorted on the real price per kg. Updated every morning before the shops open.`,
+  heroGo: pc => pc ? `Show this week's deals near ${pc}` : "Show this week's deals",
+  trial: "Start my free 14-day trial", trialNote: "14 days free, no card needed.",
+  biggest: (p, n, pr) => `Biggest discount now: <b>−${p}%</b> on ${n} at ${pr}.`,
+  pvTitle: "This week's deals", previewCap: "This is the real app, live with this week's deals.",
+  trustbar: (n, c) => `<b>${n}</b> deals checked this morning at <b>${c}</b> chains`,
+  avgSave: v => `${v} average saving per deal`,
+  week: n => `Deals of week ${n}`, bandSub: (n, c) => `${n} deals · ${c} chains · fresh every morning`, upTo: "up to",
+  allStores: "All stores", youSave: v => `You save ${v}`, promo: "Deal",
+  recipesTitle: "Cook for less", recipesSub: "Pick what you'll cook this week and tick what you have. We look for the rest in this week's deals only.",
+  startHere: "Start here", bestStore: "Best store", ofItems: (a, b) => `${a} of ${b} items`, totalSave: v => `Total saving: ${v}`,
+  listSub: "One list per store. Start where you save the most.",
+  prTitle: "Try everything free for 14 days",
+  prSub: (c, r) => `Every deal from ${c} Belgian chains within ${r} km, compared on the real price per kg, with recipes and one shopping list per store.`,
+  free: "Free", freeSub: "See and compare every deal.", plus: "Plus", plusSub: "€4.99 a month after your trial. Cancel any time.",
+  perMonth: "/ month", trialBadge: "14 days free",
+  freeList: c => [`Every deal of the week from ${c} chains`, "My list with the cheapest store per item", "1 recipe of your own"],
+  plusList: c => [`Every deal of the week from ${c} chains`, "My list with the cheapest store per item", "Unlimited recipes of your own", "One shopping list per store", "Real price per kg or litre compared", "Your past picks remembered and flagged when they're on offer again"],
+  freeBtn: "See the free deals", soon: "Accounts and payment are coming soon. Until then everything is free.",
+});
+T.en.sorts.value = "Cheapest per kg / L";
 const LOCALE = { nl: "nl-BE", fr: "fr-BE", en: "en-GB" };
 const KIND_ORDER = ["1+1", "2+1", "multi", "2nd_half", "2nd_pct", "percent", "bundle", "price_drop", "other"];
 const CAT_ORDER = ["fruit_veg", "meat_fish", "dairy", "bread", "pantry", "snacks", "drinks", "household", "other"];
@@ -219,7 +295,7 @@ function matches(d, skip) {
   return true;
 }
 const SORTS = {
-  value: (a, b) => (a.unit_price ?? 1e9) - (b.unit_price ?? 1e9) || a.price - b.price,
+  value: (a, b) => ((a.unit && a.unit_price) ?? 1e9) - ((b.unit && b.unit_price) ?? 1e9) || a.price - b.price,
   price: (a, b) => a.price - b.price,
   discount: (a, b) => (b.discount ?? effDiscount(b)) - (a.discount ?? effDiscount(a)),
   near: (a, b) => (dist(a.store) ?? 1e9) - (dist(b.store) ?? 1e9) || SORTS.value(a, b),
@@ -236,16 +312,25 @@ function tagText(d) {
   if (d.kind === "price_drop") return d.discount ? `-${Math.round(d.discount * 100)}%` : L.tag.price_drop;
   return d.promo_text || L.tag.promo;
 }
+function sicon(chain, cls = "") {
+  const c = CHAINS[chain] || { bg: "#17150F", fg: "#fff", l: chain };
+  const s = c.s || c.l.replace(/[^A-Za-zÀ-ÿ]/g, "").slice(0, 1).toUpperCase();
+  return `<span class="sicon ${cls}" aria-hidden="true" style="background:${c.bg};color:${c.fg};${c.bd ? `box-shadow:inset 0 0 0 1.5px ${c.bd};` : ""}">${esc(s)}</span>`;
+}
 function logo(chain, big) {
   const c = CHAINS[chain] || { bg: "#1D1B19", fg: "#fff", l: chain };
-  return `<span class="slogo" style="background:${c.bg};color:${c.fg};${c.bd ? `box-shadow:inset 0 0 0 1px ${c.bd};` : ""}${big ? "height:26px;font-size:13px" : ""}">${esc(c.l)}</span>`;
+  return `<span class="slogo" style="background:${c.bg};color:${c.fg};${c.bd ? `box-shadow:inset 0 0 0 1px ${c.bd};` : ""}${big ? "height:28px;font-size:13px" : ""}">${esc(c.l)}</span>`;
 }
 const kmText = chain => { const d = dist(chain); return d == null ? "" : `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`; };
-function photo(d, big, extra = "") {
+const pct = d => { if (d.discount) return Math.round(d.discount * 100); const e = effDiscount(d); if (e) return Math.round(e * 100);
+  const p = (d.promo_text || "").match(/(\d+)\s*%/); return p ? +p[1] : null; };
+function photo(d, big) {
   const img = d.image_url ? `<img src="${esc(d.image_url)}" alt="" loading="${big ? "eager" : "lazy"}" decoding="async" onerror="this.remove()">` : "";
-  const cat = t().cats[d.cat] || "";
+  const cat = t().cats[d.cat] || "", p = pct(d), tag = tagText(d);
+  const p2 = `${t().promo} · ${tag}`;
   return `<div class="photo">${img || `<div class="ph"><b>${esc((d.brand || d.name || "?").trim()[0])}</b><span>${esc(cat)}</span></div>`}
-    <span class="tag${/^\d\+\d$/.test(d.kind) ? " multi" : ""}">${esc(tagText(d))}</span>${extra}</div>`;
+    ${p ? `<span class="ribbon" aria-hidden="true">−${p}%</span>` : ""}
+    <div class="pills">${p ? `<span class="p1">−${p}%</span>` : ""}<span class="p2">${esc(p2)}</span></div></div>`;
 }
 const unitLine = d => d.unit_price ? `<span class="unit"><b>${money(d.unit_price)}</b>/${t().perUnit[d.unit] || d.unit}</span>` : "";
 const plus = on => on
@@ -253,15 +338,17 @@ const plus = on => on
   : `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
 
 function card(d) {
-  const on = !!S.list[d.id], L = t();
+  const on = !!S.list[d.id], L = t(), save = d.old_price && d.old_price > d.price ? d.old_price - d.price : null;
   return `<article class="card" data-id="${d.id}" tabindex="0" aria-label="${esc(d.name)}, ${money(d.price)}, ${esc(d.store)}">
-    ${photo(d, false, `<button type="button" class="add" data-add="${d.id}" aria-pressed="${on}" aria-label="${on ? L.added : L.add}">${plus(on)}</button>`)}
+    ${photo(d)}
     <div class="body">
       <h3 class="name">${esc(d.name)}</h3>
-      <span class="size">${esc(d.pack_size || "")}</span>
+      <div class="where">${sicon(d.store)}<span>${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}</span></div>
       <div class="priceline"><span class="price">${money(d.price)}</span>${d.old_price ? `<span class="old">${money(d.old_price)}</span>` : ""}</div>
-      ${unitLine(d)}
-      <div class="where">${logo(d.store)}<span>${kmText(d.store)}</span></div>
+      ${d.unit_price && d.unit ? `<span class="unit">${money(d.unit_price)} / ${L.perUnit[d.unit] || d.unit}</span>` : ""}
+      ${save ? `<span class="save">${L.youSave(money(save))}</span>` : ""}
+      <div class="foot-row"><span>${kmText(d.store)}</span>
+        <button type="button" class="add" data-add="${d.id}" aria-pressed="${on}" aria-label="${on ? L.added : L.add}">${plus(on)}</button></div>
     </div></article>`;
 }
 
@@ -277,21 +364,22 @@ function render() {
   const catN = count("cat", "cat"), kindN = count("kind", "group"), chainN = count("chain", "store");
   const totalCat = [...catN.values()].reduce((a, b) => a + b, 0);
 
-  $("#tabs").innerHTML = [`<button type="button" data-cat="" aria-pressed="${!S.cat}">${L.allDeals}<sup>${totalCat}</sup></button>`]
+  const grid = `<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  const pic = c => { const d = DEALS.filter(x => x.cat === c && x.image_url).sort((a, b) => (pct(b) || 0) - (pct(a) || 0))[0];
+    return d ? `<img src="${esc(d.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : ""; };
+  $("#tabs").innerHTML = [`<button type="button" data-cat="" aria-pressed="${!S.cat}"><span class="tile">${grid}</span><span>${L.allDeals}</span></button>`]
     .concat(CAT_ORDER.filter(c => catN.get(c) || S.cat === c).map(c =>
-      `<button type="button" data-cat="${c}" aria-pressed="${S.cat === c}">${L.cats[c]}<sup>${catN.get(c) || 0}</sup></button>`)).join("");
+      `<button type="button" data-cat="${c}" aria-pressed="${S.cat === c}"><span class="tile">${pic(c)}</span><span>${L.cats[c]}<sup>${catN.get(c) || 0}</sup></span></button>`)).join("");
 
   $("#kinds").innerHTML = chipsHTML(
     KIND_ORDER.filter(k => kindN.get(k) || S.kinds.has(k)).map(k => [k, L.kinds[k], kindN.get(k) || 0]),
-    k => S.kinds.has(k), "data-kind");
+    k => S.kinds.has(k), "data-kind").replace(/class="chip"/g, 'class="chip sm"');
 
   const chains = [...new Set(DEALS.map(d => d.store))]
     .filter(c => chainN.get(c) || S.chains.has(c))
     .sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9) || a.localeCompare(b));
-  $("#stores").innerHTML = chipsHTML(chains.map(c => {
-    const C = CHAINS[c] || { bg: "#1D1B19" };
-    return [c, c + (kmText(c) ? ` · ${kmText(c)}` : ""), chainN.get(c) || 0, `<span class="dot" style="background:${C.bg === "#fff" ? C.fg : C.bg}"></span>`];
-  }), c => S.chains.has(c), "data-chain");
+  $("#stores").innerHTML = `<button type="button" class="chip" data-chain="*" aria-pressed="${!S.chains.size}">${L.allStores}</button>` +
+    chains.map(c => `<button type="button" class="chip" data-chain="${esc(c)}" aria-pressed="${S.chains.has(c)}">${sicon(c)}${esc(c)}${kmText(c) ? ` <span class="km">${kmText(c)}</span>` : ` <span class="n">${chainN.get(c) || 0}</span>`}</button>`).join("");
 
   $("#sort").innerHTML = Object.entries(L.sorts)
     .filter(([k]) => k !== "near" || Object.keys(nearest).length)
@@ -315,8 +403,8 @@ function renderStatic() {
   document.querySelectorAll("[data-t]").forEach(el => { const v = L[el.dataset.t]; if (typeof v === "string") el.textContent = v; });
   document.querySelectorAll("[data-t-ph]").forEach(el => { el.placeholder = L[el.dataset.tPh]; el.setAttribute("aria-label", L[el.dataset.tPh]); });
   document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === S.lang));
-  $("#heroH").innerHTML = L.heroH;
-  $("#trust").innerHTML = L.trust(DEALS.length, new Set(DEALS.map(d => d.store)).size);
+  document.querySelectorAll("[data-t-label]").forEach(el => el.setAttribute("aria-label", L[el.dataset.tLabel]));
+  renderHero();
   $("#sampleNote").hidden = !SAMPLE;
   $("#locLbl").textContent = S.pc ? `${S.pc}${PCS[S.pc] ? " " + PCS[S.pc][2] : ""} · ${S.radius} km` : L.setPc;
   $("#footUpdated").textContent = UPDATED ? L.updated(new Date(UPDATED).toLocaleString(LOCALE[S.lang], { dateStyle: "medium", timeStyle: "short" })) : "";
@@ -332,6 +420,40 @@ function syncURL() {
   if (S.sort !== "value") p.set("sort", S.sort);
   const s = p.toString();
   history.replaceState(null, "", (s ? `?${s}` : location.pathname) + location.hash);
+}
+
+// ISO week number, for the "Deals of week 45" band
+function isoWeek(d) { const x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = x.getUTCDay() || 7;
+  x.setUTCDate(x.getUTCDate() + 4 - day); return Math.ceil(((x - Date.UTC(x.getUTCFullYear(), 0, 1)) / 864e5 + 1) / 7); }
+
+function renderHero() {
+  const L = t(), live = DEALS.filter(d => inRadius(d));
+  const chains = [...new Set(live.map(d => d.store))];
+  const saves = live.filter(d => d.old_price > d.price).map(d => d.old_price - d.price);
+  const avg = saves.length ? saves.reduce((a, b) => a + b, 0) / saves.length : 0;
+  $("#trustbar").innerHTML = `<span class="icons">${chains.map(c => sicon(c, "lg")).join("")}</span><span>${L.trustbar(live.length, chains.length)}</span>
+    ${avg ? `<span class="pill lime">${L.avgSave(money(avg))}</span>` : ""}`;
+  $("#eyebrow").textContent = L.eyebrow(chains.length);
+  $("#heroH").innerHTML = L.heroH;
+  $("#heroSub").textContent = L.heroSub(chains.length, S.radius);
+  $("#heroGo").textContent = L.heroGo(S.pc || ($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""));
+  const top = [...live].filter(d => pct(d)).sort((a, b) => pct(b) - pct(a));
+  const best = top[0];
+  $("#biggest").innerHTML = best ? L.biggest(pct(best), esc(best.name), `${esc(best.store)}, ${money(best.price)}`) : "";
+  // live preview: the four best deals with a photo, one per store where possible
+  const pick = [], seen = new Set();
+  for (const d of top) if (d.image_url && !seen.has(d.store) && pick.length < 4) { pick.push(d); seen.add(d.store); }
+  for (const d of top) if (pick.length < 4 && !pick.includes(d)) pick.push(d);
+  const host = S.pc ? `deal-ke.be · ${S.pc}` : "deal-ke.be";
+  $("#preview").innerHTML = `<div class="pv-bar"><i></i><i></i><i></i><span>${host}</span></div>
+    <div class="pv-body"><h3>${L.pvTitle}</h3>${pick.map(d => `<button type="button" class="pv-row" data-open="${d.id}">
+      <span class="th">${d.image_url ? `<img src="${esc(d.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : ""}</span>
+      <span style="min-width:0"><span class="nm" style="display:block">${esc(d.name)}</span><span class="st">${sicon(d.store)}${esc(d.store)}${kmText(d.store) ? ` · ${kmText(d.store)}` : ""}</span></span>
+      <span class="pr">${money(d.price)}<small>−${pct(d)}%</small></span></button>`).join("")}</div>`;
+  const maxP = top.length ? pct(top[0]) : 0;
+  $("#band").innerHTML = `<span class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 12.6V4a1 1 0 0 1 1-1h8.6a1 1 0 0 1 .7.3l7.4 7.4a1 1 0 0 1 0 1.4l-8.6 8.6a1 1 0 0 1-1.4 0L3.3 13.3a1 1 0 0 1-.3-.7z" fill="none" stroke="#17150F" stroke-width="1.8"/><circle cx="8" cy="8" r="1.6" fill="#17150F"/></svg></span>
+    <div><h2>${L.week(isoWeek(new Date()))}</h2><p>${L.bandSub(live.length, chains.length)}</p></div>
+    ${maxP ? `<div class="upto"><small>${L.upTo}</small><b>−${maxP}%</b></div>` : ""}`;
 }
 
 // ---------- details sheet ----------
@@ -352,13 +474,13 @@ function openDeal(id) {
   $("#sheet").classList.remove("narrow");
   $("#sheet").innerHTML = `
     <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-    ${photo(d, true).replace('<span class="tag', '<span hidden class="tag')}
+    ${photo(d, true)}
     <div>
-      <span class="tag${/^\d\+\d$/.test(d.kind) ? " multi" : ""}">${esc(tagText(d))}</span>
+      <div class="where">${sicon(d.store, "lg")}<span>${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}</span></div>
       <h2 id="sheetTitle">${esc(d.name)}</h2>
       <div class="priceline"><span class="price">${money(d.price)}</span>${d.old_price ? `<span class="old">${money(d.old_price)}</span>` : ""}</div>
       <dl class="facts">
-        ${d.unit_price ? `<dt>${F.unit} ${L.perUnit[d.unit] || d.unit}</dt><dd><b>${money(d.unit_price)}</b> <span class="unit">${L.effective}</span></dd>` : ""}
+        ${d.unit_price && d.unit ? `<dt>${F.unit} ${L.perUnit[d.unit] || d.unit}</dt><dd><b>${money(d.unit_price)}</b> <span class="unit">${L.effective}</span></dd>` : ""}
         ${save ? `<dt>${F.save}</dt><dd class="good">${money(save)}${d.discount ? ` (−${Math.round(d.discount * 100)}%)` : ""}</dd>` : ""}
         ${d.promo_text ? `<dt>${F.promo}</dt><dd>${esc(d.promo_text)}</dd>` : ""}
         <dt>${F.store}</dt><dd>${logo(d.store, true)}</dd>
@@ -410,12 +532,25 @@ function listTotals() {
 }
 function renderList() {
   const L = t(), by = groupList(), n = Object.keys(S.list).length, { total, saved } = listTotals();
+  const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  const shops = Object.entries(by).map(([c, items]) => ({ c, items,
+    sum: items.reduce((a, d) => a + d.price, 0), save: items.reduce((a, d) => a + (d.old_price > d.price ? d.old_price - d.price : 0), 0) }));
+  // start where you save the most; ties go to the nearest store
+  const best = [...shops].sort((a, b) => b.save - a.save || b.items.length - a.items.length || (dist(a.c) ?? 1e9) - (dist(b.c) ?? 1e9))[0];
+  if (best) shops.sort((a, b) => (b === best) - (a === best));
   $("#drawer").innerHTML = `
-    <div class="drawer-head"><h3 id="listTitle">${L.listTitle}</h3>
+    <div class="drawer-head"><div><h3 id="listTitle">${L.listTitle}</h3>${n ? `<p>${L.listSub}</p>` : ""}</div>
       <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-    <div class="drawer-body">${n ? Object.entries(by).map(([c, items]) => `<section><h4>${logo(c)} ${kmText(c) ? `· ${kmText(c)}` : ""}</h4><ul>${items.map(d =>
-      `<li><span>${esc(d.name)}${d.promo_text ? ` <span class="unit">· ${esc(d.promo_text)}</span>` : ""}</span><span class="p">${money(d.price)}</span>
-        <button type="button" data-add="${d.id}" aria-label="${L.remove}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></li>`).join("")}</ul></section>`).join("")
+    <div class="drawer-body">${n ? `
+      ${shops.length > 1 || best ? `<div class="starthere">${sicon(best.c)}<div><small>${L.startHere}</small><b>${esc(best.c)}</b>
+        <div class="sub">${L.ofItems(best.items.length, n)}${kmText(best.c) ? ` · ${kmText(best.c)}` : ""}</div></div>
+        <div class="tot"><b>${money(best.sum)}</b>${best.save ? L.totalSave(money(best.save)) : ""}</div></div>` : ""}
+      ${shops.map(s => `<section class="shop${s === best && shops.length > 1 ? " best" : ""}"><div class="shop-h">${sicon(s.c, "lg")}${esc(s.c)}
+          ${kmText(s.c) ? `<span class="km">${kmText(s.c)}</span>` : ""}
+          ${s === best && shops.length > 1 ? `<span class="pill lime">${L.bestStore}</span>` : ""}<span class="sum">${money(s.sum)}</span></div>
+        <ul>${s.items.map(d => `<li><span>${esc(d.name)}${d.promo_text || d.pack_size ? `<span class="unit">${esc([d.pack_size, d.promo_text].filter(Boolean).join(" · "))}</span>` : ""}</span>
+          <span class="p">${money(d.price)}</span>
+          <button type="button" data-add="${d.id}" aria-label="${L.remove}">${x}</button></li>`).join("")}</ul></section>`).join("")}`
       : `<p class="drawer-empty">${L.listEmpty}</p>`}</div>
     ${n ? `<div class="drawer-foot">
       <div class="total"><span>${L.total}</span><b>${money(total)}</b></div>
@@ -456,9 +591,11 @@ function bind() {
     if (el.dataset.add) { e.stopPropagation(); toggleList(el.dataset.add); return; }
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
-    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); if (location.hash === "#recipes") renderRecipes(); return; }
+    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); return; }
+    if ("soon" in el.dataset) { toast(t().soon); return; }
     if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
     if (el.dataset.kind) { S.kinds.has(el.dataset.kind) ? S.kinds.delete(el.dataset.kind) : S.kinds.add(el.dataset.kind); S.shown = 48; render(); return; }
+    if (el.dataset.chain === "*") { S.chains.clear(); S.shown = 48; render(); return; }
     if (el.dataset.chain) { S.chains.has(el.dataset.chain) ? S.chains.delete(el.dataset.chain) : S.chains.add(el.dataset.chain); S.shown = 48; render(); return; }
     if (el.dataset.r) { document.querySelectorAll("#radiusSeg button").forEach(b => b.setAttribute("aria-pressed", b === el)); return; }
     if (el.classList.contains("card")) { openDeal(el.dataset.id); return; }
@@ -489,16 +626,7 @@ function bind() {
       try { await navigator.clipboard.writeText(text); toast(t().copied); } catch { /* no clipboard either */ }
     }
   });
-  // hero photos fade in once loaded
-  // hero photos fade in once loaded; if they can't load, the hero falls back to text only
-  const imgs = [...document.querySelectorAll(".mosaic img")];
-  let failed = 0;
-  const fail = () => { if (++failed === imgs.length) $("#hero").classList.add("nophotos"); };
-  imgs.forEach(img => {
-    const on = () => img.classList.add("on");
-    if (img.complete) img.naturalWidth ? on() : fail();
-    else { img.addEventListener("load", on); img.addEventListener("error", fail); }
-  });
+  $("#heroPc").addEventListener("input", () => { if (!S.pc) $("#heroGo").textContent = t().heroGo($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""); });
 }
 function trap(e, root) {
   const f = [...root.querySelectorAll("button,a[href],input,select,textarea")].filter(x => !x.hidden && x.offsetParent);
@@ -548,6 +676,7 @@ function meter(r) {
 }
 const star = on => `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
 
+const tick = `<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 function renderRecipes() {
   const L = t();
   matchCache.clear();
@@ -556,12 +685,11 @@ function renderRecipes() {
   $("#rgrid").innerHTML = list.map(({ r, st }) => {
     const on = R.plan.has(r.id);
     return `<article class="rcard${on ? " on" : ""}" data-recipe="${esc(r.id)}" tabindex="0">
-      <div class="rtop"><span>${r.own ? L.mine : [r.serves && L.persons(r.serves), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span>
-        <button type="button" class="pin" data-plan="${esc(r.id)}" aria-pressed="${on}" aria-label="${L.plan}">${star(on)}</button></div>
+      <button type="button" class="pin" data-plan="${esc(r.id)}" aria-pressed="${on}" aria-label="${L.plan}">${on ? tick : ""}</button>
       <h3>${esc(rTitle(r))}</h3>
+      <div class="rside">${st.cost ? `<b class="price">≈ ${money(st.cost)}</b>` : ""}<span>${st.buy ? L.toBuy(st.buy) : L.allHave}</span></div>
+      <p class="rtop">${[r.own ? L.mine : "", r.serves && L.persons(r.serves), r.min && L.minutes(r.min), L.onPromo(st.promo, r.i.length)].filter(Boolean).join(" · ")}</p>
       ${meter(r)}
-      <p class="rmeta">${L.onPromo(st.promo, r.i.length)}</p>
-      <div class="rfoot"><span>${st.buy ? L.toBuy(st.buy) : L.allHave}</span>${st.cost ? `<b class="price">≈ ${money(st.cost)}</b>` : ""}</div>
     </article>`;
   }).join("");
   const planned = list.filter(x => R.plan.has(x.r.id));
@@ -624,12 +752,26 @@ function parseRecipe(name, serves, text) {
   return { id: "own-" + Date.now().toString(36), own: true, t: { nl: name, fr: name, en: name }, serves: +serves || null, i };
 }
 
+function renderPricing() {
+  const L = t(), c = new Set(DEALS.map(d => d.store)).size;
+  const li = a => `<ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  $("#pricing").innerHTML = `<h2>${L.prTitle}</h2><p>${L.prSub(c, S.radius)}</p>
+    <div class="plans">
+      <div class="plancard"><h3>${L.free}</h3><p>${L.freeSub}</p><div class="amount">${money(0).replace(/[.,]00/, "")}</div>${li(L.freeList(c))}
+        <a class="btn ghost block" href="#deals">${L.freeBtn}</a></div>
+      <div class="plancard plus"><span class="pill">${L.trialBadge}</span><h3>${L.plus}</h3><p>${L.plusSub}</p>
+        <div class="amount">${money(4.99)} <small>${L.perMonth}</small></div>${li(L.plusList(c))}
+        <button type="button" class="btn block" data-soon>${L.trial}</button><p class="fine">${L.trialNote}</p></div>
+    </div>`;
+}
 function showView() {
-  const recipes = location.hash === "#recipes";
-  $("#viewDeals").hidden = recipes;
-  $("#viewRecipes").hidden = !recipes;
-  document.querySelectorAll("[data-view]").forEach(a => a.setAttribute("aria-current", (a.dataset.view === "recipes") === recipes ? "page" : "false"));
-  if (recipes) renderRecipes();
+  const v = location.hash === "#recipes" ? "recipes" : location.hash === "#pricing" ? "pricing" : "deals";
+  $("#viewDeals").hidden = v !== "deals";
+  $("#viewRecipes").hidden = v !== "recipes";
+  $("#viewPricing").hidden = v !== "pricing";
+  document.querySelectorAll("[data-view]").forEach(a => a.setAttribute("aria-current", a.dataset.view === v ? "page" : "false"));
+  if (v === "recipes") renderRecipes();
+  if (v === "pricing") renderPricing();
 }
 
 function bindRecipes() {
