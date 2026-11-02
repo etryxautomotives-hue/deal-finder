@@ -1,25 +1,20 @@
-2026-11-02 19:23:05,099 INFO HTTP Request: GET https://www.aldi.be/robots.txt "HTTP/1.1 200 OK"
-2026-11-02 19:23:06,054 INFO HTTP Request: GET https://www.aldi.be/nl/aanbiedingen.html "HTTP/1.1 301 Moved Permanently"
-2026-11-02 19:23:07,088 INFO HTTP Request: GET https://www.aldi.be/aanbiedingen.html "HTTP/1.1 200 OK"
-2026-11-02 19:23:07,271 INFO Aldi: 83 deals
-2026-11-02 19:23:07,547 INFO HTTP Request: GET https://www.lidl.be/robots.txt "HTTP/1.1 200 OK"
-2026-11-02 19:23:10,506 INFO HTTP Request: GET https://www.lidl.be/c/nl-BE/store/acties-deze-week/a10082242 "HTTP/1.1 200 OK"
-2026-11-02 19:23:10,598 INFO Lidl: 21 deals
-2026-11-02 19:23:11,711 INFO HTTP Request: GET https://www.delhaize.be/robots.txt "HTTP/1.1 200 OK"
-2026-11-02 19:23:16,239 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage "HTTP/1.1 200 OK"
-2026-11-02 19:23:25,982 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=1 "HTTP/1.1 200 OK"
-2026-11-02 19:23:33,167 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=2 "HTTP/1.1 200 OK"
-2026-11-02 19:23:39,762 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=3 "HTTP/1.1 200 OK"
-2026-11-02 19:23:41,181 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=4 "HTTP/1.1 200 OK"
-2026-11-02 19:23:50,703 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=5 "HTTP/1.1 200 OK"
-2026-11-02 19:23:56,630 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=6 "HTTP/1.1 200 OK"
-2026-11-02 19:24:03,112 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=7 "HTTP/1.1 200 OK"
-2026-11-02 19:24:08,475 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=8 "HTTP/1.1 200 OK"
-2026-11-02 19:24:08,576 INFO Delhaize: 166 promotions over 9 pages
-2026-11-02 19:24:08,596 INFO Delhaize: 166 deals
-2026-11-02 19:24:08,618 INFO saved 270 deals, failed stores: none
-    r.raise_for_status()
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_models.py", line 763, in raise_for_status
-    raise HTTPStatusError(message, request=request, response=self)
-httpx.HTTPStatusError: Server error '502 Bad Gateway' for url 'https://overpass-api.de/api/interpreter'
-For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
+2026-11-02 19:25:04,694 INFO HTTP Request: GET https://www.aldi.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:25:05,773 INFO HTTP Request: GET https://www.aldi.be/nl/aanbiedingen.html "HTTP/1.1 301 Moved Permanently"
+2026-11-02 19:25:06,789 INFO HTTP Request: GET https://www.aldi.be/aanbiedingen.html "HTTP/1.1 200 OK"
+2026-11-02 19:25:06,986 INFO Aldi: 83 deals
+2026-11-02 19:25:07,416 INFO HTTP Request: GET https://www.lidl.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:25:09,730 INFO HTTP Request: GET https://www.lidl.be/c/nl-BE/store/acties-deze-week/a10082242 "HTTP/1.1 200 OK"
+2026-11-02 19:25:09,779 INFO Lidl: 21 deals
+2026-11-02 19:25:10,453 INFO HTTP Request: GET https://www.delhaize.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:25:18,401 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage "HTTP/1.1 200 OK"
+2026-11-02 19:25:24,710 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=1 "HTTP/1.1 200 OK"
+2026-11-02 19:25:24,792 INFO Delhaize: 20 promotions over 2 pages
+2026-11-02 19:25:24,795 INFO Delhaize: 20 deals
+2026-11-02 19:25:24,808 INFO saved 124 deals, failed stores: none
+2026-11-02 19:26:11,297 INFO HTTP Request: POST https://overpass-api.de/api/interpreter "HTTP/1.1 200 OK"
+2026-11-02 19:26:13,974 INFO saved 3338 stores
+fail https://imgproxy-retcat.assets.schwarz/roWpSnsfJ2pPW2aG3d-MDyinpRjZzRuA5zcbv6Yukf8/sm:0/exar:1:ce/w:427/h:320/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzE4REI1ODRCQ0FGQ0NDMkU5OUY0NTVFMz/UyQjk3MDc0MzRCRDQwNDI1QkZBQzBBNzJBNTc0NzRGN0IzQjAyMTgucG5n.png Client error '403 Forbidden' for url 'https://imgproxy-retcat.assets.schwarz/roWpSnsfJ2pPW2aG3d-MDyinpRjZzRuA5zcbv6Yukf8/sm:0/exar:1:ce/w:320/h:240/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzE4REI1ODRCQ0FGQ0NDMkU5OUY0NTVFMz/UyQjk3MDc0MzRCRDQwNDI1QkZBQzBBNzJBNTc0NzRGN0IzQjAyMTgucG5n.png'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+fail https://imgproxy-retcat.assets.schwarz/MLClNjvuGL9ubQstmAm8h2vHlOGKKY5RC1Q-yw1M-ko/sm:0/exar:1:ce/w:427/h:320/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzYwRjU2ODJFRjc0MzM0NTMwRkM5MzQwQU/VEMjRBRDJGQjhFODQ0QkRGMTIyNjczOUVENjVDQkZFNTYwRDYxMkEucG5n.png Client error '403 Forbidden' for url 'https://imgproxy-retcat.assets.schwarz/MLClNjvuGL9ubQstmAm8h2vHlOGKKY5RC1Q-yw1M-ko/sm:0/exar:1:ce/w:320/h:240/cz/M6Ly9wcm9kLWNhd/GFsb2ctbWVkaWEvaW50LzYwRjU2ODJFRjc0MzM0NTMwRkM5MzQwQU/VEMjRBRDJGQjhFODQ0QkRGMTIyNjczOUVENjVDQkZFNTYwRDYxMkEucG5n.png'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+103 thumbs
