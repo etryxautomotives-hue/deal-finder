@@ -15,12 +15,10 @@ from collector.stores.base import PoliteClient
 
 OUT = Path("probe")
 CANDIDATES = {
-    "intermarche": ["https://folders.intermarche.be/.2026-s45fr/", "https://folders.intermarche.be/.2026-s45nl/"],
-    "spar": ["https://www.spar.be/promoties/overzicht/05-11-2026-tot-18-11-2026"],
-    "jumbo": ["https://www.jumbo.com/aanbiedingen/nu", "https://www.jumbo.com/"],
-    "ah": ["https://www.ah.be/bonus"],
-    "colruyt": ["https://www.colruyt.be/nl/promoties"],
-    "aldi": ["https://www.aldi.be/nl/aanbiedingen.html"],
+    "im-products": ["https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/products.json",
+                    "https://folders.intermarche.be/.2026-s45fr/publication/contents/templates/wishlistV4/config.json"],
+    "im-index": ["https://www.intermarche.be/nl/folders/", "https://www.intermarche.be/folders/"],
+    "spar": ["https://www.spar.be/promoties"],
 }
 SITEMAPS = {}
 PROMO_WORDS = re.compile(r"promo|aanbied|bonus|actie|offre|folder", re.I)
@@ -52,7 +50,7 @@ def main() -> int:
             try:
                 r = c.get(url)
                 report[key] = summarize(url, r)
-                (OUT / f"{key}.html").write_text(r.text[:1_500_000])
+                (OUT / f"{key}.html").write_text(r.text[:8_000_000])
             except Exception as e:  # noqa: BLE001
                 report[key] = {"url": url, "error": repr(e)[:300]}
             print(key, json.dumps(report[key])[:300], flush=True)
