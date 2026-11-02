@@ -7,6 +7,14 @@
 // ---------- text ----------
 const T = {
   nl: {
+    navDeals: "Promo's", navRecipes: "Recepten", recipesTitle: "Recepten",
+    recipesSub: "Vink aan wat je al in huis hebt. Wat ontbreekt, zoeken we in de promo's van deze week.",
+    newRecipe: "Eigen recept", rName: "Naam", rServes: "Personen", rIngr: "Ingrediënten, één per lijn (bv. 500 g gehakt)", save: "Bewaar",
+    persons: n => `${n} pers.`, minutes: n => n >= 60 ? `${Math.floor(n / 60)} u${n % 60 ? " " + (n % 60) : ""}` : `${n} min`,
+    onPromo: (a, b) => `${a} van ${b} ingrediënten in promo`, toBuy: n => `${n} te kopen`, haveIt: "Heb ik",
+    noDeal: "Geen promo deze week", addMissing: "Zet ontbrekende op mijn lijst", addedMissing: n => `${n} promo's op je lijst gezet`,
+    plan: "Plan deze week", planned: "Gepland", planTitle: "Deze week koken", planSum: (r, n, e) => `${r} recepten · ${n} ingrediënten in promo · ongeveer ${e}`,
+    planAdd: "Alles op mijn lijst", deleteRecipe: "Verwijder recept", mine: "Eigen recept", allHave: "Je hebt alles in huis.",
     skip: "Naar de promoties", search: "Wat zoek je? Bv. melk, gehakt, Coca-Cola", myList: "Mijn lijst",
     heroH: "Goed eten,<br><em>voor minder.</em>",
     heroSub: "Alle promoties van de Belgische supermarkten in je buurt, vergeleken op de echte prijs per kilo. Elke ochtend vernieuwd.",
@@ -34,6 +42,14 @@ const T = {
     km: "km",
   },
   fr: {
+    navDeals: "Promos", navRecipes: "Recettes", recipesTitle: "Recettes",
+    recipesSub: "Cochez ce que vous avez déjà. Pour le reste, on cherche dans les promos de la semaine.",
+    newRecipe: "Ma recette", rName: "Nom", rServes: "Personnes", rIngr: "Ingrédients, un par ligne (ex. 500 g de haché)", save: "Enregistrer",
+    persons: n => `${n} pers.`, minutes: n => n >= 60 ? `${Math.floor(n / 60)} h${n % 60 ? " " + (n % 60) : ""}` : `${n} min`,
+    onPromo: (a, b) => `${a} ingrédients sur ${b} en promo`, toBuy: n => `${n} à acheter`, haveIt: "Je l’ai",
+    noDeal: "Pas de promo cette semaine", addMissing: "Ajouter ce qui manque à ma liste", addedMissing: n => `${n} promos ajoutées à votre liste`,
+    plan: "Au menu cette semaine", planned: "Au menu", planTitle: "Au menu cette semaine", planSum: (r, n, e) => `${r} recettes · ${n} ingrédients en promo · environ ${e}`,
+    planAdd: "Tout ajouter à ma liste", deleteRecipe: "Supprimer la recette", mine: "Ma recette", allHave: "Vous avez tout.",
     skip: "Aller aux promos", search: "Que cherchez-vous ? Ex. lait, haché, Coca-Cola", myList: "Ma liste",
     heroH: "Bien manger,<br><em>pour moins.</em>",
     heroSub: "Toutes les promotions des supermarchés belges près de chez vous, comparées au vrai prix au kilo. Mises à jour chaque matin.",
@@ -61,6 +77,14 @@ const T = {
     km: "km",
   },
   en: {
+    navDeals: "Deals", navRecipes: "Recipes", recipesTitle: "Recipes",
+    recipesSub: "Tick what you already have. We find the rest in this week's deals.",
+    newRecipe: "Add a recipe", rName: "Name", rServes: "Servings", rIngr: "Ingredients, one per line (e.g. 500 g minced beef)", save: "Save",
+    persons: n => `serves ${n}`, minutes: n => n >= 60 ? `${Math.floor(n / 60)} h${n % 60 ? " " + (n % 60) : ""}` : `${n} min`,
+    onPromo: (a, b) => `${a} of ${b} ingredients on offer`, toBuy: n => `${n} to buy`, haveIt: "Have it",
+    noDeal: "No deal this week", addMissing: "Add missing to my list", addedMissing: n => `${n} deals added to your list`,
+    plan: "Cook this week", planned: "Planned", planTitle: "Cooking this week", planSum: (r, n, e) => `${r} recipes · ${n} ingredients on offer · about ${e}`,
+    planAdd: "Add all to my list", deleteRecipe: "Delete recipe", mine: "My recipe", allHave: "You have everything.",
     skip: "Skip to deals", search: "What are you looking for? E.g. milk, mince, Coca-Cola", myList: "My list",
     heroH: "Good food,<br><em>for less.</em>",
     heroSub: "Every promotion from Belgian supermarkets near you, compared on the real price per kilo. Fresh every morning.",
@@ -307,14 +331,14 @@ function syncURL() {
   if (S.chains.size) p.set("store", [...S.chains].join(","));
   if (S.sort !== "value") p.set("sort", S.sort);
   const s = p.toString();
-  history.replaceState(null, "", s ? `?${s}` : location.pathname);
+  history.replaceState(null, "", (s ? `?${s}` : location.pathname) + location.hash);
 }
 
 // ---------- details sheet ----------
 let lastFocus = null;
 function openDialog(bg, focusEl) { lastFocus = document.activeElement; bg.hidden = false; document.body.style.overflow = "hidden"; (focusEl || bg.querySelector("button,input,a"))?.focus(); }
 function closeDialogs() {
-  for (const id of ["#sheetBg", "#listBg", "#locDlg"]) $(id).hidden = true;
+  for (const id of ["#sheetBg", "#listBg", "#locDlg", "#recipeDlg"]) $(id).hidden = true;
   document.body.style.overflow = ""; lastFocus?.focus?.();
 }
 
@@ -325,6 +349,7 @@ function openDeal(id) {
   const dest = n ? `${n.b.lat},${n.b.lon}` : encodeURIComponent(`${d.store} ${S.pc || ""} Belgium`);
   const others = DEALS.filter(x => x.id !== d.id && x.cat === d.cat && x.cat !== "other" && inRadius(x) && x.unit === d.unit && x.unit_price)
     .sort(SORTS.value).slice(0, 4);
+  $("#sheet").classList.remove("narrow");
   $("#sheet").innerHTML = `
     <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
     ${photo(d, true).replace('<span class="tag', '<span hidden class="tag')}
@@ -350,7 +375,7 @@ function openDeal(id) {
       ${others.length ? `<div class="others"><h3>${L.sameElse}</h3><ul>${others.map(o =>
         `<li><button type="button" data-open="${o.id}"><span class="on">${esc(o.name)} · ${esc(o.store)}</span><b>${money(o.unit_price)}/${L.perUnit[o.unit] || o.unit}</b></button></li>`).join("")}</ul></div>` : ""}
     </div>`;
-  openDialog($("#sheetBg"), $("#sheet .btn"));
+  if ($("#sheetBg").hidden) openDialog($("#sheetBg"), $("#sheet .btn")); else $("#sheet .btn").focus();
 }
 
 // ---------- my list ----------
@@ -431,7 +456,7 @@ function bind() {
     if (el.dataset.add) { e.stopPropagation(); toggleList(el.dataset.add); return; }
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
-    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); return; }
+    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); if (location.hash === "#recipes") renderRecipes(); return; }
     if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
     if (el.dataset.kind) { S.kinds.has(el.dataset.kind) ? S.kinds.delete(el.dataset.kind) : S.kinds.add(el.dataset.kind); S.shown = 48; render(); return; }
     if (el.dataset.chain) { S.chains.has(el.dataset.chain) ? S.chains.delete(el.dataset.chain) : S.chains.add(el.dataset.chain); S.shown = 48; render(); return; }
@@ -476,13 +501,175 @@ function bind() {
   });
 }
 function trap(e, root) {
-  const f = [...root.querySelectorAll("button,a[href],input,select")].filter(x => !x.hidden && x.offsetParent);
+  const f = [...root.querySelectorAll("button,a[href],input,select,textarea")].filter(x => !x.hidden && x.offsetParent);
   if (!f.length) return; const first = f[0], last = f[f.length - 1];
   if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 }
 
+
+// ---------- recipes ----------
+const R = {
+  own: store.get("recipes", []),            // recipes the user added
+  have: store.get("have", {}),              // recipe id -> {ingredient index: true/false}
+  plan: new Set(store.get("plan", [])),     // recipe ids planned this week
+};
+const allRecipes = () => [...R.own, ...(window.DK_RECIPES || [])];
+const rTitle = r => r.t[S.lang] || r.t.nl || Object.values(r.t)[0];
+const iName = ing => ing.n[S.lang] || ing.n.nl || Object.values(ing.n)[0];
+function hasIt(r, i) { const v = R.have[r.id]?.[i]; return v == null ? !!r.i[i].basic : v; }
+function wordStart(hay, k) {
+  for (let at = hay.indexOf(k); at !== -1; at = hay.indexOf(k, at + 1)) if (at === 0 || !/[a-z0-9]/.test(hay[at - 1])) return true;
+  return false;
+}
+const matchCache = new Map();
+function bestDeal(ing) {
+  const key = ing.k.join("|") + "#" + (ing.c || "") + "#" + S.pc + S.radius;
+  if (matchCache.has(key)) return matchCache.get(key);
+  const ks = ing.k.map(fold);
+  const d = DEALS.filter(x => inRadius(x) && (!ing.c || x.cat === ing.c) && ks.some(k => wordStart(x.hay, k)))
+    .sort((a, b) => SORTS.value(a, b))[0] || null;
+  matchCache.set(key, d);
+  return d;
+}
+function recipeStats(r) {
+  let promo = 0, buy = 0, cost = 0;
+  const deals = [];
+  r.i.forEach((ing, i) => {
+    const d = bestDeal(ing);
+    if (d) promo++;
+    if (!hasIt(r, i)) { buy++; if (d) { cost += d.price; deals.push(d); } }
+  });
+  return { promo, buy, cost, deals };
+}
+function meter(r) {
+  return `<div class="meter" aria-hidden="true">${r.i.map((ing, i) =>
+    `<i class="${hasIt(r, i) ? "m-have" : bestDeal(ing) ? "deal" : ""}"></i>`).join("")}</div>`;
+}
+const star = on => `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+
+function renderRecipes() {
+  const L = t();
+  matchCache.clear();
+  const list = allRecipes().map(r => ({ r, st: recipeStats(r) }))
+    .sort((a, b) => (R.plan.has(b.r.id) - R.plan.has(a.r.id)) || (b.st.promo / b.r.i.length - a.st.promo / a.r.i.length));
+  $("#rgrid").innerHTML = list.map(({ r, st }) => {
+    const on = R.plan.has(r.id);
+    return `<article class="rcard${on ? " on" : ""}" data-recipe="${esc(r.id)}" tabindex="0">
+      <div class="rtop"><span>${r.own ? L.mine : [r.serves && L.persons(r.serves), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span>
+        <button type="button" class="pin" data-plan="${esc(r.id)}" aria-pressed="${on}" aria-label="${L.plan}">${star(on)}</button></div>
+      <h3>${esc(rTitle(r))}</h3>
+      ${meter(r)}
+      <p class="rmeta">${L.onPromo(st.promo, r.i.length)}</p>
+      <div class="rfoot"><span>${st.buy ? L.toBuy(st.buy) : L.allHave}</span>${st.cost ? `<b class="price">≈ ${money(st.cost)}</b>` : ""}</div>
+    </article>`;
+  }).join("");
+  const planned = list.filter(x => R.plan.has(x.r.id));
+  if (!planned.length) { $("#plan").innerHTML = ""; return; }
+  const deals = new Map();
+  for (const { st } of planned) for (const d of st.deals) deals.set(d.id, d);
+  const est = [...deals.values()].reduce((a, d) => a + d.price, 0);
+  $("#plan").innerHTML = `<div class="plan-in">
+    <div><h3>${L.planTitle}</h3><p>${L.planSum(planned.length, deals.size, money(est))}</p>
+      <div class="plan-chips">${planned.map(({ r }) => `<button type="button" class="chip" data-recipe="${esc(r.id)}">${esc(rTitle(r))}</button>`).join("")}</div></div>
+    <button type="button" class="btn" data-planadd ${deals.size ? "" : "disabled"}>${L.planAdd}</button></div>`;
+}
+
+function openRecipe(id, keepFocus) {
+  const r = allRecipes().find(x => x.id === id); if (!r) return;
+  const L = t(), on = R.plan.has(r.id);
+  matchCache.clear();
+  const st = recipeStats(r);
+  $("#sheet").innerHTML = `
+    <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="rsheet">
+      <p class="rtop"><span>${r.own ? L.mine : [r.serves && L.persons(r.serves), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span></p>
+      <h2 id="sheetTitle">${esc(rTitle(r))}</h2>
+      <p class="rmeta">${L.onPromo(st.promo, r.i.length)}${st.cost ? ` · ${L.toBuy(st.buy)} ≈ <b>${money(st.cost)}</b>` : ""}</p>
+      <ul class="ings">${r.i.map((ing, i) => {
+        const have = hasIt(r, i), d = bestDeal(ing), inList = d && S.list[d.id];
+        return `<li class="${have ? "had" : ""}">
+          <label class="have"><input type="checkbox" data-have="${esc(r.id)}|${i}" ${have ? "checked" : ""}><span>${L.haveIt}</span></label>
+          <div class="iname"><b>${esc(iName(ing))}</b>${ing.a ? ` <span class="unit">${esc(ing.a)}</span>` : ""}</div>
+          <div class="imatch">${have ? "" : d ? `<button type="button" class="dealpick" data-open="${d.id}">${logo(d.store)}<span class="dn">${esc(d.name)}</span><span class="tagmini">${esc(tagText(d))}</span><b>${money(d.price)}</b></button>
+              <button type="button" class="add small" data-add="${d.id}" aria-pressed="${!!inList}" aria-label="${inList ? L.added : L.add}">${plus(!!inList)}</button>` : `<span class="unit">${L.noDeal}</span>`}</div>
+        </li>`; }).join("")}</ul>
+      <div class="cta">
+        <button type="button" class="btn" data-addmissing="${esc(r.id)}" ${st.deals.length ? "" : "disabled"}>${L.addMissing}</button>
+        <button type="button" class="btn ghost" data-plan="${esc(r.id)}" aria-pressed="${on}">${star(on)} ${on ? L.planned : L.plan}</button>
+        ${r.own ? `<button type="button" class="btn ghost" data-delrecipe="${esc(r.id)}">${L.deleteRecipe}</button>` : ""}
+      </div>
+    </div>`;
+  $("#sheet").classList.add("narrow");
+  if ($("#sheetBg").hidden) openDialog($("#sheetBg"), $("#sheet .x"));
+  else if (keepFocus) document.querySelector(`[data-have="${keepFocus}"]`)?.focus();
+}
+
+function addDeals(deals) {
+  let n = 0;
+  for (const d of deals) if (!S.list[d.id]) { const { hay, until, i, ...keep } = d; S.list[d.id] = keep; n++; }
+  store.set("list", S.list);
+  $("#listCount").textContent = Object.keys(S.list).length;
+  toast(t().addedMissing(n));
+}
+
+function parseRecipe(name, serves, text) {
+  const lines = text.split(/\n+/).map(x => x.trim()).filter(Boolean);
+  const i = lines.map(line => {
+    const m = line.match(/^([\d.,/½¼¾]+\s*(?:kg|g|gr|l|cl|ml|dl|el|tl|st|stuks?|x|×|blik|pak|zak|snede|sneden|teentjes?)?\.?)\s+(.*)$/i);
+    const amount = m ? m[1] : "", label = (m ? m[2] : line).replace(/^(?:de|het|een|du|de la|des|of)\s+/i, "");
+    const words = fold(label).split(/[^a-z0-9]+/).filter(w => w.length >= 4);
+    return { n: { nl: label, fr: label, en: label }, a: amount, k: [fold(label), ...words].filter(Boolean) };
+  });
+  return { id: "own-" + Date.now().toString(36), own: true, t: { nl: name, fr: name, en: name }, serves: +serves || null, i };
+}
+
+function showView() {
+  const recipes = location.hash === "#recipes";
+  $("#viewDeals").hidden = recipes;
+  $("#viewRecipes").hidden = !recipes;
+  document.querySelectorAll("[data-view]").forEach(a => a.setAttribute("aria-current", (a.dataset.view === "recipes") === recipes ? "page" : "false"));
+  if (recipes) renderRecipes();
+}
+
+function bindRecipes() {
+  window.addEventListener("hashchange", () => { showView(); window.scrollTo(0, 0); });
+  document.addEventListener("click", e => {
+    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe]"); if (!el) return;
+    if (el.dataset.plan) {
+      e.stopPropagation();
+      R.plan.has(el.dataset.plan) ? R.plan.delete(el.dataset.plan) : R.plan.add(el.dataset.plan);
+      store.set("plan", [...R.plan]); renderRecipes();
+      if (!$("#sheetBg").hidden && el.closest("#sheet")) openRecipe(el.dataset.plan);
+    } else if (el.dataset.addmissing) {
+      const r = allRecipes().find(x => x.id === el.dataset.addmissing); addDeals(recipeStats(r).deals); openRecipe(r.id); renderRecipes();
+    } else if ("planadd" in el.dataset) {
+      addDeals(allRecipes().filter(r => R.plan.has(r.id)).flatMap(r => recipeStats(r).deals)); renderRecipes();
+    } else if (el.dataset.delrecipe) {
+      R.own = R.own.filter(r => r.id !== el.dataset.delrecipe); store.set("recipes", R.own);
+      R.plan.delete(el.dataset.delrecipe); store.set("plan", [...R.plan]); closeDialogs(); renderRecipes();
+    } else if (el.dataset.recipe) {
+      openRecipe(el.dataset.recipe);
+    }
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Enter" && document.activeElement.classList?.contains("rcard")) openRecipe(document.activeElement.dataset.recipe); });
+  document.addEventListener("change", e => {
+    const v = e.target.dataset?.have; if (!v) return;
+    const [id, i] = v.split("|");
+    (R.have[id] ||= {})[i] = e.target.checked; store.set("have", R.have);
+    openRecipe(id, v); renderRecipes();
+  });
+  $("#newRecipe").addEventListener("click", () => { $("#recipeForm").reset(); openDialog($("#recipeDlg"), $("#rName")); });
+  $("#recipeForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const r = parseRecipe($("#rName").value.trim(), $("#rServes").value, $("#rIngr").value);
+    if (!r.i.length) return;
+    R.own.unshift(r); store.set("recipes", R.own); closeDialogs(); renderRecipes(); openRecipe(r.id);
+  });
+}
+
 // ---------- start ----------
 bind();
-load().then(() => { renderStatic(); render(); });
+bindRecipes();
+load().then(() => { renderStatic(); render(); showView(); });
 })();

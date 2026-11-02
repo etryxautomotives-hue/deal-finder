@@ -18,6 +18,10 @@
 <header class="top">
   <div class="wrap top-row">
     <a class="logo" href="./" aria-label="deal'ke home">deal<span>’</span>ke</a>
+    <nav class="views" aria-label="Sections">
+      <a href="#deals" data-view="deals" data-t="navDeals">Deals</a>
+      <a href="#recipes" data-view="recipes" data-t="navRecipes">Recipes</a>
+    </nav>
     <form class="search" id="searchForm" role="search">
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       <input id="q" type="search" autocomplete="off" enterkeyhint="search" data-t-ph="search">
@@ -42,6 +46,7 @@
 </header>
 
 <main>
+<div id="viewDeals">
   <section class="hero wrap" id="hero">
     <div class="hero-text">
       <h1 id="heroH"></h1>
@@ -99,6 +104,19 @@
     <div class="grid" id="grid"></div>
     <div class="more" id="more" hidden><button type="button" class="btn ghost" id="moreBtn" data-t="showMore">Show more</button></div>
   </section>
+</div>
+
+<section class="wrap recipes" id="viewRecipes" hidden>
+  <div class="sechead">
+    <div class="sechead-text">
+      <h2 data-t="recipesTitle">Recipes</h2>
+      <p data-t="recipesSub"></p>
+    </div>
+    <button type="button" class="btn" id="newRecipe" data-t="newRecipe">Add a recipe</button>
+  </div>
+  <div class="plan" id="plan"></div>
+  <div class="rgrid" id="rgrid"></div>
+</section>
 </main>
 
 <footer class="foot">
@@ -136,8 +154,24 @@
   <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="listTitle"></aside>
 </div>
 
+<!-- New recipe -->
+<div class="scrim" id="recipeDlg" hidden>
+  <form class="pop wide" id="recipeForm" role="dialog" aria-modal="true" aria-labelledby="recipeTitle">
+    <h3 id="recipeTitle" data-t="newRecipe">Add a recipe</h3>
+    <label class="field"><span data-t="rName">Name</span><input id="rName" required maxlength="80" autocomplete="off"></label>
+    <label class="field"><span data-t="rServes">Servings</span><input id="rServes" inputmode="numeric" maxlength="2" value="4"></label>
+    <label class="field"><span data-t="rIngr">Ingredients, one per line</span>
+      <textarea id="rIngr" rows="7" required></textarea></label>
+    <div class="pop-actions">
+      <button type="button" class="btn ghost" data-close data-t="cancel">Cancel</button>
+      <button type="submit" class="btn" data-t="save">Save</button>
+    </div>
+  </form>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="recipes-data.js" defer></script>
 <script src="app.js" defer></script>
 </body>
 </html>
