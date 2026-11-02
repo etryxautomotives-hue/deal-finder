@@ -471,3 +471,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .maker-top .field input{width:100%;min-width:0}
 .picker input:focus-visible,.search input:focus-visible,.pcbox input:focus-visible{outline:none}
 .field .picker input,.field .picker input:focus{min-height:0;padding:0;border-radius:0;background:transparent;box-shadow:none}
+
+/* account */
+.accbtn{width:var(--tap);height:var(--tap);border:0;border-radius:50%;background:transparent;display:grid;place-items:center;position:relative}
+.accbtn:hover{background:var(--soft)}
+.accbtn.in::after{content:"";position:absolute;right:8px;bottom:9px;width:9px;height:9px;border-radius:50%;background:var(--lime-d);box-shadow:0 0 0 2px var(--bg)}
+.acc .muted{color:var(--muted);font-size:var(--t-sm);margin:0 0 var(--s4)}
+.acc .small{font-size:12.5px;margin:var(--s3) 0 0}
+.acc .upsell{background:var(--lime-soft);color:var(--lime-ink);font-weight:600;font-size:var(--t-sm);border-radius:var(--r-sm);padding:var(--s3) var(--s4);margin:0 0 var(--s4)}
+.acc-form{display:grid;gap:var(--s3)}
+.acc .facts{margin-top:0}

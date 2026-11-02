@@ -133,10 +133,11 @@ Object.assign(T.nl, {
   prSub: (c, r) => `Elke promo van ${c} Belgische ketens binnen ${r} km, vergeleken op de echte prijs per kg, met recepten en één boodschappenlijst per winkel.`,
   free: "Gratis", freeSub: "Bekijk en vergelijk alle deals.", plus: "Plus", plusSub: "€ 4,99 per maand na je proefperiode. Altijd opzegbaar.",
   perMonth: "/ maand", trialBadge: "14 dagen gratis",
-  freeList: c => [`Alle deals van de week van ${c} ketens`, "Mijn lijst met de goedkoopste winkel per product", "1 eigen recept"],
-  plusList: c => [`Alle deals van de week van ${c} ketens`, "Mijn lijst met de goedkoopste winkel per product", "Eigen recepten, onbeperkt", "Eén boodschappenlijst per winkel", "Echte prijs per kg of liter vergeleken", "Je vorige keuzes onthouden, gemarkeerd als ze terug in promo zijn"],
+  freeList: c => [`Alle deals van de week van ${c} ketens`, "Echte prijs per kg of liter vergeleken", "Mijn lijst, per winkel", "1 eigen recept"],
+  plusList: c => [`Alles uit Gratis`, "Eigen recepten, onbeperkt", "Je week plannen: alle recepten in één keer op je lijst", "Je lijst en recepten op al je toestellen", "Altijd opzegbaar, met één klik"],
   freeBtn: "Gratis deals bekijken", soon: "Accounts en betalen komen binnenkort. Tot dan is alles gratis.",
 });
+Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
@@ -161,10 +162,11 @@ Object.assign(T.fr, {
   prSub: (c, r) => `Toutes les promos de ${c} enseignes belges à moins de ${r} km, comparées au vrai prix au kilo, avec des recettes et une liste de courses par magasin.`,
   free: "Gratuit", freeSub: "Voir et comparer toutes les promos.", plus: "Plus", plusSub: "4,99 € par mois après l’essai. Résiliable à tout moment.",
   perMonth: "/ mois", trialBadge: "14 jours gratuits",
-  freeList: c => [`Toutes les promos de la semaine de ${c} enseignes`, "Ma liste avec le magasin le moins cher par produit", "1 recette perso"],
-  plusList: c => [`Toutes les promos de la semaine de ${c} enseignes`, "Ma liste avec le magasin le moins cher par produit", "Recettes perso illimitées", "Une liste de courses par magasin", "Vrai prix au kilo ou au litre comparé", "Vos choix mémorisés, signalés quand ils repassent en promo"],
+  freeList: c => [`Toutes les promos de la semaine de ${c} enseignes`, "Vrai prix au kilo ou au litre comparé", "Ma liste, par magasin", "1 recette perso"],
+  plusList: c => ["Tout ce qui est gratuit", "Recettes perso illimitées", "Planifier la semaine : toutes les recettes d’un coup sur ma liste", "Liste et recettes sur tous vos appareils", "Résiliable à tout moment, en un clic"],
   freeBtn: "Voir les promos gratuites", soon: "Les comptes et le paiement arrivent bientôt. D’ici là, tout est gratuit.",
 });
+Object.assign(T.fr, { accSignIn: "Se connecter", accTitle: "Mon compte", accEmail: "E-mail", accSend: "Recevoir un lien de connexion", accWhy: "Pas de mot de passe : vous recevez un lien par e-mail. Votre liste et vos recettes vous suivent sur tous vos appareils.", accSent: e => `Regardez votre boîte mail (${e}) et cliquez sur le lien.`, accPlan: "Abonnement", accFree: "Gratuit", accTrial: d => `Plus, essai gratuit jusqu’au ${d}`, accActive: d => `Plus, renouvelé le ${d}`, accEnds: d => `Plus, se termine le ${d}`, accPastDue: "Plus, paiement échoué : mettez à jour votre moyen de paiement", accManage: "Gérer l’abonnement", accSubscribe: "Prendre Plus, 4,99 € par mois", accLogout: "Se déconnecter", accOut: "Vous êtes déconnecté", accErr: "Ça n’a pas marché. Réessayez dans un instant.", accRedirect: "Un instant, on ouvre la page de paiement…", accSynced: "Votre liste et vos recettes sont enregistrées dans votre compte.", accNeed: { plan: "Planifier la semaine fait partie de Plus. Essayez 14 jours gratuitement.", recipes: "Plus d’une recette perso fait partie de Plus. Essayez 14 jours gratuitement." } });
 T.fr.sorts.value = "Moins cher au kg / L";
 Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. haché, pâtes, oignon", rFree: q => `Ajouter « ${q} » comme ingrédient`,
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
@@ -189,10 +191,11 @@ Object.assign(T.en, {
   prSub: (c, r) => `Every deal from ${c} Belgian chains within ${r} km, compared on the real price per kg, with recipes and one shopping list per store.`,
   free: "Free", freeSub: "See and compare every deal.", plus: "Plus", plusSub: "€4.99 a month after your trial. Cancel any time.",
   perMonth: "/ month", trialBadge: "14 days free",
-  freeList: c => [`Every deal of the week from ${c} chains`, "My list with the cheapest store per item", "1 recipe of your own"],
-  plusList: c => [`Every deal of the week from ${c} chains`, "My list with the cheapest store per item", "Unlimited recipes of your own", "One shopping list per store", "Real price per kg or litre compared", "Your past picks remembered and flagged when they're on offer again"],
+  freeList: c => [`Every deal of the week from ${c} chains`, "Real price per kg or litre compared", "My list, per store", "1 recipe of your own"],
+  plusList: c => ["Everything in Free", "Unlimited recipes of your own", "Plan your week: every recipe onto your list at once", "Your list and recipes on all your devices", "Cancel any time, in one click"],
   freeBtn: "See the free deals", soon: "Accounts and payment are coming soon. Until then everything is free.",
 });
+Object.assign(T.en, { accSignIn: "Sign in", accTitle: "My account", accEmail: "Email", accSend: "Email me a sign-in link", accWhy: "No password: we email you a link. Your list and recipes then follow you on every device.", accSent: e => `Check your inbox (${e}) and click the link.`, accPlan: "Plan", accFree: "Free", accTrial: d => `Plus, free trial until ${d}`, accActive: d => `Plus, renews on ${d}`, accEnds: d => `Plus, ends on ${d}`, accPastDue: "Plus, payment failed: please update your payment details", accManage: "Manage subscription", accSubscribe: "Get Plus, €4.99 a month", accLogout: "Sign out", accOut: "You're signed out", accErr: "That didn't work. Please try again in a moment.", accRedirect: "One moment, opening the payment page…", accSynced: "Your list and recipes are saved to your account.", accNeed: { plan: "Planning your week is part of Plus. Try it free for 14 days.", recipes: "More than one recipe of your own is part of Plus. Try it free for 14 days." } });
 T.en.sorts.value = "Cheapest per kg / L";
 Object.assign(T.en, { rPick: "Ingredients", rPickPh: "Search a product, e.g. mince, pasta, onion", rFree: q => `Add “${q}” as your own ingredient`,
   rSteps: "How to make it (optional)", rAmount: "Amount", rNone: "Add at least one ingredient.", editRecipe: "Edit recipe",
@@ -213,9 +216,10 @@ const CHAINS = {
 };
 
 // ---------- state ----------
+const SYNCED = new Set(["list", "recipes", "have", "plan"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
-  set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } },
+  set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
 };
 const url = new URLSearchParams(location.search);
 const browserLang = (navigator.language || "nl").slice(0, 2);
@@ -469,7 +473,7 @@ function renderHero() {
 let lastFocus = null;
 function openDialog(bg, focusEl) { lastFocus = document.activeElement; bg.hidden = false; document.body.style.overflow = "hidden"; (focusEl || bg.querySelector("button,input,a"))?.focus(); }
 function closeDialogs() {
-  for (const id of ["#sheetBg", "#listBg", "#locDlg", "#recipeDlg"]) $(id).hidden = true;
+  for (const id of ["#sheetBg", "#listBg", "#locDlg", "#recipeDlg", "#accDlg"]) $(id).hidden = true;
   document.body.style.overflow = ""; lastFocus?.focus?.();
 }
 
@@ -601,7 +605,10 @@ function bind() {
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
     if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); return; }
-    if ("soon" in el.dataset) { toast(t().soon); return; }
+    if ("soon" in el.dataset) { if (ACC.on) startTrial(); else toast(t().soon); return; }
+    if ("account" in el.dataset) { openAccount(); return; }
+    if ("portal" in el.dataset) { openPortal(); return; }
+    if ("logout" in el.dataset) { signOut(); return; }
     if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
     if (el.dataset.kind) { S.kinds.has(el.dataset.kind) ? S.kinds.delete(el.dataset.kind) : S.kinds.add(el.dataset.kind); S.shown = 48; render(); return; }
     if (el.dataset.chain === "*") { S.chains.clear(); S.shown = 48; render(); return; }
@@ -836,6 +843,7 @@ function renderPricing() {
     </div>`;
 }
 function showView() {
+  if (location.hash === "#account") { history.replaceState(null, "", location.pathname + location.search); openAccount(); }
   const v = location.hash === "#recipes" ? "recipes" : location.hash === "#pricing" ? "pricing" : "deals";
   $("#viewDeals").hidden = v !== "deals";
   $("#viewRecipes").hidden = v !== "recipes";
@@ -851,6 +859,7 @@ function bindRecipes() {
     const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe]"); if (!el) return;
     if (el.dataset.plan) {
       e.stopPropagation();
+      if (!R.plan.has(el.dataset.plan) && !allowed("plan")) return;
       R.plan.has(el.dataset.plan) ? R.plan.delete(el.dataset.plan) : R.plan.add(el.dataset.plan);
       store.set("plan", [...R.plan]); renderRecipes();
       if (!$("#sheetBg").hidden && el.closest("#sheet")) openRecipe(el.dataset.plan);
@@ -874,7 +883,7 @@ function bindRecipes() {
     (R.have[id] ||= {})[i] = e.target.checked; store.set("have", R.have);
     openRecipe(id, v); renderRecipes();
   });
-  $("#newRecipe").addEventListener("click", () => openMaker());
+  $("#newRecipe").addEventListener("click", () => { if (R.own.length >= 1 && !allowed("recipes")) return; openMaker(); });
   $("#recipeForm").addEventListener("submit", e => {
     e.preventDefault();
     if (document.activeElement === $("#pickQ")) return; // Enter in the search picks, it doesn't save
@@ -902,8 +911,116 @@ function bindRecipes() {
   $("#chosen").addEventListener("input", e => { const i = e.target.dataset.amt; if (i != null) M.items[+i].a = e.target.value; });
 }
 
+// ---------- accounts and payments (on only when config.js has the Supabase keys) ----------
+const CFG = window.DK_CONFIG || {};
+const ACC = { on: !!(CFG.supabaseUrl && CFG.supabaseAnonKey), sb: null, user: null, profile: null, pulling: false };
+const isPlus = () => ["trialing", "active"].includes(ACC.profile?.subscription_status);
+// Free: every deal, my list, one own recipe. Plus: unlimited recipes and the weekly plan.
+function allowed(feature) {
+  if (!ACC.on || isPlus()) return true;
+  openAccount(feature);
+  return false;
+}
+function loadScript(src) {
+  return new Promise((ok, fail) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = fail; document.head.append(s); });
+}
+async function initAccounts() {
+  const btn = $("#accBtn");
+  if (!ACC.on) return;               // no keys yet: the site works exactly as before, without accounts
+  btn.hidden = false;
+  try { await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"); }
+  catch { ACC.on = false; btn.hidden = true; return; }  // can't reach the login service: carry on without accounts
+  ACC.sb = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey);
+  ACC.sb.auth.onAuthStateChange((_e, session) => { setUser(session?.user || null); });
+  const { data } = await ACC.sb.auth.getSession();
+  await setUser(data.session?.user || null);
+  if (url.has("paid")) { await refreshProfile(); openAccount(); }  // back from Stripe checkout
+}
+async function setUser(user) {
+  if ((user?.id || null) === (ACC.user?.id || null) && ACC.profile) return;
+  ACC.user = user; ACC.profile = null;
+  if (user) { await refreshProfile(); await pull(); }
+  paintAccount();
+}
+async function refreshProfile() {
+  if (!ACC.user) return;
+  const { data } = await ACC.sb.from("profiles").select("*").eq("id", ACC.user.id).single();
+  ACC.profile = data || {};
+  paintAccount();
+}
+// first sign-in on a device: merge what's in the browser with what's in the account
+async function pull() {
+  const { data } = await ACC.sb.from("user_data").select("*").eq("user_id", ACC.user.id).single();
+  if (!data) return;
+  ACC.pulling = true;
+  S.list = { ...(data.list || {}), ...S.list };
+  const ids = new Set(R.own.map(r => r.id));
+  R.own = [...R.own, ...(data.recipes || []).filter(r => !ids.has(r.id))];
+  R.have = { ...(data.have || {}), ...R.have };
+  R.plan = new Set([...(data.plan || []), ...R.plan]);
+  store.set("list", S.list); store.set("recipes", R.own); store.set("have", R.have); store.set("plan", [...R.plan]);
+  ACC.pulling = false;
+  $("#listCount").textContent = Object.keys(S.list).length;
+  render(); if (location.hash === "#recipes") renderRecipes();
+  push();
+}
+let syncTimer;
+function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTimer); syncTimer = setTimeout(push, 800); }
+async function push() {
+  if (!ACC.user) return;
+  await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan], updated_at: new Date().toISOString() });
+}
+async function callFn(name) {
+  const { data, error } = await ACC.sb.functions.invoke(name, { body: {} });
+  if (error || !data?.url) { toast(t().accErr); return; }
+  location.href = data.url;
+}
+function startTrial() { if (!ACC.user) { openAccount("trial"); return; } toast(t().accRedirect); callFn("create-checkout"); }
+function openPortal() { toast(t().accRedirect); callFn("customer-portal"); }
+async function signOut() { await ACC.sb.auth.signOut(); closeDialogs(); toast(t().accOut); }
+function paintAccount() {
+  const b = $("#accBtn"); if (!b) return;
+  b.classList.toggle("in", !!ACC.user);
+  b.setAttribute("aria-label", ACC.user ? t().accTitle : t().accSignIn);
+  if (!$("#accDlg").hidden) openAccount(ACC.why);
+}
+function planLine() {
+  const L = t(), p = ACC.profile || {}, d = x => x ? new Date(x).toLocaleDateString(LOCALE[S.lang], { day: "numeric", month: "long" }) : "";
+  if (p.subscription_status === "trialing") return L.accTrial(d(p.trial_end));
+  if (p.subscription_status === "active") return p.cancel_at_period_end ? L.accEnds(d(p.current_period_end)) : L.accActive(d(p.current_period_end));
+  if (p.subscription_status === "past_due") return L.accPastDue;
+  return L.accFree;
+}
+function openAccount(why) {
+  const L = t(); ACC.why = why;
+  const box = $("#accBox");
+  const upsell = why && why !== "trial" ? `<p class="upsell">${L.accNeed[why] || ""}</p>` : "";
+  if (!ACC.user) {
+    box.innerHTML = `<h3 id="accTitle">${L.accSignIn}</h3>${upsell}<p class="muted">${L.accWhy}</p>
+      <form id="accForm" class="acc-form"><label class="field"><span>${L.accEmail}</span><input id="accEmail" type="email" required autocomplete="email" inputmode="email"></label>
+      <button class="btn block" type="submit">${L.accSend}</button></form>
+      <p class="muted small" id="accSent" hidden></p>
+      <div class="pop-actions"><button type="button" class="btn ghost" data-close>${L.close}</button></div>`;
+    $("#accForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const email = $("#accEmail").value.trim();
+      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname + (why === "trial" ? "#pricing" : "") } });
+      const sent = $("#accSent"); if (sent) { sent.textContent = error ? L.accErr : L.accSent(email); sent.hidden = false; }
+    });
+  } else {
+    box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
+      <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd></dl>
+      <div class="cta">${isPlus() || ACC.profile?.subscription_status === "past_due"
+        ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
+        : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
+        <button type="button" class="btn ghost" data-logout>${L.accLogout}</button></div>
+      <p class="muted small">${L.accSynced}</p>`;
+  }
+  if ($("#accDlg").hidden) openDialog($("#accDlg"));
+}
+
 // ---------- start ----------
 bind();
 bindRecipes();
-load().then(() => { renderStatic(); render(); showView(); });
+load().then(() => { renderStatic(); render(); showView(); initAccounts(); });
 })();

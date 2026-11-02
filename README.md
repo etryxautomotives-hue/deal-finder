@@ -39,3 +39,7 @@ cp data/*.json site/data/ 2>/dev/null; cd site && python -m http.server 8000   #
 ```
 
 The design rules it follows, and the research behind them, are in `site/DESIGN-RULES.md`.
+
+## Accounts and payments
+
+Off until `site/config.js` has the Supabase keys. Step-by-step setup (Supabase login, Stripe €4,99/month with 14-day trial, webhook): [docs/SETUP-PAYMENTS.md](docs/SETUP-PAYMENTS.md).
