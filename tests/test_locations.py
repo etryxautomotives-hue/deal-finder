@@ -6,6 +6,10 @@ def test_chain_of_reads_brand_then_name():
     assert chain_of({"name": "AD Delhaize Gent"}) == "Delhaize"
     assert chain_of({"name": "Spar Express"}) == "Spar"
     assert chain_of({"name": "Bakkerij Jan"}) is None
+    assert chain_of({"name": "Louis Delhaize Couvin"}) == "Louis Delhaize"
+    assert chain_of({"brand": "Alvo"}) == "Alvo"
+    assert chain_of({"name": "Eurospar"}) == "Spar"
+    assert chain_of({"name": "Délitraiteur Uccle"}) == "Delitraiteur"
 
 
 def test_to_stores_uses_way_centre_and_builds_address():

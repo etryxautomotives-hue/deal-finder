@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "deal-collector"
           git config user.email "actions@users.noreply.github.com"
-          git add data/deals.json data/meta.json data/stores.json 2>/dev/null || true
+          for f in data/deals.json data/meta.json data/stores.json; do if [ -f "$f" ]; then git add "$f"; fi; done
           git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
           git push
       - name: Build the site

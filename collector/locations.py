@@ -26,11 +26,13 @@ area["ISO3166-1"="BE"][admin_level=2]->.be;
 out center tags;"""
 
 # chain name on the site -> patterns matched against OSM brand/name tags (lowercase)
-CHAINS = {
+CHAINS = {  # order matters: the first match wins ("Louis Delhaize" before "Delhaize")
     "Colruyt": r"^colruyt", "Okay": r"^okay", "Bio-Planet": r"bio-?planet",
+    "Louis Delhaize": r"^louis delhaize", "Alvo": r"^alvo\b", "Renmans": r"^renmans", "Ekoplaza": r"^ekoplaza",
+    "Delitraiteur": r"^d[eé]litraiteur", "Cru": r"^cru\b",
     "Delhaize": r"delhaize|^proxy|shop.?n.?go", "Lidl": r"^lidl", "Aldi": r"^aldi",
     "Carrefour": r"carrefour", "Albert Heijn": r"albert heijn|^ah\b", "Intermarché": r"intermarch",
-    "Spar": r"^spar\b", "Match": r"^s?match\b", "Cora": r"^cora\b", "Jumbo": r"^jumbo\b", "Sligro": r"^sligro",
+    "Spar": r"^(euro)?spar\b", "Match": r"^s?match\b", "Cora": r"^cora\b", "Jumbo": r"^jumbo\b", "Sligro": r"^sligro",
 }
 
 
