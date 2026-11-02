@@ -138,6 +138,9 @@ Object.assign(T.nl, {
   freeBtn: "Gratis deals bekijken", soon: "Accounts en betalen komen binnenkort. Tot dan is alles gratis.",
 });
 T.nl.sorts.value = "Goedkoopst per kg / L";
+Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
+  rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
+  stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
   navHome: "Accueil", navPricing: "Tarifs",
   eyebrow: c => `Belgique · ${c} enseignes · un prix honnête au kilo`,
@@ -163,6 +166,9 @@ Object.assign(T.fr, {
   freeBtn: "Voir les promos gratuites", soon: "Les comptes et le paiement arrivent bientôt. D’ici là, tout est gratuit.",
 });
 T.fr.sorts.value = "Moins cher au kg / L";
+Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. haché, pâtes, oignon", rFree: q => `Ajouter « ${q} » comme ingrédient`,
+  rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
+  stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
   navHome: "Home", navPricing: "Pricing",
   eyebrow: c => `Belgium · ${c} chains · one honest price per kg`,
@@ -188,6 +194,9 @@ Object.assign(T.en, {
   freeBtn: "See the free deals", soon: "Accounts and payment are coming soon. Until then everything is free.",
 });
 T.en.sorts.value = "Cheapest per kg / L";
+Object.assign(T.en, { rPick: "Ingredients", rPickPh: "Search a product, e.g. mince, pasta, onion", rFree: q => `Add “${q}” as your own ingredient`,
+  rSteps: "How to make it (optional)", rAmount: "Amount", rNone: "Add at least one ingredient.", editRecipe: "Edit recipe",
+  stepsTitle: "How to make it", rHint: "Pick from every store's products. Each week we find the best deal for each ingredient.", rSaved: "Recipe saved" });
 const LOCALE = { nl: "nl-BE", fr: "fr-BE", en: "en-GB" };
 const KIND_ORDER = ["1+1", "2+1", "multi", "2nd_half", "2nd_pct", "percent", "bundle", "price_drop", "other"];
 const CAT_ORDER = ["fruit_veg", "meat_fish", "dairy", "bread", "pantry", "snacks", "drinks", "household", "other"];
@@ -725,8 +734,10 @@ function openRecipe(id, keepFocus) {
       <div class="cta">
         <button type="button" class="btn" data-addmissing="${esc(r.id)}" ${st.deals.length ? "" : "disabled"}>${L.addMissing}</button>
         <button type="button" class="btn ghost" data-plan="${esc(r.id)}" aria-pressed="${on}">${star(on)} ${on ? L.planned : L.plan}</button>
-        ${r.own ? `<button type="button" class="btn ghost" data-delrecipe="${esc(r.id)}">${L.deleteRecipe}</button>` : ""}
+        ${r.own ? `<button type="button" class="btn ghost" data-editrecipe="${esc(r.id)}">${L.editRecipe}</button>
+          <button type="button" class="btn ghost" data-delrecipe="${esc(r.id)}">${L.deleteRecipe}</button>` : ""}
       </div>
+      ${r.steps ? `<div class="steps"><h3>${L.stepsTitle}</h3>${r.steps.split(/\n+/).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
     </div>`;
   $("#sheet").classList.add("narrow");
   if ($("#sheetBg").hidden) openDialog($("#sheetBg"), $("#sheet .x"));
@@ -741,15 +752,75 @@ function addDeals(deals) {
   toast(t().addedMissing(n));
 }
 
-function parseRecipe(name, serves, text) {
-  const lines = text.split(/\n+/).map(x => x.trim()).filter(Boolean);
-  const i = lines.map(line => {
-    const m = line.match(/^([\d.,/½¼¾]+\s*(?:kg|g|gr|l|cl|ml|dl|el|tl|st|stuks?|x|×|blik|pak|zak|snede|sneden|teentjes?)?\.?)\s+(.*)$/i);
-    const amount = m ? m[1] : "", label = (m ? m[2] : line).replace(/^(?:de|het|een|du|de la|des|of)\s+/i, "");
-    const words = fold(label).split(/[^a-z0-9]+/).filter(w => w.length >= 4);
-    return { n: { nl: label, fr: label, en: label }, a: amount, k: [fold(label), ...words].filter(Boolean) };
-  });
-  return { id: "own-" + Date.now().toString(36), own: true, t: { nl: name, fr: name, en: name }, serves: +serves || null, i };
+// ---------- recipe maker: ingredients picked from the stores' products ----------
+const AMOUNT = /^([\d.,/½¼¾]+\s*(?:kg|g|gr|l|cl|ml|dl|el|tl|st|stuks?|x|×|blik|pak|zak|snede|sneden|teentjes?)?\.?)\s+(.*)$/i;
+const STOP = new Set(["fijne", "verse", "vers", "grote", "kleine", "mini", "extra", "classic", "original", "stuks", "pack", "promo", "voor", "pour", "avec", "met", "van", "the", "and"]);
+const M = { name: "", serves: 4, items: [], steps: "", editing: null };
+function keywordsFor(label, brand) {
+  const b = fold(brand || "");
+  const words = fold(label).split(/[^a-z0-9]+/).filter(w => w.length >= 3 && !STOP.has(w) && w !== b && !/^\d/.test(w));
+  const longest = [...words].sort((a, c) => c.length - a.length)[0];  // first word + longest word, e.g. "kiwi", "aardappelsparretjes"
+  return [...new Set([fold(label), words[0], longest])].filter(Boolean);
+}
+function fromProduct(d) {
+  return { n: { nl: d.name, fr: d.name, en: d.name }, a: d.pack_size || "", k: keywordsFor(d.name, d.brand), c: d.cat !== "other" ? d.cat : undefined,
+    src: { store: d.store, img: d.image_url || null } };
+}
+function fromText(text) {
+  const m = text.match(AMOUNT), amount = m ? m[1] : "", label = (m ? m[2] : text).replace(/^(?:de|het|een|du|de la|des|of)\s+/i, "").trim();
+  return { n: { nl: label, fr: label, en: label }, a: amount, k: keywordsFor(label) };
+}
+function products(q) {
+  const ws = fold(q).split(/\s+/).filter(Boolean); if (!ws.length) return [];
+  const seen = new Set(), out = [];
+  for (const d of DEALS) {
+    if (!ws.every(w => d.hay.includes(w))) continue;
+    const key = fold(d.name) + "|" + d.store; if (seen.has(key)) continue; seen.add(key);
+    out.push({ d, score: (wordStart(fold(d.name), ws[0]) ? 0 : 1) });
+  }
+  return out.sort((a, b) => a.score - b.score || a.d.price - b.d.price).slice(0, 8).map(x => x.d);
+}
+let pickIdx = -1;
+function renderPick() {
+  const L = t(), q = $("#pickQ").value.trim(), list = $("#pickList");
+  if (!q) { list.hidden = true; $("#pickQ").setAttribute("aria-expanded", "false"); return; }
+  const found = products(q);
+  list.innerHTML = found.map((d, i) => `<li role="option" id="pick${i}" data-pick="${d.id}" aria-selected="${i === pickIdx}">
+      <span class="th">${d.image_url ? `<img src="${esc(d.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : ""}</span>
+      <span class="pn"><b>${esc(d.name)}</b><span class="st">${sicon(d.store)}${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}</span></span>
+      <span class="pp">${money(d.price)}</span></li>`).join("") +
+    `<li role="option" id="pick${found.length}" data-pickfree="1" aria-selected="${pickIdx === found.length}" class="free"><span class="th">+</span><span class="pn">${esc(L.rFree(q))}</span></li>`;
+  list.hidden = false; $("#pickQ").setAttribute("aria-expanded", "true");
+  $("#pickQ").setAttribute("aria-activedescendant", pickIdx >= 0 ? `pick${pickIdx}` : "");
+}
+function choose(item) {
+  M.items.push(item); $("#pickQ").value = ""; pickIdx = -1; renderPick(); renderChosen(); $("#pickQ").focus(); $("#recipeErr").hidden = true;
+}
+function renderChosen() {
+  const L = t();
+  $("#chosen").innerHTML = M.items.map((ing, i) => `<li>
+      <span class="th">${ing.src?.img ? `<img src="${esc(ing.src.img)}" alt="" onerror="this.remove()">` : ""}</span>
+      <span class="pn"><b>${esc(iName(ing))}</b>${ing.src ? `<span class="st">${sicon(ing.src.store)}${esc(ing.src.store)}</span>` : ""}</span>
+      <input class="amt" data-amt="${i}" value="${esc(ing.a || "")}" placeholder="${L.rAmount}" aria-label="${L.rAmount}" maxlength="20">
+      <button type="button" class="rm" data-rm="${i}" aria-label="${L.remove}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></li>`).join("");
+}
+function openMaker(r) {
+  M.editing = r ? r.id : null; M.items = r ? r.i.map(x => ({ ...x })) : [];
+  $("#recipeForm").reset(); $("#recipeErr").hidden = true;
+  $("#recipeTitle").textContent = r ? t().editRecipe : t().newRecipe;
+  $("#rName").value = r ? rTitle(r) : ""; $("#rServes").value = r?.serves || 4; $("#rSteps").value = r?.steps || "";
+  pickIdx = -1; renderPick(); renderChosen();
+  openDialog($("#recipeDlg"), $("#rName"));
+}
+function saveMaker() {
+  const name = $("#rName").value.trim();
+  if (!M.items.length) { $("#recipeErr").textContent = t().rNone; $("#recipeErr").hidden = false; $("#pickQ").focus(); return null; }
+  const r = { id: M.editing || "own-" + Date.now().toString(36), own: true, t: { nl: name, fr: name, en: name },
+    serves: +$("#rServes").value || null, i: M.items, steps: $("#rSteps").value.trim() };
+  const at = R.own.findIndex(x => x.id === r.id);
+  if (at >= 0) R.own[at] = r; else R.own.unshift(r);
+  store.set("recipes", R.own); toast(t().rSaved);
+  return r;
 }
 
 function renderPricing() {
@@ -777,7 +848,7 @@ function showView() {
 function bindRecipes() {
   window.addEventListener("hashchange", () => { showView(); window.scrollTo(0, 0); });
   document.addEventListener("click", e => {
-    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe]"); if (!el) return;
+    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe]"); if (!el) return;
     if (el.dataset.plan) {
       e.stopPropagation();
       R.plan.has(el.dataset.plan) ? R.plan.delete(el.dataset.plan) : R.plan.add(el.dataset.plan);
@@ -787,6 +858,8 @@ function bindRecipes() {
       const r = allRecipes().find(x => x.id === el.dataset.addmissing); addDeals(recipeStats(r).deals); openRecipe(r.id); renderRecipes();
     } else if ("planadd" in el.dataset) {
       addDeals(allRecipes().filter(r => R.plan.has(r.id)).flatMap(r => recipeStats(r).deals)); renderRecipes();
+    } else if (el.dataset.editrecipe) {
+      const r = R.own.find(x => x.id === el.dataset.editrecipe); closeDialogs(); if (r) openMaker(r);
     } else if (el.dataset.delrecipe) {
       R.own = R.own.filter(r => r.id !== el.dataset.delrecipe); store.set("recipes", R.own);
       R.plan.delete(el.dataset.delrecipe); store.set("plan", [...R.plan]); closeDialogs(); renderRecipes();
@@ -801,13 +874,32 @@ function bindRecipes() {
     (R.have[id] ||= {})[i] = e.target.checked; store.set("have", R.have);
     openRecipe(id, v); renderRecipes();
   });
-  $("#newRecipe").addEventListener("click", () => { $("#recipeForm").reset(); openDialog($("#recipeDlg"), $("#rName")); });
+  $("#newRecipe").addEventListener("click", () => openMaker());
   $("#recipeForm").addEventListener("submit", e => {
     e.preventDefault();
-    const r = parseRecipe($("#rName").value.trim(), $("#rServes").value, $("#rIngr").value);
-    if (!r.i.length) return;
-    R.own.unshift(r); store.set("recipes", R.own); closeDialogs(); renderRecipes(); openRecipe(r.id);
+    if (document.activeElement === $("#pickQ")) return; // Enter in the search picks, it doesn't save
+    const r = saveMaker(); if (!r) return;
+    closeDialogs(); matchCache.clear(); renderRecipes(); openRecipe(r.id);
   });
+  $("#pickQ").addEventListener("input", () => { pickIdx = -1; renderPick(); });
+  $("#pickQ").addEventListener("keydown", e => {
+    const opts = [...$("#pickList").children];
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault(); if (!opts.length) return;
+      pickIdx = (pickIdx + (e.key === "ArrowDown" ? 1 : -1) + opts.length) % opts.length; renderPick();
+      $("#pick" + pickIdx)?.scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter") {
+      e.preventDefault(); if (!opts.length) return;
+      const o = opts[Math.max(pickIdx, 0)]; o.dataset.pickfree ? choose(fromText($("#pickQ").value.trim())) : choose(fromProduct(DEALS.find(d => d.id === o.dataset.pick)));
+    } else if (e.key === "Escape" && $("#pickQ").value) { e.stopPropagation(); $("#pickQ").value = ""; renderPick(); }
+  });
+  $("#pickList").addEventListener("mousedown", e => e.preventDefault()); // keep focus in the search box
+  $("#pickList").addEventListener("click", e => {
+    const o = e.target.closest("li"); if (!o) return;
+    o.dataset.pickfree ? choose(fromText($("#pickQ").value.trim())) : choose(fromProduct(DEALS.find(d => d.id === o.dataset.pick)));
+  });
+  $("#chosen").addEventListener("click", e => { const b = e.target.closest("[data-rm]"); if (b) { M.items.splice(+b.dataset.rm, 1); renderChosen(); } });
+  $("#chosen").addEventListener("input", e => { const i = e.target.dataset.amt; if (i != null) M.items[+i].a = e.target.value; });
 }
 
 // ---------- start ----------

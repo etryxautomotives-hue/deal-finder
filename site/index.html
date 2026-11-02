@@ -152,14 +152,25 @@
   <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="listTitle"></aside>
 </div>
 
-<!-- New recipe -->
+<!-- New or edited recipe: pick ingredients from the stores' products -->
 <div class="scrim" id="recipeDlg" hidden>
-  <form class="pop wide" id="recipeForm" role="dialog" aria-modal="true" aria-labelledby="recipeTitle">
+  <form class="pop wide maker" id="recipeForm" role="dialog" aria-modal="true" aria-labelledby="recipeTitle" autocomplete="off">
     <h3 id="recipeTitle" data-t="newRecipe">Add a recipe</h3>
-    <label class="field"><span data-t="rName">Name</span><input id="rName" required maxlength="80" autocomplete="off"></label>
-    <label class="field"><span data-t="rServes">Servings</span><input id="rServes" inputmode="numeric" maxlength="2" value="4"></label>
-    <label class="field"><span data-t="rIngr">Ingredients, one per line</span>
-      <textarea id="rIngr" rows="7" required></textarea></label>
+    <div class="maker-top">
+      <label class="field"><span data-t="rName">Name</span><input id="rName" required maxlength="80"></label>
+      <label class="field small"><span data-t="rServes">Servings</span><input id="rServes" inputmode="numeric" maxlength="2" value="4"></label>
+    </div>
+    <div class="field"><span id="pickLbl" data-t="rPick">Ingredients</span>
+      <div class="picker">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="pickQ" role="combobox" aria-expanded="false" aria-controls="pickList" aria-labelledby="pickLbl" data-t-ph="rPickPh">
+      </div>
+      <ul class="picklist" id="pickList" role="listbox" hidden></ul>
+      <span class="hint" data-t="rHint"></span>
+    </div>
+    <ul class="chosen" id="chosen"></ul>
+    <label class="field"><span data-t="rSteps">How to make it</span><textarea id="rSteps" rows="4"></textarea></label>
+    <p class="pc-error" id="recipeErr" role="alert" hidden></p>
     <div class="pop-actions">
       <button type="button" class="btn ghost" data-close data-t="cancel">Cancel</button>
       <button type="submit" class="btn" data-t="save">Save</button>
