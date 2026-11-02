@@ -1,6 +1,6 @@
 """Delhaize. The promotions page is rendered on the server: each product is a data-testid="product-block" tile.
 
-The page shows 20 products at a time; we walk the pages with ?pageNumber= until a page adds nothing new.
+The page shows 20 products at a time; we walk the pages with ?pageNumber= until two pages in a row add nothing new.
 """
 from __future__ import annotations
 
@@ -64,12 +64,17 @@ class Delhaize(Store):
     name = "Delhaize"
 
     def collect(self) -> list[Deal]:
-        deals, seen = [], set()
+        deals, seen, empty = [], set(), 0
         for page in range(MAX_PAGES):
             url = PROMO_URL if page == 0 else f"{PROMO_URL}?pageNumber={page}"
             new = [d for d in parse_page(self.client.get(url).text, url) if d.source_url not in seen]
             if not new:
-                break
+                # the site sometimes serves an earlier page again; only stop after two pages in a row add nothing
+                empty += 1
+                if empty == 2:
+                    break
+                continue
+            empty = 0
             seen.update(d.source_url for d in new)
             deals += new
         log.info("Delhaize: %d promotions over %d pages", len(deals), page + 1)

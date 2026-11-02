@@ -17,3 +17,23 @@ def test_parse_page_reads_tiles():
     assert fruit.source_url.startswith("https://www.delhaize.be/nl/shop/")
     assert pomegranate.deal_kind == "price_drop"
     assert box.deal_kind == "bundle"
+
+
+def test_paging_survives_one_repeated_page():
+    from collector.stores.delhaize import Delhaize, PROMO_URL
+
+    class FakeResp:
+        def __init__(self, text): self.text = text
+
+    pages = {0: HTML, 1: HTML, 2: HTML.replace("/p/", "/p/x"), 3: "", 4: ""}
+
+    class FakeClient:
+        def get(self, url):
+            n = 0 if url == PROMO_URL else int(url.rsplit("=", 1)[1])
+            return FakeResp(pages.get(n, ""))
+
+    store = Delhaize.__new__(Delhaize)
+    store.client = FakeClient()
+    deals = store.collect()
+    first = parse_page(HTML)
+    assert len(deals) == 2 * len(first)
