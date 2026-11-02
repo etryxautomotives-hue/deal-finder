@@ -8,6 +8,7 @@ Run weekly; shops rarely move.
 from __future__ import annotations
 
 import json
+import time
 import logging
 import re
 import sys
@@ -62,15 +63,17 @@ def to_stores(elements: list[dict]) -> list[dict]:
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     stores: list[dict] = []
-    for url in OVERPASS:  # public mirrors; the main one is often busy
+    for url in OVERPASS * 2:  # public mirrors, two rounds; the main one is often busy
+        if stores:
+            break
         try:
             r = httpx.post(url, data={"data": QUERY}, timeout=240,
                            headers={"User-Agent": "DealFinderBot/0.1 (store locations)"})
             r.raise_for_status()
             stores = to_stores(r.json().get("elements", []))
-            break
         except (httpx.HTTPError, ValueError) as e:
             log.warning("%s failed: %s", url, e)
+            time.sleep(30)
     if len(stores) < 500:  # Belgium has thousands; a tiny result means Overpass had a bad day
         log.error("only %d stores found, keeping the old file", len(stores))
         return 1
