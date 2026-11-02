@@ -1,4 +1,4 @@
-# Deal finder
+# deal'ke
 
 Finds this week's grocery deals at Belgian supermarkets and ranks them by real price per kg or litre.
 
@@ -20,3 +20,22 @@ python -m collector.run      # collect now
 ```
 
 Before enabling a store, check its terms of use. See the design brief for the per-store notes.
+
+## Website
+
+`site/` is the website: plain HTML, CSS and JavaScript, no build step, so it loads fast and can be hosted anywhere static
+(GitHub Pages is set up in the workflow). It reads:
+
+- `data/deals.json`, written every morning by the collector
+- `data/stores.json`, shop locations from OpenStreetMap (`python -m collector.locations`, refreshed weekly)
+- `data/postcodes.json`, Belgian postal code centres (from github.com/jief/zipcode-belgium)
+
+Until the first real collection, it shows `site/data/sample-deals.json` with a clear "example deals" note.
+
+Try it locally:
+
+```
+cp data/*.json site/data/ 2>/dev/null; cd site && python -m http.server 8000   # open http://localhost:8000
+```
+
+The design rules it follows, and the research behind them, are in `site/DESIGN-RULES.md`.

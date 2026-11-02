@@ -101,6 +101,12 @@ def effective_price(price: float, promo: str | None) -> float:
         get, pay = int(m.group(1)), int(m.group(2))
         if get > pay:
             return round(price * pay / get, 2)
+    m = re.search(r"\b(\d+)\s*(?:voor|pour|for)\s*(?:€\s*)?(\d+(?:[.,]\d+)?)\s*(?:€|eur)", t) or \
+        re.search(r"\b(\d+)\s*(?:voor|pour|for)\s*€\s*(\d+(?:[.,]\d+)?)", t)
+    if m and int(m.group(1)) > 0:
+        each = to_float(m.group(2)) / int(m.group(1))
+        if each < price:
+            return round(each, 2)
     if re.search(r"\b2(?:de|e|ème)\b", t):
         if "halve prijs" in t or "moitié prix" in t:
             return round(price * 0.75, 2)
@@ -108,3 +114,79 @@ def effective_price(price: float, promo: str | None) -> float:
         if m:
             return round(price * (1 - int(m.group(1)) / 200), 2)
     return price
+
+
+def deal_kind(text: str | None) -> str | None:
+    """The deal type people filter on, in one canonical key.
+
+    '1+1' (also '2 voor 1'), '2+1' (also '3 voor 2'), any 'N+M', 'bundle' ('2 voor € 5'),
+    '2nd_half' ('2de aan halve prijs'), '2nd_pct' ('2e à -30%'), 'percent', 'price_drop', 'other'.
+    """
+    if not text:
+        return None
+    t = text.lower().replace("\xa0", " ")
+    m = re.search(r"\b(\d)\s*\+\s*(\d)\b", t)
+    if m:
+        return f"{int(m.group(1))}+{int(m.group(2))}"
+    m = re.search(r"\b(\d+)\s*(?:voor|pour|for)\s*(€\s*)?(\d+(?:[.,]\d+)?)\s*(€|eur)?", t)
+    if m:
+        if m.group(2) or m.group(4) or re.search(r"[.,]", m.group(3)):
+            return "bundle"
+        get, pay = int(m.group(1)), int(m.group(3))
+        if get > pay > 0:
+            return f"{pay}+{get - pay}"
+    if re.search(r"\b2(?:de|e|ème|nd)\b", t):
+        if re.search(r"halve prijs|moitié prix|half price|-?\s*50\s*%", t):
+            return "2nd_half"
+        if re.search(r"\d+\s*%", t):
+            return "2nd_pct"
+    if re.search(r"-\s*\d+\s*%|\d+\s*%\s*(?:korting|réduction|off)", t):
+        return "percent"
+    if re.search(r"prijsdaling|baisse de prix|price drop|nieuwe lage prijs|bonus|actieprijs|prix promo", t):
+        return "price_drop"
+    return "other"
+
+
+# category -> words in Dutch, French and English (lowercase, matched on word starts)
+_CATEGORIES = {
+    "household": "wasmiddel lessive detergent afwas vaisselle toiletpapier papier toilette wc-papier keukenrol essuie-tout "
+                 "schoonmaak nettoyant vuilniszak sacs poubelle tandpasta dentifrice shampoo douchegel gel douche luiers langes deo",
+    "drinks": "sinaasappelsap appelsap fruitsap jus d'orange bier bière beer wijn wine cola frisdrank soda limonade water eau sap jus juice koffie café coffee thee thé tea "
+              "pils cava champagne spuitwater smoothie",
+    "dairy": "melk lait milk kaas fromage cheese yoghurt yaourt yogurt boter beurre butter room crème cream eieren oeufs eggs "
+             "gouda emmental mozzarella skyr platte kaas fromage blanc",
+    "bread": "brood pain bread croissant pistolet stokbrood baguette sandwich koffiekoek wraps tortilla beschuit toast",
+    "meat_fish": "vlees viande meat gehakt haché kip poulet chicken varken porc pork rund boeuf bœuf beef worst saucisse sausage "
+                 "ham jambon spek lard bacon steak filet zalm saumon salmon vis poisson fish tonijn thon tuna garnalen crevettes "
+                 "scampi kabeljauw cabillaud salami",
+    "fruit_veg": "appel pomme apple peer poire pear banaan banane banana sinaas orange mandarijn mandarine druiven raisin grapes "
+                 "aardbei fraise strawberr ananas pineapple meloen melon kiwi citroen citron lemon tomaat tomate tomato "
+                 "komkommer concombre cucumber sla salade lettuce wortel carotte carrot uien oignon onion aardappel pomme de terre "
+                 "potato broccoli champignon paprika poivron pepper courgette prei poireau spinazie épinard groente légume "
+                 "vegetable fruit avocado",
+    "snacks": "chips chocolade chocolat chocolate koek biscuit cookie snoep bonbon candy chupa noten noix nuts ijs glace ice cream "
+              "praline wafel gaufre chips",
+    "pantry": "olijfolie zonnebloemolie pasta pâtes spaghetti penne rijst riz rice saus sauce soep soupe soup olie huile oil bloem farine flour suiker sucre "
+              "sugar ontbijtgranen céréales cereal muesli conserven blik choco confituur confiture jam mayonaise ketchup pizza lasagne "
+              "maaltijd plat préparé meal noedels nouilles noodles",
+}
+_CAT_WORDS = [(w, c) for c, words in _CATEGORIES.items() for w in words.split()]
+
+
+def categorize(name: str | None) -> str | None:
+    """Rough aisle for a product name, so people can browse by category. None if unsure.
+
+    Dutch glues words together ("melkchocolade", "roomboter"), so longer keywords may match inside a word
+    and the longest matching keyword wins; short keywords (4 letters or fewer) must start a word.
+    """
+    if not name:
+        return None
+    t = name.lower()
+    best, best_len = None, 0
+    for w, c in _CAT_WORDS:
+        if len(w) <= best_len:
+            continue
+        hit = re.search(r"\b" + re.escape(w), t) if len(w) <= 4 else w in t
+        if hit:
+            best, best_len = c, len(w)
+    return best

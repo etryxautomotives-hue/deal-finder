@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>deal'ke · Supermarket deals near you</title>
+<meta name="description" content="Every supermarket promotion in Belgium near you, compared on the real price per kilo. Updated every morning.">
+<meta name="theme-color" content="#FAF8F5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#results" data-t="skip">Skip to deals</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="logo" href="./" aria-label="deal'ke home">deal<span>’</span>ke</a>
+    <form class="search" id="searchForm" role="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" autocomplete="off" enterkeyhint="search" data-t-ph="search">
+      <kbd class="kbd" aria-hidden="true">/</kbd>
+    </form>
+    <div class="right">
+      <button type="button" class="loc" id="locBtn" aria-haspopup="dialog">
+        <svg width="14" height="18" viewBox="0 0 14 18" aria-hidden="true"><path d="M7 0a7 7 0 0 1 7 7c0 5-7 11-7 11S0 12 0 7a7 7 0 0 1 7-7z" fill="currentColor"/><circle cx="7" cy="7" r="2.6" fill="var(--bg)"/></svg>
+        <span id="locLbl"></span>
+      </button>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="nl">NL</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="mylist" id="listBtn" aria-haspopup="dialog">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h2l2.2 10.2a1 1 0 0 0 1 .8h9.3a1 1 0 0 0 1-.8L20 8H6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="17" cy="20" r="1.5" fill="currentColor"/></svg>
+        <span class="lbl" data-t="myList">My list</span><span class="count" id="listCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" id="hero">
+    <div class="hero-text">
+      <h1 id="heroH"></h1>
+      <p class="lead" data-t="heroSub"></p>
+      <form class="cta-row" id="heroForm">
+        <label class="sr" for="heroPc" data-t="postcode">Postal code</label>
+        <input id="heroPc" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="postal-code" placeholder="9000">
+        <button type="submit" class="btn" data-t="showDeals">Show my deals</button>
+      </form>
+      <p class="pc-error" id="heroErr" role="alert" hidden></p>
+      <p class="trust"><span class="pulse" aria-hidden="true"></span><span id="trust"></span></p>
+    </div>
+    <div class="mosaic" aria-hidden="true">
+      <figure class="m1"><img alt="" fetchpriority="high" decoding="async"
+        src="https://images.unsplash.com/photo-1757609909192-0246239198c0?auto=format&fit=crop&w=900&q=70"
+        srcset="https://images.unsplash.com/photo-1757609909192-0246239198c0?auto=format&fit=crop&w=600&q=70 600w, https://images.unsplash.com/photo-1757609909192-0246239198c0?auto=format&fit=crop&w=900&q=70 900w, https://images.unsplash.com/photo-1757609909192-0246239198c0?auto=format&fit=crop&w=1300&q=70 1300w"
+        sizes="(max-width: 820px) 100vw, 30vw"></figure>
+      <figure class="m2"><img alt="" decoding="async"
+        src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=70"
+        srcset="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=450&q=70 450w, https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=70 700w, https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=70 1000w"
+        sizes="(max-width: 820px) 50vw, 20vw"></figure>
+      <figure class="m3"><img alt="" decoding="async"
+        src="https://images.unsplash.com/photo-1775227612415-4569328d9631?auto=format&fit=crop&w=700&q=70"
+        srcset="https://images.unsplash.com/photo-1775227612415-4569328d9631?auto=format&fit=crop&w=450&q=70 450w, https://images.unsplash.com/photo-1775227612415-4569328d9631?auto=format&fit=crop&w=700&q=70 700w, https://images.unsplash.com/photo-1775227612415-4569328d9631?auto=format&fit=crop&w=1000&q=70 1000w"
+        sizes="(max-width: 820px) 50vw, 20vw"></figure>
+    </div>
+  </section>
+
+  <div class="sample wrap" id="sampleNote" hidden><span data-t="sample"></span></div>
+
+  <nav class="tabs" id="tabs" aria-label="Categories"></nav>
+
+  <div class="tools" id="tools">
+    <div class="wrap">
+      <div class="tool-row">
+        <span class="tool-lbl" data-t="dealType">Deal type</span>
+        <div class="chips" id="kinds" role="group"></div>
+      </div>
+      <div class="tool-row">
+        <span class="tool-lbl" data-t="stores">Stores</span>
+        <div class="chips" id="stores" role="group"></div>
+        <label class="sort"><span data-t="sortBy">Sort</span>
+          <select id="sort"></select>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap results" id="results" tabindex="-1">
+    <div class="sechead">
+      <h2 id="secTitle"></h2>
+      <p id="secSub" aria-live="polite"></p>
+      <button type="button" class="clear" id="clearAll" hidden data-t="clearAll">Clear filters</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="more" id="more" hidden><button type="button" class="btn ghost" id="moreBtn" data-t="showMore">Show more</button></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p id="footUpdated"></p>
+    <p data-t="footNote"></p>
+    <p class="credits">Photos: <a href="https://unsplash.com/photos/people-shopping-at-an-outdoor-farmers-market-with-fresh-produce-e3-9x-Ee238" rel="noopener">Jason Ng</a>, <a href="https://unsplash.com/photos/rustic-bread-loaves-with-wheat-stalks-rsWZ-P9FbQ4" rel="noopener">Wesual Click</a>, <a href="https://unsplash.com/photos/fresh-produce-including-bell-peppers-and-tomatoes-at-market-sD6exbeLBb4" rel="noopener">Lynn Ben-Yousef</a> on Unsplash · Shop locations © <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors</p>
+  </div>
+</footer>
+
+<!-- Location -->
+<div class="scrim" id="locDlg" hidden>
+  <form class="pop" id="locForm" role="dialog" aria-modal="true" aria-labelledby="locTitle">
+    <h3 id="locTitle" data-t="whereShop">Where do you shop?</h3>
+    <label class="field"><span data-t="postcode">Postal code</span>
+      <input id="locPc" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="postal-code" required></label>
+    <fieldset class="radius"><legend data-t="radius">Distance</legend>
+      <div class="seg" id="radiusSeg"></div>
+    </fieldset>
+    <p class="pc-error" id="locErr" role="alert" hidden></p>
+    <div class="pop-actions">
+      <button type="button" class="btn ghost" data-close data-t="cancel">Cancel</button>
+      <button type="submit" class="btn" data-t="apply">Show deals</button>
+    </div>
+  </form>
+</div>
+
+<!-- Deal details -->
+<div class="scrim" id="sheetBg" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+</div>
+
+<!-- My list -->
+<div class="scrim right" id="listBg" hidden>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="listTitle"></aside>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js" defer></script>
+</body>
+</html>

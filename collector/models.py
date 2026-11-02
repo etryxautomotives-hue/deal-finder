@@ -20,6 +20,7 @@ class Deal:
     unit_price: float | None = None # euro per kg / L / piece, computed by us
     promo_text: str | None = None   # raw promo label, e.g. "2de aan halve prijs"
     promo_type: str | None = None   # normalised: percent, multi_buy, second_discount, price_drop
+    deal_kind: str | None = None    # what people filter on: "1+1", "2+1", "2nd_half", "percent", ... (parse.deal_kind)
     valid_from: date | None = None
     valid_until: date | None = None
     image_url: str | None = None    # the store's own product photo

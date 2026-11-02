@@ -11,11 +11,11 @@ import json
 import logging
 import sqlite3
 import sys
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from collector.models import Deal
-from collector.parse import effective_price, parse_quantity, promo_type, unit_price
+from collector.parse import categorize, deal_kind, effective_price, parse_quantity, promo_type, unit_price
 from collector.stores import STORES
 from collector.stores.base import PoliteClient
 
@@ -30,6 +30,8 @@ def enrich(deal: Deal) -> Deal:
         if q:
             deal.quantity, deal.unit = q
     deal.promo_type = deal.promo_type or promo_type(deal.promo_text)
+    deal.deal_kind = deal.deal_kind or deal_kind(deal.promo_text)
+    deal.category = deal.category or categorize(deal.name)
     deal.unit_price = unit_price(effective_price(deal.price, deal.promo_text), deal.quantity)
     return deal
 
@@ -44,13 +46,16 @@ def save(deals: list[Deal], data_dir: Path = DATA) -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
     rows = [d.to_dict() for d in deals]
     (data_dir / "deals.json").write_text(json.dumps(rows, ensure_ascii=False, indent=1))
+    meta = {"collected_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "deals": len(rows),
+            "stores": sorted({r["store"] for r in rows})}
+    (data_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False))
     db = sqlite3.connect(data_dir / "deals.sqlite")
     db.execute("""CREATE TABLE IF NOT EXISTS deals (
         store TEXT, name TEXT, brand TEXT, category TEXT, price REAL, old_price REAL,
-        pack_size TEXT, quantity REAL, unit TEXT, unit_price REAL, promo_text TEXT, promo_type TEXT,
+        pack_size TEXT, quantity REAL, unit TEXT, unit_price REAL, promo_text TEXT, promo_type TEXT, deal_kind TEXT,
         valid_from TEXT, valid_until TEXT, image_url TEXT, source_url TEXT, language TEXT, collected_at TEXT)""")
     cols = ["store", "name", "brand", "category", "price", "old_price", "pack_size", "quantity", "unit",
-            "unit_price", "promo_text", "promo_type", "valid_from", "valid_until", "image_url",
+            "unit_price", "promo_text", "promo_type", "deal_kind", "valid_from", "valid_until", "image_url",
             "source_url", "language", "collected_at"]
     db.executemany(f"INSERT INTO deals VALUES ({','.join('?' * len(cols))})",
                    [[r[c] for c in cols] for r in rows])
