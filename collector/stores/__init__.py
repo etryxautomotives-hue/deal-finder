@@ -2,10 +2,12 @@
 from collector.stores.aldi import Aldi
 from collector.stores.base import Store
 from collector.stores.delhaize import Delhaize
+from collector.stores.intermarche import Intermarche
 from collector.stores.lidl import Lidl
 
 STORES: dict[str, type[Store]] = {
     "aldi": Aldi,
     "lidl": Lidl,
     "delhaize": Delhaize,
+    "intermarche": Intermarche,
 }
