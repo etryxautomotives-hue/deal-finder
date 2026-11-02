@@ -17,7 +17,8 @@ import httpx
 
 log = logging.getLogger("locations")
 DATA = Path(__file__).resolve().parent.parent / "data"
-OVERPASS = "https://overpass-api.de/api/interpreter"
+OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter",
+            "https://maps.mail.ru/osm/tools/overpass/api/interpreter"]
 QUERY = """[out:json][timeout:180];
 area["ISO3166-1"="BE"][admin_level=2]->.be;
 (nwr["shop"~"^(supermarket|convenience|wholesale)$"](area.be););
@@ -60,10 +61,16 @@ def to_stores(elements: list[dict]) -> list[dict]:
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    r = httpx.post(OVERPASS, data={"data": QUERY}, timeout=240,
-                   headers={"User-Agent": "DealFinderBot/0.1 (store locations)"})
-    r.raise_for_status()
-    stores = to_stores(r.json().get("elements", []))
+    stores: list[dict] = []
+    for url in OVERPASS:  # public mirrors; the main one is often busy
+        try:
+            r = httpx.post(url, data={"data": QUERY}, timeout=240,
+                           headers={"User-Agent": "DealFinderBot/0.1 (store locations)"})
+            r.raise_for_status()
+            stores = to_stores(r.json().get("elements", []))
+            break
+        except (httpx.HTTPError, ValueError) as e:
+            log.warning("%s failed: %s", url, e)
     if len(stores) < 500:  # Belgium has thousands; a tiny result means Overpass had a bad day
         log.error("only %d stores found, keeping the old file", len(stores))
         return 1
