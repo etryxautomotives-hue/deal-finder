@@ -1,0 +1,25 @@
+2026-11-02 19:23:05,099 INFO HTTP Request: GET https://www.aldi.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:23:06,054 INFO HTTP Request: GET https://www.aldi.be/nl/aanbiedingen.html "HTTP/1.1 301 Moved Permanently"
+2026-11-02 19:23:07,088 INFO HTTP Request: GET https://www.aldi.be/aanbiedingen.html "HTTP/1.1 200 OK"
+2026-11-02 19:23:07,271 INFO Aldi: 83 deals
+2026-11-02 19:23:07,547 INFO HTTP Request: GET https://www.lidl.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:23:10,506 INFO HTTP Request: GET https://www.lidl.be/c/nl-BE/store/acties-deze-week/a10082242 "HTTP/1.1 200 OK"
+2026-11-02 19:23:10,598 INFO Lidl: 21 deals
+2026-11-02 19:23:11,711 INFO HTTP Request: GET https://www.delhaize.be/robots.txt "HTTP/1.1 200 OK"
+2026-11-02 19:23:16,239 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage "HTTP/1.1 200 OK"
+2026-11-02 19:23:25,982 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=1 "HTTP/1.1 200 OK"
+2026-11-02 19:23:33,167 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=2 "HTTP/1.1 200 OK"
+2026-11-02 19:23:39,762 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=3 "HTTP/1.1 200 OK"
+2026-11-02 19:23:41,181 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=4 "HTTP/1.1 200 OK"
+2026-11-02 19:23:50,703 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=5 "HTTP/1.1 200 OK"
+2026-11-02 19:23:56,630 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=6 "HTTP/1.1 200 OK"
+2026-11-02 19:24:03,112 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=7 "HTTP/1.1 200 OK"
+2026-11-02 19:24:08,475 INFO HTTP Request: GET https://www.delhaize.be/nl/Promolandingpage?pageNumber=8 "HTTP/1.1 200 OK"
+2026-11-02 19:24:08,576 INFO Delhaize: 166 promotions over 9 pages
+2026-11-02 19:24:08,596 INFO Delhaize: 166 deals
+2026-11-02 19:24:08,618 INFO saved 270 deals, failed stores: none
+    r.raise_for_status()
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_models.py", line 763, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '502 Bad Gateway' for url 'https://overpass-api.de/api/interpreter'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
