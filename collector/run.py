@@ -32,7 +32,8 @@ def enrich(deal: Deal) -> Deal:
     deal.promo_type = deal.promo_type or promo_type(deal.promo_text)
     deal.deal_kind = deal.deal_kind or deal_kind(deal.promo_text)
     deal.category = deal.category or categorize(deal.name)
-    deal.unit_price = unit_price(effective_price(deal.price, deal.promo_text), deal.quantity)
+    if deal.unit_price is None:  # some stores give their own (more reliable) price per kg/L
+        deal.unit_price = unit_price(effective_price(deal.price, deal.promo_text), deal.quantity)
     return deal
 
 

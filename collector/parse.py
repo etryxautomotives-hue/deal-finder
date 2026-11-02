@@ -151,12 +151,12 @@ def deal_kind(text: str | None) -> str | None:
 _CATEGORIES = {
     "household": "wasmiddel lessive detergent afwas vaisselle toiletpapier papier toilette wc-papier keukenrol essuie-tout "
                  "schoonmaak nettoyant vuilniszak sacs poubelle tandpasta dentifrice shampoo douchegel gel douche luiers langes deo",
-    "drinks": "sinaasappelsap appelsap fruitsap jus d'orange bier bière beer wijn wine cola frisdrank soda limonade water eau sap jus juice koffie café coffee thee thé tea "
+    "drinks": "coca-cola glühwein sinaasappelsap appelsap fruitsap jus d'orange bier bière beer wijn wine cola frisdrank soda limonade water eau sap jus juice koffie café coffee thee thé tea "
               "pils cava champagne spuitwater smoothie",
     "dairy": "melk lait milk kaas fromage cheese yoghurt yaourt yogurt boter beurre butter room crème cream eieren oeufs eggs "
              "gouda emmental mozzarella skyr platte kaas fromage blanc",
     "bread": "brood pain bread croissant pistolet stokbrood baguette sandwich koffiekoek wraps tortilla beschuit toast",
-    "meat_fish": "vlees viande meat gehakt haché kip poulet chicken varken porc pork rund boeuf bœuf beef worst saucisse sausage "
+    "meat_fish": "koolvis kaasburger vlees viande meat gehakt haché kip poulet chicken varken porc pork rund boeuf bœuf beef worst saucisse sausage "
                  "ham jambon spek lard bacon steak filet zalm saumon salmon vis poisson fish tonijn thon tuna garnalen crevettes "
                  "scampi kabeljauw cabillaud salami",
     "fruit_veg": "appel pomme apple peer poire pear banaan banane banana sinaas orange mandarijn mandarine druiven raisin grapes "
@@ -164,9 +164,9 @@ _CATEGORIES = {
                  "komkommer concombre cucumber sla salade lettuce wortel carotte carrot uien oignon onion aardappel pomme de terre "
                  "potato broccoli champignon paprika poivron pepper courgette prei poireau spinazie épinard groente légume "
                  "vegetable fruit avocado",
-    "snacks": "chips chocolade chocolat chocolate koek biscuit cookie snoep bonbon candy chupa noten noix nuts ijs glace ice cream "
+    "snacks": "speculoos snoepjes marshmallow guimauve panettone chips chocolade chocolat chocolate koek biscuit cookie snoep bonbon candy chupa noten noix nuts ijs glace ice cream "
               "praline wafel gaufre chips",
-    "pantry": "olijfolie zonnebloemolie pasta pâtes spaghetti penne rijst riz rice saus sauce soep soupe soup olie huile oil bloem farine flour suiker sucre "
+    "pantry": "zuurkool tafelsaus bolognesesaus srirachasaus paté pâté fond olijfolie zonnebloemolie pasta pâtes spaghetti penne rijst riz rice saus sauce soep soupe soup olie huile oil bloem farine flour suiker sucre "
               "sugar ontbijtgranen céréales cereal muesli conserven blik choco confituur confiture jam mayonaise ketchup pizza lasagne "
               "maaltijd plat préparé meal noedels nouilles noodles",
 }
