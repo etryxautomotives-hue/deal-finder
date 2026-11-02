@@ -604,7 +604,7 @@ function bind() {
     if (el.dataset.add) { e.stopPropagation(); toggleList(el.dataset.add); return; }
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
-    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); return; }
+    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); paintAccount(); return; }
     if ("soon" in el.dataset) { if (PAY()) startTrial(); else toast(t().soon); return; }
     if ("account" in el.dataset) { openAccount(); return; }
     if ("portal" in el.dataset) { openPortal(); return; }
@@ -982,6 +982,7 @@ async function signOut() { await ACC.sb.auth.signOut(); closeDialogs(); toast(t(
 function paintAccount() {
   const b = $("#accBtn"); if (!b) return;
   b.classList.toggle("in", !!ACC.user);
+  $("#accLbl").textContent = ACC.user ? "" : t().accSignIn;   // signed out: say "Inloggen" next to the icon so it is easy to find
   b.setAttribute("aria-label", ACC.user ? t().accTitle : t().accSignIn);
   if (!$("#accDlg").hidden) openAccount(ACC.why);
 }
