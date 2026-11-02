@@ -1,0 +1,64 @@
+name: Collect deals and publish the site
+
+# Runs every morning on GitHub's servers. No Claude involved.
+on:
+  schedule:
+    - cron: "15 5 * * *"   # 05:15 UTC, before Belgian shops open
+  push:
+    branches: [main]
+    paths: ["site/**"]
+  workflow_dispatch: {}     # "Run workflow" button for a manual run
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - name: Collect today's deals
+        if: github.event_name != 'push'
+        run: python -m collector.run
+      - name: Refresh shop locations (Mondays, or when missing)
+        if: github.event_name != 'push'
+        run: |
+          if [ ! -f data/stores.json ] || [ "$(date -u +%u)" = "1" ]; then python -m collector.locations || true; fi
+      - name: Save the data
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "deal-collector"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/deals.json data/meta.json data/stores.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
+          git push
+      - name: Build the site
+        run: |
+          mkdir -p _site
+          cp -r site/. _site/
+          cp data/*.json _site/data/ 2>/dev/null || true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: collect
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

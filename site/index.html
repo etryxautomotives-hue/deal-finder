@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>deal'ke · Supermarket deals near you</title>
+<meta name="description" content="Every supermarket promotion in Belgium near you, compared on the real price per kilo. Updated every morning.">
+<meta name="theme-color" content="#F6F4EE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#results" data-t="skip">Skip to deals</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="logo" href="#deals" aria-label="deal'ke home">
+      <span class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M3 12.6V4a1 1 0 0 1 1-1h8.6a1 1 0 0 1 .7.3l7.4 7.4a1 1 0 0 1 0 1.4l-8.6 8.6a1 1 0 0 1-1.4 0L3.3 13.3a1 1 0 0 1-.3-.7z" fill="#C6F135"/><circle cx="8" cy="8" r="1.8" fill="#17150F"/></svg></span>
+      deal’ke</a>
+    <nav class="views" aria-label="Sections">
+      <a href="#deals" data-view="deals" data-t="navHome">Home</a>
+      <a href="#recipes" data-view="recipes" data-t="navRecipes">Recipes</a>
+      <a href="#pricing" data-view="pricing" data-t="navPricing">Pricing</a>
+    </nav>
+    <form class="search" id="searchForm" role="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" autocomplete="off" enterkeyhint="search" data-t-ph="search">
+      <kbd class="kbd" aria-hidden="true">/</kbd>
+    </form>
+    <div class="right">
+      <button type="button" class="loc" id="locBtn" aria-haspopup="dialog">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        <span id="locLbl"></span>
+      </button>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="nl">NL</button>
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="accbtn" id="accBtn" data-account hidden aria-haspopup="dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4.5 20c1.2-3.6 4-5.4 7.5-5.4s6.3 1.8 7.5 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button type="button" class="mylist" id="listBtn" aria-haspopup="dialog">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m3.5 6 1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="lbl" data-t="myList">My list</span><span class="count" id="listCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div id="viewDeals">
+  <div class="wrap">
+    <div class="trustbar" id="trustbar"></div>
+  </div>
+
+  <section class="hero wrap" id="hero">
+    <div class="hero-text">
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="heroH"></h1>
+      <p class="lead" id="heroSub"></p>
+      <form class="cta-row" id="heroForm">
+        <label class="pcbox"><span class="sr" data-t="postcode">Postal code</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="heroPc" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="postal-code" placeholder="9000"></label>
+        <button type="submit" class="btn gold" id="heroGo"></button>
+      </form>
+      <p class="pc-error" id="heroErr" role="alert" hidden></p>
+      <a class="btn outline trial" href="#pricing" data-t="trial">Start my free 14-day trial</a>
+      <p class="note" data-t="trialNote"></p>
+      <p class="note" id="biggest"></p>
+    </div>
+    <div>
+      <div class="preview" id="preview" aria-label="Preview"></div>
+      <p class="pv-cap" data-t="previewCap"></p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="band" id="band"></div>
+    <div class="sample" id="sampleNote" hidden><span data-t="sample"></span></div>
+    <nav class="tabs" id="tabs" aria-label="Categories"></nav>
+  </div>
+
+  <section class="wrap results" id="results" tabindex="-1">
+    <div class="sechead">
+      <div class="sechead-text"><h2 id="secTitle"></h2><p id="secSub" aria-live="polite"></p></div>
+      <button type="button" class="clear" id="clearAll" hidden data-t="clearAll">Clear filters</button>
+    </div>
+    <div class="tools" id="tools">
+      <div class="tool-row"><div class="chips" id="stores" role="group" data-t-label="stores"></div></div>
+      <div class="tool-row">
+        <label class="select"><span class="sr" data-t="sortBy">Sort</span><select id="sort"></select></label>
+        <div class="chips" id="kinds" role="group" data-t-label="dealType"></div>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="more" id="more" hidden><button type="button" class="btn ghost" id="moreBtn" data-t="showMore">Show more</button></div>
+  </section>
+</div>
+
+<section class="wrap" id="viewRecipes" hidden>
+  <div class="page">
+    <div class="sechead">
+      <div class="sechead-text">
+        <h2 data-t="recipesTitle">Recipes</h2>
+        <p data-t="recipesSub"></p>
+      </div>
+    </div>
+    <div class="rtools"><button type="button" class="btn" id="newRecipe"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span data-t="newRecipe">Add a recipe</span></button></div>
+    <div class="plan" id="plan"></div>
+    <div class="rgrid" id="rgrid"></div>
+  </div>
+</section>
+
+<section class="wrap" id="viewPricing" hidden>
+  <div class="pricing" id="pricing"></div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p id="footUpdated"></p>
+    <p data-t="footNote"></p>
+    <p class="credits">Product photos and prices: the stores' own websites · Shop locations © <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors</p>
+  </div>
+</footer>
+
+<!-- Location -->
+<div class="scrim" id="locDlg" hidden>
+  <form class="pop" id="locForm" role="dialog" aria-modal="true" aria-labelledby="locTitle">
+    <h3 id="locTitle" data-t="whereShop">Where do you shop?</h3>
+    <label class="field"><span data-t="postcode">Postal code</span>
+      <input id="locPc" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="postal-code" required></label>
+    <fieldset class="radius"><legend data-t="radius">Distance</legend>
+      <div class="seg" id="radiusSeg"></div>
+    </fieldset>
+    <p class="pc-error" id="locErr" role="alert" hidden></p>
+    <div class="pop-actions">
+      <button type="button" class="btn ghost" data-close data-t="cancel">Cancel</button>
+      <button type="submit" class="btn" data-t="apply">Show deals</button>
+    </div>
+  </form>
+</div>
+
+<!-- Deal details -->
+<div class="scrim" id="sheetBg" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+</div>
+
+<!-- My list -->
+<div class="scrim right" id="listBg" hidden>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="listTitle"></aside>
+</div>
+
+<!-- New or edited recipe: pick ingredients from the stores' products -->
+<div class="scrim" id="recipeDlg" hidden>
+  <form class="pop wide maker" id="recipeForm" role="dialog" aria-modal="true" aria-labelledby="recipeTitle" autocomplete="off">
+    <h3 id="recipeTitle" data-t="newRecipe">Add a recipe</h3>
+    <div class="maker-top">
+      <label class="field"><span data-t="rName">Name</span><input id="rName" required maxlength="80"></label>
+      <label class="field small"><span data-t="rServes">Servings</span><input id="rServes" inputmode="numeric" maxlength="2" value="4"></label>
+    </div>
+    <div class="field"><span id="pickLbl" data-t="rPick">Ingredients</span>
+      <div class="picker">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="pickQ" role="combobox" aria-expanded="false" aria-controls="pickList" aria-labelledby="pickLbl" data-t-ph="rPickPh">
+      </div>
+      <ul class="picklist" id="pickList" role="listbox" hidden></ul>
+      <span class="hint" data-t="rHint"></span>
+    </div>
+    <ul class="chosen" id="chosen"></ul>
+    <label class="field"><span data-t="rSteps">How to make it</span><textarea id="rSteps" rows="4"></textarea></label>
+    <p class="pc-error" id="recipeErr" role="alert" hidden></p>
+    <div class="pop-actions">
+      <button type="button" class="btn ghost" data-close data-t="cancel">Cancel</button>
+      <button type="submit" class="btn" data-t="save">Save</button>
+    </div>
+  </form>
+</div>
+
+<!-- Account -->
+<div class="scrim" id="accDlg" hidden>
+  <div class="pop acc" id="accBox" role="dialog" aria-modal="true" aria-labelledby="accTitle"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js" defer></script>
+<script src="recipes-data.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>
