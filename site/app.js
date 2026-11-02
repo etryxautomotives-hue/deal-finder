@@ -137,6 +137,9 @@ Object.assign(T.nl, {
   plusList: c => [`Alles uit Gratis`, "Eigen recepten, onbeperkt", "Je week plannen: alle recepten in één keer op je lijst", "Je lijst en recepten op al je toestellen", "Altijd opzegbaar, met één klik"],
   freeBtn: "Gratis deals bekijken", soon: "Accounts en betalen komen binnenkort. Tot dan is alles gratis.",
 });
+Object.assign(T.nl, { nearT: (n, r) => `${n} winkels binnen ${r} km`, nearSub: (n, pc) => `${n} ketens rond ${pc}. Tik op een winkel om hem op de kaart te zien.`, nearNo: "nog geen promo's online", nearRoute: "Route" });
+Object.assign(T.fr, { nearT: (n, r) => `${n} magasins à moins de ${r} km`, nearSub: (n, pc) => `${n} enseignes autour de ${pc}. Touchez un magasin pour le voir sur la carte.`, nearNo: "pas encore de promos en ligne", nearRoute: "Itinéraire" });
+Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n, pc) => `${n} chains around ${pc}. Tap a shop to see it on the map.`, nearNo: "no promos online yet", nearRoute: "Directions" });
 Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
@@ -213,6 +216,9 @@ const CHAINS = {
   "Intermarché": { bg: "#E30613", fg: "#fff", l: "Intermarché" }, "Spar": { bg: "#007A3D", fg: "#fff", l: "SPAR" },
   "Match": { bg: "#E2001A", fg: "#fff", l: "Match" }, "Cora": { bg: "#E2001A", fg: "#fff", l: "cora" },
   "Jumbo": { bg: "#FFC800", fg: "#1D1B19", l: "Jumbo" }, "Sligro": { bg: "#003B7A", fg: "#fff", l: "Sligro" },
+  "Louis Delhaize": { bg: "#fff", fg: "#B5121B", bd: "#B5121B", l: "Louis D." }, "Alvo": { bg: "#E30613", fg: "#fff", l: "Alvo" },
+  "Renmans": { bg: "#7A1F2B", fg: "#fff", l: "Renmans" }, "Ekoplaza": { bg: "#2E7D32", fg: "#fff", l: "Ekoplaza" },
+  "Delitraiteur": { bg: "#1D1B19", fg: "#fff", l: "Delitraiteur" }, "Cru": { bg: "#2B2A26", fg: "#fff", l: "Cru" },
 };
 
 // ---------- state ----------
@@ -370,7 +376,69 @@ function chipsHTML(items, active, attr) {
     `<button type="button" class="chip" ${attr}="${esc(key)}" aria-pressed="${active(key)}">${extra || ""}${esc(label)}${n != null ? ` <span class="n">${n}</span>` : ""}</button>`).join("");
 }
 
+// Shops around the postcode: a map with every branch inside the radius, and the nearest branch per chain as a list
+const MAP = { lib: null, map: null, layer: null, markers: {}, key: "" };
+function loadLeaflet() {
+  if (!MAP.lib) MAP.lib = loadScript("https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js").then(() => window.L);
+  return MAP.lib;
+}
+function branchesNear() {
+  const p = S.pc && PCS[S.pc]; if (!p) return [];
+  return BRANCHES.map(b => ({ b, d: haversine(p[0], p[1], b.lat, b.lon) })).filter(x => x.d <= S.radius).sort((x, y) => x.d - y.d);
+}
+const route = b => `https://www.openstreetmap.org/directions?to=${b.lat},${b.lon}`;
+function renderNear() {
+  const L = t(), box = $("#near"), p = S.pc && PCS[S.pc];
+  const all = branchesNear();
+  box.hidden = !all.length; if (!all.length) return;
+  const withDeals = new Set(DEALS.map(d => d.store));
+  const first = {}; for (const x of all) first[x.b.chain] ??= x;
+  const near = Object.values(first);
+  $("#nearT").textContent = L.nearT(all.length, S.radius);
+  $("#nearSub").textContent = L.nearSub(near.length, `${S.pc} ${p[2]}`);
+  $("#nearList").innerHTML = near.map(({ b }, i) => `<li><button type="button" class="near-go" data-near="${i}">${sicon(b.chain, "lg")}<span><b>${esc(b.name)}</b><small>${esc(b.address || b.chain)}${withDeals.has(b.chain) ? "" : ` · ${L.nearNo}`}</small></span><span class="km">${kmText(b.chain)}</span></button>
+    <a class="route" href="${route(b)}" target="_blank" rel="noopener">${L.nearRoute}</a></li>`).join("");
+  $("#nearList").onclick = e => { const g = e.target.closest("[data-near]"); if (g) focusBranch(near[+g.dataset.near].b); };
+  const key = `${S.pc}|${S.radius}|${S.lang}|${BRANCHES.length}`;
+  if (key === MAP.key) return;
+  MAP.key = key;
+  loadLeaflet().then(Lf => drawMap(Lf, p, all, withDeals)).catch(() => { $("#map").hidden = true; });
+}
+function pin(Lf, chain) {
+  const c = CHAINS[chain] || { bg: "#17150F", fg: "#fff", l: chain };
+  const s = c.s || c.l.replace(/[^A-Za-zÀ-ÿ]/g, "").slice(0, 1).toUpperCase();
+  return Lf.divIcon({ className: "pin", iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14],
+    html: `<span style="background:${c.bg};color:${c.fg};${c.bd ? `box-shadow:inset 0 0 0 2px ${c.bd},0 1px 4px rgba(0,0,0,.35);` : ""}">${esc(s)}</span>` });
+}
+function drawMap(Lf, p, all, withDeals) {
+  const L = t();
+  if (!MAP.map) {
+    MAP.map = Lf.map("map", { scrollWheelZoom: false, zoomControl: true });
+    Lf.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(MAP.map);
+  }
+  MAP.layer?.remove();
+  MAP.layer = Lf.layerGroup().addTo(MAP.map);
+  MAP.markers = {};
+  const home = [p[0], p[1]];
+  Lf.circle(home, { radius: S.radius * 1000, color: "#B4E01F", weight: 2, fillColor: "#C6F135", fillOpacity: .08, interactive: false }).addTo(MAP.layer);
+  Lf.marker(home, { icon: Lf.divIcon({ className: "pin home", iconSize: [18, 18], iconAnchor: [9, 9] }), title: `${S.pc} ${p[2]}`, keyboard: false }).addTo(MAP.layer);
+  for (const { b, d } of all) {
+    const km = `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`;
+    const m = Lf.marker([b.lat, b.lon], { icon: pin(Lf, b.chain), title: b.name })
+      .bindPopup(`<b>${esc(b.name)}</b><br>${esc(b.address || "")}${b.address ? "<br>" : ""}${km}${withDeals.has(b.chain) ? "" : ` · ${L.nearNo}`}<br><a href="${route(b)}" target="_blank" rel="noopener">${L.nearRoute}</a>`);
+    m.addTo(MAP.layer); MAP.markers[`${b.lat},${b.lon}`] = m;
+  }
+  MAP.map.invalidateSize();
+  MAP.map.fitBounds(Lf.latLng(home).toBounds(S.radius * 2000), { padding: [8, 8] });
+}
+function focusBranch(b) {
+  const m = MAP.markers[`${b.lat},${b.lon}`]; if (!m || !MAP.map) return;
+  MAP.map.setView([b.lat, b.lon], Math.max(MAP.map.getZoom(), 15)); m.openPopup();
+  $("#map").scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
 function render() {
+  renderNear();
   const L = t();
   // facet counts: each filter group counts what the *other* filters leave
   const count = (skip, key) => { const m = new Map(); for (const d of DEALS) if (matches(d, skip)) m.set(d[key], (m.get(d[key]) || 0) + 1); return m; };
