@@ -520,4 +520,18 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .acc .upsell{background:var(--lime-soft);color:var(--lime-ink);font-weight:600;font-size:var(--t-sm);border-radius:var(--r-sm);padding:var(--s3) var(--s4);margin:0 0 var(--s4)}
 .acc-form{display:grid;gap:var(--s3)}
 .acc .facts{margin-top:0}
-.pc-pick{font:inherit;font-weight:600;color:var(--ink,#17150F);background:#fff;border:1px solid currentColor;border-radius:999px;padding:4px 10px;margin:4px 4px 0 0;cursor:pointer}
+/* Belgium / Netherlands picker next to the postcode */
+.pcbox label{display:flex;align-items:center;gap:var(--s2)}
+.cc-seg{display:inline-flex;gap:2px;background:var(--soft);border-radius:8px;padding:3px;flex:none}
+.cc-seg button{display:inline-flex;align-items:center;gap:5px;min-height:34px;min-width:44px;padding:0 8px;border:0;border-radius:6px;background:transparent;font:inherit;font-size:var(--t-sm);font-weight:600;color:var(--muted);cursor:pointer}
+.cc-seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.flag{width:14px;height:10px;border-radius:2px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.flag.be{background:linear-gradient(90deg,#1D1B19 33.3%,#FDDA24 33.3% 66.6%,#EF3340 66.6%)}
+.flag.nl{background:linear-gradient(180deg,#AE1C28 33.3%,#fff 33.3% 66.6%,#21468B 66.6%)}
+.pc-row{display:flex;gap:var(--s2);align-items:center}
+.pc-row input{flex:1;min-width:0}
+.cc-tag{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:11px;font-weight:700;color:var(--muted)}
+.linkish{border:0;background:none;padding:0 0 0 6px;font:inherit;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.acc-form .field+.field{margin-top:var(--s4)}
+.acc-form .field small{font-weight:400}
+.acc-form .btn{margin-top:var(--s4)}

@@ -16,3 +16,9 @@ def test_parse_offers_keeps_groceries_on_promo():
     assert coffee.image_url.startswith("https://s7g10.scene7.com/")
     cookies = deals["Glazuurkoekjes Biscotto"]
     assert cookies.promo_text == "2 voor € 4,00" and cookies.deal_kind == "bundle"
+
+
+def test_aldi_netherlands_marks_deals_dutch():
+    deals = parse_offers(HTML, "https://www.aldi.nl/aanbiedingen.html", cc="NL")
+    assert deals and all(d.cc == "NL" and d.source_url.startswith("https://www.aldi.nl/") for d in deals)
+    assert all(d.cc == "BE" for d in parse_offers(HTML))

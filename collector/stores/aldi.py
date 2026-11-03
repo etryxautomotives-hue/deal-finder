@@ -1,4 +1,4 @@
-"""ALDI Belgium. The offers page embeds every product as JSON in Next.js data (__NEXT_DATA__ → apiData)."""
+"""ALDI Belgium and ALDI Netherlands (same shop system). The offers page embeds every product as JSON in Next.js data (__NEXT_DATA__ → apiData)."""
 from __future__ import annotations
 
 import json
@@ -50,7 +50,7 @@ def _date(s: str | None) -> date | None:
         return None
 
 
-def parse_offers(html: str, page_url: str = OFFERS_URL) -> list[Deal]:
+def parse_offers(html: str, page_url: str = OFFERS_URL, cc: str = "BE") -> list[Deal]:
     deals = []
     for p in _products(html):
         price = p.get("currentPrice") or {}
@@ -75,7 +75,7 @@ def parse_offers(html: str, page_url: str = OFFERS_URL) -> list[Deal]:
             unit_price=float(base["basePriceValue"]), unit=_UNITS.get(scale),
             valid_from=_date(promo.get("validFromLocalDate")), valid_until=_date(promo.get("validUntilLocalDate")),
             image_url=f"{img}?wid=600&hei=600&fit=fit" if img else None,
-            source_url=page_url, language="nl",
+            source_url=page_url, language="nl", cc=cc,
         ))
     return deals
 
@@ -85,3 +85,12 @@ class Aldi(Store):
 
     def collect(self) -> list[Deal]:
         return parse_offers(self.client.get(OFFERS_URL).text)
+
+
+class AldiNL(Store):
+    """ALDI Nederland, for the shops in Zeeuws-Vlaanderen. Its robots.txt allows the offers page."""
+    name = "Aldi NL"
+    url = "https://www.aldi.nl/aanbiedingen.html"
+
+    def collect(self) -> list[Deal]:
+        return parse_offers(self.client.get(self.url).text, self.url, cc="NL")

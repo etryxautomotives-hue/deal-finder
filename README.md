@@ -21,6 +21,22 @@ python -m collector.run      # collect now
 
 Before enabling a store, check its terms of use. See the design brief for the per-store notes.
 
+### Zeeuws-Vlaanderen (Netherlands)
+
+Every deal has `cc`: `"BE"` or `"NL"`. The site measures each deal's distance to a branch of that chain *in that
+country*, so near the border people see the promos of both countries inside their radius.
+
+| Chain (NL) | Status (checked 2026-11-03) |
+|---|---|
+| ALDI (`aldi-nl`) | collected: robots.txt allows the offers page, no scraping clause found |
+| Lidl (`lidl-nl`) | collected: robots.txt allows the offers pages, no scraping clause found |
+| Jumbo | not collected: terms art. 9 forbid scraping |
+| PLUS / Coop | not collected: terms art. 19.1 forbid copying without permission |
+| Albert Heijn | not collected: Bonus page is built in the browser; needs AH's permission or a partnership |
+
+Folder sites are no way around this for Carrefour, Colruyt or AH Belgium: myShopi's terms forbid scraping and
+reuse, and Folderz and Promotheek turn bots away in robots.txt.
+
 ## Website
 
 `site/` is the website: plain HTML, CSS and JavaScript, no build step, so it loads fast and can be hosted anywhere static

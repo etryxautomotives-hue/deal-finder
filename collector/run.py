@@ -54,11 +54,14 @@ def save(deals: list[Deal], data_dir: Path = DATA) -> None:
     db.execute("""CREATE TABLE IF NOT EXISTS deals (
         store TEXT, name TEXT, brand TEXT, category TEXT, price REAL, old_price REAL,
         pack_size TEXT, quantity REAL, unit TEXT, unit_price REAL, promo_text TEXT, promo_type TEXT, deal_kind TEXT,
-        valid_from TEXT, valid_until TEXT, image_url TEXT, source_url TEXT, language TEXT, collected_at TEXT)""")
+        valid_from TEXT, valid_until TEXT, image_url TEXT, source_url TEXT, language TEXT, collected_at TEXT,
+        cc TEXT)""")
+    if "cc" not in [c[1] for c in db.execute("PRAGMA table_info(deals)")]:  # history made before Dutch deals
+        db.execute("ALTER TABLE deals ADD COLUMN cc TEXT DEFAULT 'BE'")
     cols = ["store", "name", "brand", "category", "price", "old_price", "pack_size", "quantity", "unit",
             "unit_price", "promo_text", "promo_type", "deal_kind", "valid_from", "valid_until", "image_url",
-            "source_url", "language", "collected_at"]
-    db.executemany(f"INSERT INTO deals VALUES ({','.join('?' * len(cols))})",
+            "source_url", "language", "collected_at", "cc"]
+    db.executemany(f"INSERT INTO deals ({','.join(cols)}) VALUES ({','.join('?' * len(cols))})",
                    [[r[c] for c in cols] for r in rows])
     db.commit()
     db.close()

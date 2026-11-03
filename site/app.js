@@ -138,11 +138,14 @@ Object.assign(T.nl, {
   freeBtn: "Gratis deals bekijken", soon: "Accounts en betalen komen binnenkort. Tot dan is alles gratis.",
 });
 Object.assign(T.nl, { nearT: (n, r) => `${n} winkels binnen ${r} km`, nearSub: (n, pc) => `${n} ketens rond ${pc}. Tik op een winkel om hem op de kaart te zien.`, nearNo: "nog geen promo's online", nearRoute: "Route",
-  nearNL: "in Nederland, nog geen promo's online", pcWhich: "Die postcode bestaat in België en in Nederland. Welke bedoel je?" });
+  nearNL: "in Nederland, nog geen promo's online", country: "Land", cc: { BE: "België", NL: "Nederland" },
+  accPc: "Je postcode", accPcWhy: "Zo tonen we meteen de promo's bij jou in de buurt. Je kunt dit altijd aanpassen.", accChange: "Wijzig" });
 Object.assign(T.fr, { nearT: (n, r) => `${n} magasins à moins de ${r} km`, nearSub: (n, pc) => `${n} enseignes autour de ${pc}. Touchez un magasin pour le voir sur la carte.`, nearNo: "pas encore de promos en ligne", nearRoute: "Itinéraire",
-  nearNL: "aux Pays-Bas, pas encore de promos en ligne", pcWhich: "Ce code postal existe en Belgique et aux Pays-Bas. Lequel ?" });
+  nearNL: "aux Pays-Bas, pas encore de promos en ligne", country: "Pays", cc: { BE: "Belgique", NL: "Pays-Bas" },
+  accPc: "Votre code postal", accPcWhy: "Pour voir directement les promos près de chez vous. Modifiable à tout moment.", accChange: "Modifier" });
 Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n, pc) => `${n} chains around ${pc}. Tap a shop to see it on the map.`, nearNo: "no promos online yet", nearRoute: "Directions",
-  nearNL: "in the Netherlands, no promos online yet", pcWhich: "That postal code exists in Belgium and the Netherlands. Which one?" });
+  nearNL: "in the Netherlands, no promos online yet", country: "Country", cc: { BE: "Belgium", NL: "Netherlands" },
+  accPc: "Your postal code", accPcWhy: "So we show the promos near you straight away. You can change it any time.", accChange: "Change" });
 Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
@@ -232,7 +235,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "hist"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -309,18 +312,27 @@ function haversine(a, b, c, d) {
 const isNL = pc => String(pc || "").startsWith("NL-");
 const pcAt = pc => !pc ? null : isNL(pc) ? PCS_NL[pc.slice(3)] : PCS[pc];
 const pcName = pc => { const p = pcAt(pc); return p ? `${isNL(pc) ? pc.slice(3) : pc} ${p[2]}${isNL(pc) ? " (NL)" : ""}` : (isNL(pc) ? pc.slice(3) : pc || ""); };
+const ccOf = pc => isNL(pc) ? "NL" : "BE";
+// Nearest branch per chain *and country*: a Dutch Lidl promo only counts Dutch Lidl branches, and the other way round.
+// Near the border you get the promos of both countries inside your radius.
 function computeNearest() {
   nearest = {};
   const p = pcAt(S.pc);
   if (!p || !BRANCHES.length) return;
   for (const b of BRANCHES) {
-    if (b.cc === "NL") continue; // the promos are Belgian, so only Belgian branches count for them
-    const d = haversine(p[0], p[1], b.lat, b.lon);
-    if (!nearest[b.chain] || d < nearest[b.chain].d) nearest[b.chain] = { d, b };
+    const d = haversine(p[0], p[1], b.lat, b.lon), k = `${b.cc || "BE"}|${b.chain}`;
+    if (!nearest[k] || d < nearest[k].d) nearest[k] = { d, b };
   }
 }
-const dist = chain => nearest[chain]?.d;
-const inRadius = d => { const k = dist(d.store); return k == null || k <= S.radius; };
+const nearOf = d => nearest[`${d.cc || "BE"}|${d.store}`];
+const dist = chain => { const a = nearest["BE|" + chain]?.d, b = nearest["NL|" + chain]?.d; return a == null ? b : b == null ? a : Math.min(a, b); };
+const distDeal = d => nearOf(d)?.d;
+function inRadius(d) {
+  const nl = d.cc === "NL", k = distDeal(d);
+  if (!S.pc) return !nl;               // no postcode yet: Belgian promos only
+  if (k == null) return !nl;           // no branch of this chain known: keep Belgian promos as before
+  return k <= S.radius;
+}
 
 // ---------- filtering ----------
 function matches(d, skip) {
@@ -335,7 +347,7 @@ const SORTS = {
   value: (a, b) => ((a.unit && a.unit_price) ?? 1e9) - ((b.unit && b.unit_price) ?? 1e9) || a.price - b.price,
   price: (a, b) => a.price - b.price,
   discount: (a, b) => (b.discount ?? effDiscount(b)) - (a.discount ?? effDiscount(a)),
-  near: (a, b) => (dist(a.store) ?? 1e9) - (dist(b.store) ?? 1e9) || SORTS.value(a, b),
+  near: (a, b) => (distDeal(a) ?? 1e9) - (distDeal(b) ?? 1e9) || SORTS.value(a, b),
   ending: (a, b) => (a.until ?? 9e15) - (b.until ?? 9e15),
 };
 function effDiscount(d) { const m = /^(\d)\+(\d)$/.exec(d.kind); if (m) return +m[2] / (+m[1] + +m[2]); if (d.kind === "2nd_half") return .25; return 0; }
@@ -360,6 +372,8 @@ function logo(chain, big) {
 }
 const km = d => d == null ? "" : `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`;
 const kmText = chain => km(dist(chain));
+const kmDeal = d => km(distDeal(d));
+const ccTag = d => d.cc === "NL" ? `<span class="cc-tag" title="${esc(t().cc.NL)}"><i class="flag nl"></i>NL</span>` : "";
 const pct = d => { if (d.discount) return Math.round(d.discount * 100); const e = effDiscount(d); if (e) return Math.round(e * 100);
   const p = (d.promo_text || "").match(/(\d+)\s*%/); return p ? +p[1] : null; };
 function photo(d, big) {
@@ -381,11 +395,11 @@ function card(d) {
     ${photo(d)}
     <div class="body">
       <h3 class="name">${esc(d.name)}</h3>
-      <div class="where">${sicon(d.store)}<span>${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}</span></div>
+      <div class="where">${sicon(d.store)}<span>${esc(d.store)}${ccTag(d)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}</span></div>
       <div class="priceline"><span class="price">${money(d.price)}</span>${d.old_price ? `<span class="old">${money(d.old_price)}</span>` : ""}</div>
       ${d.unit_price && d.unit ? `<span class="unit">${money(d.unit_price)} / ${L.perUnit[d.unit] || d.unit}</span>` : ""}
       ${save ? `<span class="save">${L.youSave(money(save))}</span>` : ""}
-      <div class="foot-row"><span>${kmText(d.store)}</span>
+      <div class="foot-row"><span>${kmDeal(d)}</span>
         <button type="button" class="add" data-add="${d.id}" aria-pressed="${on}" aria-label="${on ? L.added : L.add}">${plus(on)}</button></div>
     </div></article>`;
 }
@@ -410,7 +424,7 @@ function renderNear() {
   const L = t(), box = $("#near");
   const all = branchesNear();
   box.hidden = !all.length; if (!all.length) return;
-  const live = new Set(DEALS.map(d => d.store)), withDeals = b => b.cc !== "NL" && live.has(b.chain);
+  const live = new Set(DEALS.map(d => `${d.cc || "BE"}|${d.store}`)), withDeals = b => live.has(`${b.cc || "BE"}|${b.chain}`);
   const noDeals = b => b.cc === "NL" ? L.nearNL : L.nearNo;
   const first = {}; for (const x of all) first[`${x.b.cc || "BE"}|${x.b.chain}`] ??= x; // nearest per chain and country
   const near = Object.values(first);
@@ -507,6 +521,7 @@ function renderStatic() {
   renderHero();
   $("#sampleNote").hidden = !SAMPLE;
   $("#locLbl").textContent = S.pc ? `${pcName(S.pc)} · ${S.radius} km` : L.setPc;
+  paintCc();
   $("#footUpdated").textContent = UPDATED ? L.updated(new Date(UPDATED).toLocaleString(LOCALE[S.lang], { dateStyle: "medium", timeStyle: "short" })) : "";
   $("#hero").classList.toggle("compact", !!S.pc && !url.has("hero"));
   $("#listCount").textContent = Object.keys(S.list).length;
@@ -548,7 +563,7 @@ function renderHero() {
   $("#preview").innerHTML = `<div class="pv-bar"><i></i><i></i><i></i><span>${host}</span></div>
     <div class="pv-body"><h3>${L.pvTitle}</h3>${pick.map(d => `<button type="button" class="pv-row" data-open="${d.id}">
       <span class="th">${d.image_url ? `<img src="${esc(d.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : ""}</span>
-      <span style="min-width:0"><span class="nm" style="display:block">${esc(d.name)}</span><span class="st">${sicon(d.store)}${esc(d.store)}${kmText(d.store) ? ` · ${kmText(d.store)}` : ""}</span></span>
+      <span style="min-width:0"><span class="nm" style="display:block">${esc(d.name)}</span><span class="st">${sicon(d.store)}${esc(d.store)}${ccTag(d)}${kmDeal(d) ? ` · ${kmDeal(d)}` : ""}</span></span>
       <span class="pr">${money(d.price)}<small>−${pct(d)}%</small></span></button>`).join("")}</div>`;
   const maxP = top.length ? pct(top[0]) : 0;
   $("#band").innerHTML = `<span class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 12.6V4a1 1 0 0 1 1-1h8.6a1 1 0 0 1 .7.3l7.4 7.4a1 1 0 0 1 0 1.4l-8.6 8.6a1 1 0 0 1-1.4 0L3.3 13.3a1 1 0 0 1-.3-.7z" fill="none" stroke="#17150F" stroke-width="1.8"/><circle cx="8" cy="8" r="1.6" fill="#17150F"/></svg></span>
@@ -568,9 +583,9 @@ function openDeal(id) {
   const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d) return;
   if (S.q) noteSearch(S.q);  // opening a result confirms the search
   noteProduct(d);
-  const L = t(), F = L.facts, on = !!S.list[d.id], n = nearest[d.store];
+  const L = t(), F = L.facts, on = !!S.list[d.id], n = nearOf(d);
   const save = d.old_price ? d.old_price - d.price : null;
-  const dest = n ? `${n.b.lat},${n.b.lon}` : encodeURIComponent(`${d.store} ${S.pc || ""} Belgium`);
+  const dest = n ? `${n.b.lat},${n.b.lon}` : encodeURIComponent(`${d.store} ${pcName(S.pc)} ${d.cc === "NL" ? "Nederland" : "Belgium"}`);
   const others = DEALS.filter(x => x.id !== d.id && x.cat === d.cat && x.cat !== "other" && inRadius(x) && x.unit === d.unit && x.unit_price)
     .sort(SORTS.value).slice(0, 4);
   $("#sheet").classList.remove("narrow");
@@ -586,7 +601,7 @@ function openDeal(id) {
         ${save ? `<dt>${F.save}</dt><dd class="good">${money(save)}${d.discount ? ` (−${Math.round(d.discount * 100)}%)` : ""}</dd>` : ""}
         ${d.promo_text ? `<dt>${F.promo}</dt><dd>${esc(d.promo_text)}</dd>` : ""}
         <dt>${F.store}</dt><dd>${logo(d.store, true)}</dd>
-        ${n ? `<dt>${F.near}</dt><dd>${esc(n.b.address || n.b.name)} · ${kmText(d.store)}</dd>` : ""}
+        ${n ? `<dt>${F.near}</dt><dd>${esc(n.b.address || n.b.name)} · ${kmDeal(d)}</dd>` : ""}
         ${d.pack_size ? `<dt>${F.pack}</dt><dd>${esc(d.pack_size)}</dd>` : ""}
         ${d.brand ? `<dt>${F.brand}</dt><dd>${esc(d.brand)}</dd>` : ""}
         ${d.until ? `<dt>${F.until}</dt><dd>${d.until.toLocaleDateString(LOCALE[S.lang], { weekday: "short", day: "numeric", month: "long" })}</dd>` : ""}
@@ -668,31 +683,31 @@ function toast(msg) { const el = $("#toast"); el.textContent = msg; el.classList
 function renderRadius(sel) {
   $("#radiusSeg").innerHTML = RADII.map(r => `<button type="button" data-r="${r}" aria-pressed="${r === sel}">${r} km</button>`).join("");
 }
-// Accepts "9000", "B-4500", "4531", "4531 AB", "4531AB" and "NL-4531". A bare number that exists in both
-// countries (e.g. 4530 Villers-le-Bouillet and 4530 Terneuzen) gets two buttons to pick from.
-function readPc(raw) {
+// The postcode box has a Belgium / Netherlands picker next to it. "4531 AB", "NL-4531" or "B-4500" pick the
+// country themselves; a number that only exists in the other country switches the picker over.
+function readPc(raw, cc) {
   const m = String(raw || "").toUpperCase().replace(/\s+/g, "").match(/^(NL|BE?)?-?(\d{4})([A-Z]{2})?$/);
-  if (!m) return { none: true };
-  const [, cc, n, letters] = m, be = PCS[n] ? n : null, nl = PCS_NL[n] ? "NL-" + n : null;
-  if (cc === "NL" || letters) return nl ? { pc: nl } : { none: true };
-  if (cc) return be ? { pc: be } : { none: true };
-  if (be && nl) return { both: [be, nl] };
-  return be || nl ? { pc: be || nl } : { none: true };
+  if (!m) return null;
+  const [, pre, n, letters] = m, has = { BE: !!PCS[n], NL: !!PCS_NL[n] };
+  const want = pre === "NL" || letters ? "NL" : pre ? "BE" : cc || "BE";
+  const got = has[want] ? want : !pre && !letters && has[want === "NL" ? "BE" : "NL"] ? (want === "NL" ? "BE" : "NL") : null;
+  return got ? (got === "NL" ? "NL-" + n : n) : null;
 }
-function setPc(raw, errEl) {
-  const L = t(), r = readPc(raw);
-  if (r.both) {
-    errEl.innerHTML = `${esc(L.pcWhich)} ${r.both.map(pc => `<button type="button" class="pc-pick" data-pc="${pc}">${esc(pcName(pc))}${isNL(pc) ? "" : " (BE)"}</button>`).join(" ")}`;
-    errEl.onclick = e => {
-      const b = e.target.closest("[data-pc]"); if (!b) return;
-      const input = errEl.closest(".hero-text, form")?.querySelector("input[autocomplete=postal-code]");
-      if (input) { input.value = isNL(b.dataset.pc) ? b.dataset.pc : "B-" + b.dataset.pc; input.form.requestSubmit(); }
-    };
-    errEl.hidden = false; return false;
-  }
-  if (r.none && Object.keys(PCS).length) { errEl.textContent = L.badPc; errEl.hidden = false; return false; }
-  const pc = r.pc || String(raw || "").trim();
-  errEl.hidden = true; S.pc = pc; store.set("pc", pc); computeNearest(); return true;
+const guessCc = () => S.pc ? ccOf(S.pc) : /-NL$/i.test(navigator.language || "") ? "NL" : "BE";
+function ccPicked(inputId) { return document.querySelector(`.cc-seg[data-for="${inputId}"] [aria-pressed="true"]`)?.dataset.cc || guessCc(); }
+function paintCc(cc, inputId) {
+  const L = t();
+  document.querySelectorAll(inputId ? `.cc-seg[data-for="${inputId}"]` : ".cc-seg").forEach(el => {
+    const sel = cc || el.querySelector('[aria-pressed="true"]')?.dataset.cc || guessCc();
+    el.setAttribute("aria-label", L.country);
+    el.innerHTML = ["BE", "NL"].map(c => `<button type="button" data-cc="${c}" aria-pressed="${c === sel}" title="${esc(L.cc[c])}"><i class="flag ${c.toLowerCase()}"></i>${c}</button>`).join("");
+  });
+}
+function setPc(raw, errEl, inputId) {
+  const pc = readPc(raw, ccPicked(inputId));
+  if (!pc && Object.keys(PCS).length) { errEl.textContent = t().badPc; errEl.hidden = false; return false; }
+  const val = pc || String(raw || "").trim();
+  errEl.hidden = true; S.pc = val; store.set("pc", val); computeNearest(); paintCc(ccOf(val)); return true;
 }
 
 // ---------- search suggestions (matching and ranking live in search.js) ----------
@@ -814,13 +829,17 @@ function bind() {
 
   $("#heroForm").addEventListener("submit", e => {
     e.preventDefault();
-    if (!setPc($("#heroPc").value, $("#heroErr"))) return;
+    if (!setPc($("#heroPc").value, $("#heroErr"), "heroPc")) return;
     renderStatic(); render(); $("#results").scrollIntoView({ behavior: "smooth" });
   });
-  $("#locBtn").addEventListener("click", () => { $("#locPc").value = S.pc || ""; $("#locErr").hidden = true; renderRadius(S.radius); openDialog($("#locDlg"), $("#locPc")); });
+  document.addEventListener("click", e => {
+    const b = e.target.closest(".cc-seg [data-cc]"); if (!b) return;
+    b.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  });
+  $("#locBtn").addEventListener("click", () => { $("#locPc").value = S.pc ? pcName(S.pc).split(" ")[0] : ""; paintCc(guessCc(), "locPc"); $("#locErr").hidden = true; renderRadius(S.radius); openDialog($("#locDlg"), $("#locPc")); });
   $("#locForm").addEventListener("submit", e => {
     e.preventDefault();
-    if (!setPc($("#locPc").value, $("#locErr"))) return;
+    if (!setPc($("#locPc").value, $("#locErr"), "locPc")) return;
     const r = +($("#radiusSeg [aria-pressed=true]")?.dataset.r || S.radius); S.radius = r; store.set("radius", r);
     computeNearest(); closeDialogs(); renderStatic(); render();
   });
@@ -1151,17 +1170,23 @@ async function pull() {
   R.have = { ...(data.have || {}), ...R.have };
   R.plan = new Set([...(data.plan || []), ...R.plan]);
   if (data.history) { HIST = DS.prune(DS.merge(HIST, data.history), Date.now()); store.set("hist", HIST); }
+  // preferred postcode: the one saved in the account, else the one given when the account was made
+  const pref = data.prefs?.pc || ACC.user.user_metadata?.pc;
+  if (pref && !S.pc && pcAt(pref)) { S.pc = pref; store.set("pc", pref); computeNearest(); }
+  const r = data.prefs?.radius || ACC.user.user_metadata?.radius;
+  if (r && RADII.includes(+r) && !localStorage.getItem("dk.radius")) { S.radius = +r; store.set("radius", S.radius); }
   store.set("list", S.list); store.set("recipes", R.own); store.set("have", R.have); store.set("plan", [...R.plan]);
   ACC.pulling = false;
   $("#listCount").textContent = Object.keys(S.list).length;
-  render(); if (location.hash === "#recipes") renderRecipes();
+  renderStatic(); render(); if (location.hash === "#recipes") renderRecipes();
   push();
 }
 let syncTimer;
 function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTimer); syncTimer = setTimeout(push, 800); }
 async function push() {
   if (!ACC.user) return;
-  await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan], updated_at: new Date().toISOString() });
+  await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
@@ -1194,24 +1219,34 @@ function openAccount(why) {
   if (!ACC.user) {
     box.innerHTML = `<h3 id="accTitle">${L.accSignIn}</h3>${upsell}<p class="muted">${L.accWhy}</p>
       <form id="accForm" class="acc-form"><label class="field"><span>${L.accEmail}</span><input id="accEmail" type="email" required autocomplete="email" inputmode="email"></label>
+      <div class="field"><label for="accPc">${L.accPc}</label>
+        <div class="pc-row"><input id="accPc" inputmode="numeric" maxlength="8" autocomplete="postal-code" value="${S.pc ? esc(pcName(S.pc).split(" ")[0]) : ""}" placeholder="9000">
+          <span class="cc-seg" role="group" data-for="accPc"></span></div>
+        <small class="muted">${L.accPcWhy}</small></div>
+      <p class="pc-error" id="accPcErr" role="alert" hidden></p>
       <button class="btn block" type="submit">${L.accSend}</button></form>
       <p class="muted small" id="accSent" hidden></p>
       <div class="pop-actions"><button type="button" class="btn ghost" data-close>${L.close}</button></div>`;
     $("#accForm").addEventListener("submit", async e => {
       e.preventDefault();
       const email = $("#accEmail").value.trim();
-      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname + (why === "trial" ? "#pricing" : "") } });
+      if ($("#accPc").value.trim() && !setPc($("#accPc").value, $("#accPcErr"), "accPc")) return; // optional, but must be valid
+      renderStatic(); render();
+      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { data: S.pc ? { pc: S.pc, radius: S.radius } : {}, emailRedirectTo: location.origin + location.pathname + (why === "trial" ? "#pricing" : "") } });
       const sent = $("#accSent"); if (sent) { sent.textContent = error ? L.accErr : L.accSent(email); sent.hidden = false; }
     });
   } else {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
-      <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd></dl>
+      <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
+        <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
       <div class="cta">${!PAY() ? "" : isPlus() || ACC.profile?.subscription_status === "past_due"
         ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
         : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
         <button type="button" class="btn ghost" data-logout>${L.accLogout}</button></div>
       <p class="muted small">${L.accSynced}</p>`;
   }
+  paintCc(guessCc(), "accPc");
+  box.querySelector("[data-acc-pc]")?.addEventListener("click", () => { closeDialogs(); $("#locBtn").click(); });
   if ($("#accDlg").hidden) openDialog($("#accDlg"));
 }
 
