@@ -43,3 +43,14 @@ The design rules it follows, and the research behind them, are in `site/DESIGN-R
 ## Accounts and payments
 
 Off until `site/config.js` has the Supabase keys. Step-by-step setup (Supabase login, Stripe €4,99/month with 14-day trial, webhook): [docs/SETUP-PAYMENTS.md](docs/SETUP-PAYMENTS.md).
+
+## Search engines
+
+`seo/build.py` runs in the workflow after the site is built. It writes Dutch and French landing pages
+(per store, deal type and product group) from `data/deals.json`, plus `sitemap.xml`, `robots.txt` and
+canonical, hreflang and structured-data tags. The public address comes from the `SITE_URL` repository
+variable. See `docs/SEO.md` for the keyword research and how to change the address.
+
+```
+python -m seo.build --site _site --base-url https://dealke.be   # after copying site/ and data/ to _site/
+```
