@@ -34,8 +34,8 @@ country*, so near the border people see the promos of both countries inside thei
 | PLUS / Coop | not collected: terms art. 19.1 forbid copying without permission |
 | Albert Heijn | not collected: Bonus page is built in the browser; needs AH's permission or a partnership |
 
-Folder sites (myShopi, Folderz, Promotheek) forbid automated copying too, so they are not a route to
-Carrefour, Colruyt or AH Belgium.
+Folder sites are no way around this for Carrefour, Colruyt or AH Belgium: myShopi's terms forbid scraping and
+reuse, and Folderz and Promotheek turn bots away in robots.txt.
 
 ## Website
 
