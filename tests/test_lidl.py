@@ -21,3 +21,12 @@ def test_promo_from_percentage_and_count():
     assert _promo(25, "5,80 € - 4,35 € pour 2 pièces", "fr") == "2e à moitié prix"
     assert _promo(25, "10,76 € - 8,07 € pour 4 pièces", "nl") == "3+1 gratis"
     assert _promo(23, "préemballées", "nl") == "-23%"
+
+
+def test_dutch_lidl_price_per_kg_and_country():
+    from collector.stores.lidl import _per_unit
+    assert _per_unit("500 g - 1,98 EUR/kg") == (1.98, "kg")
+    assert _per_unit("Per 500 g (1 kg = € 3,96)") == (3.96, "kg")
+    assert _per_unit("1,5 L | 1 l = 0,66") == (0.66, "L")
+    [d] = [d for d in parse_offers(HTML, "https://www.lidl.nl/c/aanbiedingen/a1") if d.name == "TROPICANA Jus d'orange"]
+    assert d.cc == "NL" and d.source_url.startswith("https://www.lidl.nl/p/")

@@ -64,9 +64,10 @@
       <h1 id="heroH"></h1>
       <p class="lead" id="heroSub"></p>
       <form class="cta-row" id="heroForm">
-        <label class="pcbox"><span class="sr" data-t="postcode">Postal code</span>
+        <div class="pcbox"><label><span class="sr" data-t="postcode">Postal code</span>
           <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
           <input id="heroPc" inputmode="numeric" maxlength="8" autocomplete="postal-code" placeholder="9000"></label>
+          <span class="cc-seg" role="group" data-for="heroPc"></span></div>
         <button type="submit" class="btn gold" id="heroGo"></button>
       </form>
       <p class="pc-error" id="heroErr" role="alert" hidden></p>
@@ -141,8 +142,9 @@
 <div class="scrim" id="locDlg" hidden>
   <form class="pop" id="locForm" role="dialog" aria-modal="true" aria-labelledby="locTitle">
     <h3 id="locTitle" data-t="whereShop">Where do you shop?</h3>
-    <label class="field"><span data-t="postcode">Postal code</span>
-      <input id="locPc" inputmode="numeric" maxlength="8" autocomplete="postal-code" required></label>
+    <div class="field"><label for="locPc" data-t="postcode">Postal code</label>
+      <div class="pc-row"><input id="locPc" inputmode="numeric" maxlength="8" autocomplete="postal-code" required>
+        <span class="cc-seg" role="group" data-for="locPc"></span></div></div>
     <fieldset class="radius"><legend data-t="radius">Distance</legend>
       <div class="seg" id="radiusSeg"></div>
     </fieldset>
