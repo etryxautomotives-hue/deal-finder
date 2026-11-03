@@ -49,7 +49,8 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           for f in data/deals.json data/meta.json data/stores.json data/postcodes-nl.json; do if [ -f "$f" ]; then git add "$f"; fi; done
           git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
-          git push
+          # main may have moved while collecting (a merged PR): put the data commit on top, retry a few times
+          ok=; for i in 1 2 3; do if git pull --rebase origin main && git push; then ok=1; break; fi; sleep 5; done; [ -n "$ok" ]
       - name: Build the site
         run: |
           mkdir -p _site
