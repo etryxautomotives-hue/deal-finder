@@ -25,6 +25,7 @@ class Deal:
     valid_until: date | None = None
     image_url: str | None = None    # the store's own product photo
     language: str = "nl"
+    cc: str = "BE"                  # country the promo is valid in: "BE", or "NL" for Zeeuws-Vlaanderen
     collected_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     @property
