@@ -32,16 +32,22 @@ jobs:
       - name: Collect today's deals
         if: github.event_name != 'push'
         run: python -m collector.run
-      - name: Refresh shop locations (Mondays, or when missing)
+      - name: Refresh shop locations (Mondays, or when missing or without the Dutch shops)
         if: github.event_name != 'push'
         run: |
-          if [ ! -f data/stores.json ] || [ "$(date -u +%u)" = "1" ]; then python -m collector.locations || true; fi
+          if [ ! -f data/stores.json ] || [ "$(date -u +%u)" = "1" ] || ! grep -q '"cc":"NL"' data/stores.json; then
+            python -m collector.locations || true
+          fi
+      - name: Dutch postal codes for Zeeuws-Vlaanderen (only when missing)
+        if: github.event_name != 'push'
+        run: |
+          if [ ! -f data/postcodes-nl.json ]; then python -m collector.postcodes_nl || true; fi
       - name: Save the data
         if: github.event_name != 'push'
         run: |
           git config user.name "deal-collector"
           git config user.email "actions@users.noreply.github.com"
-          for f in data/deals.json data/meta.json data/stores.json; do if [ -f "$f" ]; then git add "$f"; fi; done
+          for f in data/deals.json data/meta.json data/stores.json data/postcodes-nl.json; do if [ -f "$f" ]; then git add "$f"; fi; done
           git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
           git push
       - name: Build the site

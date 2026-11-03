@@ -18,7 +18,7 @@ const T = {
     skip: "Naar de promoties", search: "Wat zoek je? Bv. melk, gehakt, Coca-Cola", myList: "Mijn lijst",
     heroH: "Goed eten,<br><em>voor minder.</em>",
     heroSub: "Alle promoties van de Belgische supermarkten in je buurt, vergeleken op de echte prijs per kilo. Elke ochtend vernieuwd.",
-    postcode: "Postcode", showDeals: "Toon mijn promo's", badPc: "Die postcode kennen we niet. Probeer bv. 9000.",
+    postcode: "Postcode", showDeals: "Toon mijn promo's", badPc: "Die postcode kennen we niet. Probeer bv. 9000 of 4531 AB.",
     trust: (n, c) => `<b>${n}</b> promo's van <b>${c}</b> ketens, vanochtend gecheckt`,
     sample: "Voorbeeldpromo's: de echte promo's verschijnen na de eerste automatische ronde van de verzamelaar.",
     dealType: "Soort promo", stores: "Winkels", sortBy: "Sorteer", clearAll: "Wis filters", showMore: "Toon meer",
@@ -53,7 +53,7 @@ const T = {
     skip: "Aller aux promos", search: "Que cherchez-vous ? Ex. lait, haché, Coca-Cola", myList: "Ma liste",
     heroH: "Bien manger,<br><em>pour moins.</em>",
     heroSub: "Toutes les promotions des supermarchés belges près de chez vous, comparées au vrai prix au kilo. Mises à jour chaque matin.",
-    postcode: "Code postal", showDeals: "Voir mes promos", badPc: "Code postal inconnu. Essayez par ex. 1000.",
+    postcode: "Code postal", showDeals: "Voir mes promos", badPc: "Code postal inconnu. Essayez par ex. 1000 ou 4531 AB.",
     trust: (n, c) => `<b>${n}</b> promos de <b>${c}</b> enseignes vérifiées ce matin`,
     sample: "Promos d’exemple : les vraies promos apparaissent après le premier passage automatique du collecteur.",
     dealType: "Type de promo", stores: "Magasins", sortBy: "Trier", clearAll: "Effacer les filtres", showMore: "Voir plus",
@@ -88,7 +88,7 @@ const T = {
     skip: "Skip to deals", search: "What are you looking for? E.g. milk, mince, Coca-Cola", myList: "My list",
     heroH: "Good food,<br><em>for less.</em>",
     heroSub: "Every promotion from Belgian supermarkets near you, compared on the real price per kilo. Fresh every morning.",
-    postcode: "Postal code", showDeals: "Show my deals", badPc: "We don't know that postal code. Try 9000, for example.",
+    postcode: "Postal code", showDeals: "Show my deals", badPc: "We don't know that postal code. Try 9000 or 4531 AB, for example.",
     trust: (n, c) => `<b>${n}</b> deals from <b>${c}</b> chains checked this morning`,
     sample: "Example deals: the real deals appear after the collector's first automatic run.",
     dealType: "Deal type", stores: "Stores", sortBy: "Sort", clearAll: "Clear filters", showMore: "Show more",
@@ -137,9 +137,12 @@ Object.assign(T.nl, {
   plusList: c => [`Alles uit Gratis`, "Eigen recepten, onbeperkt", "Je week plannen: alle recepten in één keer op je lijst", "Je lijst en recepten op al je toestellen", "Altijd opzegbaar, met één klik"],
   freeBtn: "Gratis deals bekijken", soon: "Accounts en betalen komen binnenkort. Tot dan is alles gratis.",
 });
-Object.assign(T.nl, { nearT: (n, r) => `${n} winkels binnen ${r} km`, nearSub: (n, pc) => `${n} ketens rond ${pc}. Tik op een winkel om hem op de kaart te zien.`, nearNo: "nog geen promo's online", nearRoute: "Route" });
-Object.assign(T.fr, { nearT: (n, r) => `${n} magasins à moins de ${r} km`, nearSub: (n, pc) => `${n} enseignes autour de ${pc}. Touchez un magasin pour le voir sur la carte.`, nearNo: "pas encore de promos en ligne", nearRoute: "Itinéraire" });
-Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n, pc) => `${n} chains around ${pc}. Tap a shop to see it on the map.`, nearNo: "no promos online yet", nearRoute: "Directions" });
+Object.assign(T.nl, { nearT: (n, r) => `${n} winkels binnen ${r} km`, nearSub: (n, pc) => `${n} ketens rond ${pc}. Tik op een winkel om hem op de kaart te zien.`, nearNo: "nog geen promo's online", nearRoute: "Route",
+  nearNL: "in Nederland, nog geen promo's online", pcWhich: "Die postcode bestaat in België en in Nederland. Welke bedoel je?" });
+Object.assign(T.fr, { nearT: (n, r) => `${n} magasins à moins de ${r} km`, nearSub: (n, pc) => `${n} enseignes autour de ${pc}. Touchez un magasin pour le voir sur la carte.`, nearNo: "pas encore de promos en ligne", nearRoute: "Itinéraire",
+  nearNL: "aux Pays-Bas, pas encore de promos en ligne", pcWhich: "Ce code postal existe en Belgique et aux Pays-Bas. Lequel ?" });
+Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n, pc) => `${n} chains around ${pc}. Tap a shop to see it on the map.`, nearNo: "no promos online yet", nearRoute: "Directions",
+  nearNL: "in the Netherlands, no promos online yet", pcWhich: "That postal code exists in Belgium and the Netherlands. Which one?" });
 Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
@@ -219,6 +222,10 @@ const CHAINS = {
   "Louis Delhaize": { bg: "#fff", fg: "#B5121B", bd: "#B5121B", l: "Louis D." }, "Alvo": { bg: "#E30613", fg: "#fff", l: "Alvo" },
   "Renmans": { bg: "#7A1F2B", fg: "#fff", l: "Renmans" }, "Ekoplaza": { bg: "#2E7D32", fg: "#fff", l: "Ekoplaza" },
   "Delitraiteur": { bg: "#1D1B19", fg: "#fff", l: "Delitraiteur" }, "Cru": { bg: "#2B2A26", fg: "#fff", l: "Cru" },
+  // Dutch chains, only in Zeeuws-Vlaanderen
+  "Plus": { bg: "#00843D", fg: "#fff", l: "PLUS" }, "Coop": { bg: "#F37021", fg: "#fff", l: "Coop" },
+  "Dirk": { bg: "#E30613", fg: "#fff", l: "Dirk" }, "Hoogvliet": { bg: "#004F9F", fg: "#fff", l: "Hoogvliet" },
+  "DekaMarkt": { bg: "#E2001A", fg: "#fff", l: "DekaMarkt" },
 };
 
 // ---------- state ----------
@@ -239,7 +246,7 @@ const S = {
   list: store.get("list", {}), // id -> deal snapshot, so the list survives a new week of data
   shown: 48,
 };
-let DEALS = [], BRANCHES = [], PCS = {}, SAMPLE = false, UPDATED = null;
+let DEALS = [], BRANCHES = [], PCS = {}, PCS_NL = {}, SAMPLE = false, UPDATED = null;
 let nearest = {}; // chain -> {d, branch}
 
 const $ = s => document.querySelector(s);
@@ -277,13 +284,15 @@ async function getJSON(path) {
 }
 
 async function load() {
-  const [deals, branches, pcs, meta] = await Promise.all([
-    getJSON("data/deals.json"), getJSON("data/stores.json"), getJSON("data/postcodes.json"), getJSON("data/meta.json")]);
+  const [deals, branches, pcs, meta, pcsNl] = await Promise.all([
+    getJSON("data/deals.json"), getJSON("data/stores.json"), getJSON("data/postcodes.json"), getJSON("data/meta.json"),
+    getJSON("data/postcodes-nl.json")]);
   let raw = deals || [];
   if (!raw.length) { raw = (await getJSON("data/sample-deals.json")) || []; SAMPLE = true; }
   DEALS = prepare(raw);
   BRANCHES = branches || [];
   PCS = pcs || {};
+  PCS_NL = pcsNl || {};
   UPDATED = meta?.collected_at || raw.reduce((a, d) => (d.collected_at > a ? d.collected_at : a), "") || null;
   computeNearest();
 }
@@ -292,11 +301,17 @@ function haversine(a, b, c, d) {
   const r = Math.PI / 180, x = Math.sin((c - a) * r / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin((d - b) * r / 2) ** 2;
   return 12742 * Math.asin(Math.sqrt(x));
 }
+// Postcodes: Belgian ones are stored as "9000", Dutch ones (Zeeuws-Vlaanderen) as "NL-4531",
+// because 4500-4589 exist in both countries (Huy/Liège and Terneuzen/Hulst/Sluis).
+const isNL = pc => String(pc || "").startsWith("NL-");
+const pcAt = pc => !pc ? null : isNL(pc) ? PCS_NL[pc.slice(3)] : PCS[pc];
+const pcName = pc => { const p = pcAt(pc); return p ? `${isNL(pc) ? pc.slice(3) : pc} ${p[2]}${isNL(pc) ? " (NL)" : ""}` : (isNL(pc) ? pc.slice(3) : pc || ""); };
 function computeNearest() {
   nearest = {};
-  const p = S.pc && PCS[S.pc];
+  const p = pcAt(S.pc);
   if (!p || !BRANCHES.length) return;
   for (const b of BRANCHES) {
+    if (b.cc === "NL") continue; // the promos are Belgian, so only Belgian branches count for them
     const d = haversine(p[0], p[1], b.lat, b.lon);
     if (!nearest[b.chain] || d < nearest[b.chain].d) nearest[b.chain] = { d, b };
   }
@@ -340,7 +355,8 @@ function logo(chain, big) {
   const c = CHAINS[chain] || { bg: "#1D1B19", fg: "#fff", l: chain };
   return `<span class="slogo" style="background:${c.bg};color:${c.fg};${c.bd ? `box-shadow:inset 0 0 0 1px ${c.bd};` : ""}${big ? "height:28px;font-size:13px" : ""}">${esc(c.l)}</span>`;
 }
-const kmText = chain => { const d = dist(chain); return d == null ? "" : `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`; };
+const km = d => d == null ? "" : `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`;
+const kmText = chain => km(dist(chain));
 const pct = d => { if (d.discount) return Math.round(d.discount * 100); const e = effDiscount(d); if (e) return Math.round(e * 100);
   const p = (d.promo_text || "").match(/(\d+)\s*%/); return p ? +p[1] : null; };
 function photo(d, big) {
@@ -383,26 +399,27 @@ function loadLeaflet() {
   return MAP.lib;
 }
 function branchesNear() {
-  const p = S.pc && PCS[S.pc]; if (!p) return [];
+  const p = pcAt(S.pc); if (!p) return [];
   return BRANCHES.map(b => ({ b, d: haversine(p[0], p[1], b.lat, b.lon) })).filter(x => x.d <= S.radius).sort((x, y) => x.d - y.d);
 }
 const route = b => `https://www.openstreetmap.org/directions?to=${b.lat},${b.lon}`;
 function renderNear() {
-  const L = t(), box = $("#near"), p = S.pc && PCS[S.pc];
+  const L = t(), box = $("#near");
   const all = branchesNear();
   box.hidden = !all.length; if (!all.length) return;
-  const withDeals = new Set(DEALS.map(d => d.store));
-  const first = {}; for (const x of all) first[x.b.chain] ??= x;
+  const live = new Set(DEALS.map(d => d.store)), withDeals = b => b.cc !== "NL" && live.has(b.chain);
+  const noDeals = b => b.cc === "NL" ? L.nearNL : L.nearNo;
+  const first = {}; for (const x of all) first[`${x.b.cc || "BE"}|${x.b.chain}`] ??= x; // nearest per chain and country
   const near = Object.values(first);
   $("#nearT").textContent = L.nearT(all.length, S.radius);
-  $("#nearSub").textContent = L.nearSub(near.length, `${S.pc} ${p[2]}`);
-  $("#nearList").innerHTML = near.map(({ b }, i) => `<li><button type="button" class="near-go" data-near="${i}">${sicon(b.chain, "lg")}<span><b>${esc(b.name)}</b><small>${esc(b.address || b.chain)}${withDeals.has(b.chain) ? "" : ` · ${L.nearNo}`}</small></span><span class="km">${kmText(b.chain)}</span></button>
+  $("#nearSub").textContent = L.nearSub(near.length, pcName(S.pc));
+  $("#nearList").innerHTML = near.map(({ b, d }, i) => `<li><button type="button" class="near-go" data-near="${i}">${sicon(b.chain, "lg")}<span><b>${esc(b.name)}</b><small>${esc(b.address || b.chain)}${withDeals(b) ? "" : ` · ${noDeals(b)}`}</small></span><span class="km">${km(d)}</span></button>
     <a class="route" href="${route(b)}" target="_blank" rel="noopener">${L.nearRoute}</a></li>`).join("");
   $("#nearList").onclick = e => { const g = e.target.closest("[data-near]"); if (g) focusBranch(near[+g.dataset.near].b); };
   const key = `${S.pc}|${S.radius}|${S.lang}|${BRANCHES.length}`;
   if (key === MAP.key) return;
   MAP.key = key;
-  loadLeaflet().then(Lf => drawMap(Lf, p, all, withDeals)).catch(() => { $("#map").hidden = true; });
+  loadLeaflet().then(Lf => drawMap(Lf, pcAt(S.pc), all, withDeals, noDeals)).catch(() => { $("#map").hidden = true; });
 }
 function pin(Lf, chain) {
   const c = CHAINS[chain] || { bg: "#17150F", fg: "#fff", l: chain };
@@ -410,7 +427,7 @@ function pin(Lf, chain) {
   return Lf.divIcon({ className: "pin", iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14],
     html: `<span style="background:${c.bg};color:${c.fg};${c.bd ? `box-shadow:inset 0 0 0 2px ${c.bd},0 1px 4px rgba(0,0,0,.35);` : ""}">${esc(s)}</span>` });
 }
-function drawMap(Lf, p, all, withDeals) {
+function drawMap(Lf, p, all, withDeals, noDeals) {
   const L = t();
   if (!MAP.map) {
     MAP.map = Lf.map("map", { scrollWheelZoom: false, zoomControl: true });
@@ -422,11 +439,10 @@ function drawMap(Lf, p, all, withDeals) {
   MAP.markers = {};
   const home = [p[0], p[1]];
   Lf.circle(home, { radius: S.radius * 1000, color: "#B4E01F", weight: 2, fillColor: "#C6F135", fillOpacity: .08, interactive: false }).addTo(MAP.layer);
-  Lf.marker(home, { icon: Lf.divIcon({ className: "pin home", iconSize: [18, 18], iconAnchor: [9, 9] }), title: `${S.pc} ${p[2]}`, keyboard: false }).addTo(MAP.layer);
+  Lf.marker(home, { icon: Lf.divIcon({ className: "pin home", iconSize: [18, 18], iconAnchor: [9, 9] }), title: pcName(S.pc), keyboard: false }).addTo(MAP.layer);
   for (const { b, d } of all) {
-    const km = `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`;
     const m = Lf.marker([b.lat, b.lon], { icon: pin(Lf, b.chain), title: b.name })
-      .bindPopup(`<b>${esc(b.name)}</b><br>${esc(b.address || "")}${b.address ? "<br>" : ""}${km}${withDeals.has(b.chain) ? "" : ` · ${L.nearNo}`}<br><a href="${route(b)}" target="_blank" rel="noopener">${L.nearRoute}</a>`);
+      .bindPopup(`<b>${esc(b.name)}</b><br>${esc(b.address || "")}${b.address ? "<br>" : ""}${km(d)}${withDeals(b) ? "" : ` · ${noDeals(b)}`}<br><a href="${route(b)}" target="_blank" rel="noopener">${L.nearRoute}</a>`);
     m.addTo(MAP.layer); MAP.markers[`${b.lat},${b.lon}`] = m;
   }
   MAP.map.invalidateSize();
@@ -467,9 +483,9 @@ function render() {
     .map(([k, v]) => `<option value="${k}"${S.sort === k ? " selected" : ""}>${v}</option>`).join("");
 
   const list = DEALS.filter(d => matches(d)).sort(SORTS[S.sort] || SORTS.value);
-  const pcName = S.pc && PCS[S.pc] ? `${S.pc} ${PCS[S.pc][2]}` : "";
+  const here = pcAt(S.pc) ? pcName(S.pc) : "";
   $("#secTitle").textContent = S.q ? L.searchTitle(S.q) : (S.cat ? L.cats[S.cat] : L.secTitle);
-  $("#secSub").textContent = L.secSub(list.length, Object.keys(nearest).length ? pcName : "", S.radius);
+  $("#secSub").textContent = L.secSub(list.length, Object.keys(nearest).length ? here : "", S.radius);
   $("#clearAll").hidden = !(S.q || S.cat || S.kinds.size || S.chains.size);
   $("#grid").innerHTML = list.length
     ? list.slice(0, S.shown).map(card).join("")
@@ -487,7 +503,7 @@ function renderStatic() {
   document.querySelectorAll("[data-t-label]").forEach(el => el.setAttribute("aria-label", L[el.dataset.tLabel]));
   renderHero();
   $("#sampleNote").hidden = !SAMPLE;
-  $("#locLbl").textContent = S.pc ? `${S.pc}${PCS[S.pc] ? " " + PCS[S.pc][2] : ""} · ${S.radius} km` : L.setPc;
+  $("#locLbl").textContent = S.pc ? `${pcName(S.pc)} · ${S.radius} km` : L.setPc;
   $("#footUpdated").textContent = UPDATED ? L.updated(new Date(UPDATED).toLocaleString(LOCALE[S.lang], { dateStyle: "medium", timeStyle: "short" })) : "";
   $("#hero").classList.toggle("compact", !!S.pc && !url.has("hero"));
   $("#listCount").textContent = Object.keys(S.list).length;
@@ -517,7 +533,7 @@ function renderHero() {
   $("#eyebrow").textContent = L.eyebrow(chains.length);
   $("#heroH").innerHTML = L.heroH;
   $("#heroSub").textContent = L.heroSub(chains.length, S.radius);
-  $("#heroGo").textContent = L.heroGo(S.pc || ($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""));
+  $("#heroGo").textContent = L.heroGo(S.pc ? pcName(S.pc).split(" ")[0] : ($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""));
   const top = [...live].filter(d => pct(d)).sort((a, b) => pct(b) - pct(a));
   const best = top[0];
   $("#biggest").innerHTML = best ? L.biggest(pct(best), esc(best.name), `${esc(best.store)}, ${money(best.price)}`) : "";
@@ -647,9 +663,30 @@ function toast(msg) { const el = $("#toast"); el.textContent = msg; el.classList
 function renderRadius(sel) {
   $("#radiusSeg").innerHTML = RADII.map(r => `<button type="button" data-r="${r}" aria-pressed="${r === sel}">${r} km</button>`).join("");
 }
-function setPc(pc, errEl) {
-  pc = String(pc || "").trim();
-  if (!PCS[pc] && Object.keys(PCS).length) { errEl.textContent = t().badPc; errEl.hidden = false; return false; }
+// Accepts "9000", "B-4500", "4531", "4531 AB", "4531AB" and "NL-4531". A bare number that exists in both
+// countries (e.g. 4530 Villers-le-Bouillet and 4530 Terneuzen) gets two buttons to pick from.
+function readPc(raw) {
+  const m = String(raw || "").toUpperCase().replace(/\s+/g, "").match(/^(NL|BE?)?-?(\d{4})([A-Z]{2})?$/);
+  if (!m) return { none: true };
+  const [, cc, n, letters] = m, be = PCS[n] ? n : null, nl = PCS_NL[n] ? "NL-" + n : null;
+  if (cc === "NL" || letters) return nl ? { pc: nl } : { none: true };
+  if (cc) return be ? { pc: be } : { none: true };
+  if (be && nl) return { both: [be, nl] };
+  return be || nl ? { pc: be || nl } : { none: true };
+}
+function setPc(raw, errEl) {
+  const L = t(), r = readPc(raw);
+  if (r.both) {
+    errEl.innerHTML = `${esc(L.pcWhich)} ${r.both.map(pc => `<button type="button" class="pc-pick" data-pc="${pc}">${esc(pcName(pc))}${isNL(pc) ? "" : " (BE)"}</button>`).join(" ")}`;
+    errEl.onclick = e => {
+      const b = e.target.closest("[data-pc]"); if (!b) return;
+      const input = errEl.closest(".hero-text, form")?.querySelector("input[autocomplete=postal-code]");
+      if (input) { input.value = isNL(b.dataset.pc) ? b.dataset.pc : "B-" + b.dataset.pc; input.form.requestSubmit(); }
+    };
+    errEl.hidden = false; return false;
+  }
+  if (r.none && Object.keys(PCS).length) { errEl.textContent = L.badPc; errEl.hidden = false; return false; }
+  const pc = r.pc || String(raw || "").trim();
   errEl.hidden = true; S.pc = pc; store.set("pc", pc); computeNearest(); return true;
 }
 

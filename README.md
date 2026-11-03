@@ -28,6 +28,7 @@ Before enabling a store, check its terms of use. See the design brief for the pe
 
 - `data/deals.json`, written every morning by the collector
 - `data/stores.json`, shop locations from OpenStreetMap (`python -m collector.locations`, refreshed weekly)
+- `data/postcodes-nl.json`, Dutch postal codes for Zeeuws-Vlaanderen (Sluis, Terneuzen, Hulst) from GeoNames (`python -m collector.postcodes_nl`, made once). Shops there are in `stores.json` with `"cc": "NL"`.
 - `data/postcodes.json`, Belgian postal code centres (from github.com/jief/zipcode-belgium)
 
 Until the first real collection, it shows `site/data/sample-deals.json` with a clear "example deals" note.

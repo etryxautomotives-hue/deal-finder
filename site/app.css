@@ -504,3 +504,4 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .acc .upsell{background:var(--lime-soft);color:var(--lime-ink);font-weight:600;font-size:var(--t-sm);border-radius:var(--r-sm);padding:var(--s3) var(--s4);margin:0 0 var(--s4)}
 .acc-form{display:grid;gap:var(--s3)}
 .acc .facts{margin-top:0}
+.pc-pick{font:inherit;font-weight:600;color:var(--ink,#17150F);background:#fff;border:1px solid currentColor;border-radius:999px;padding:4px 10px;margin:4px 4px 0 0;cursor:pointer}
