@@ -42,6 +42,7 @@ The rules the site follows, why, and where each one lives in the code. The look 
 | Remember the user | Postal code, radius, language, sort and My list are stored on the device; returning visitors skip the hero and land on their deals | Saves a step on every visit |
 | Filters stay in reach | On desktop the filter band sticks under the header while scrolling | |
 | Shareable state | Every filter is in the address bar (`?type=2+1&store=Lidl`), so a link opens the same view and Back works | |
+| Search forgives typos and learns | Suggestions appear while typing (photo, store, price); a typo still finds the product ("kipfillet", "mlek"); products you open, add and search for most rank first, with recent searches when the box is empty. All in the browser (`search.js`), history on the device or in the account | [Google autocomplete](https://support.google.com/websearch/answer/7368877); NN/g [site search suggestions](https://www.nngroup.com/articles/site-search-suggestions/) |
 | Keyboard | `/` jumps to search, Esc closes panels or clears search, Enter opens a focused card | |
 
 ## Deal types people can filter on

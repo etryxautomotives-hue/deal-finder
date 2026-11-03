@@ -206,6 +206,9 @@ Object.assign(T.en, {
 });
 Object.assign(T.en, { accSignIn: "Sign in", accTitle: "My account", accEmail: "Email", accSend: "Email me a sign-in link", accWhy: "No password: we email you a link. Your list and recipes then follow you on every device.", accSent: e => `Check your inbox (${e}) and click the link.`, accPlan: "Plan", accFree: "Free", accTrial: d => `Plus, free trial until ${d}`, accActive: d => `Plus, renews on ${d}`, accEnds: d => `Plus, ends on ${d}`, accPastDue: "Plus, payment failed: please update your payment details", accManage: "Manage subscription", accSubscribe: "Get Plus, €4.99 a month", accLogout: "Sign out", accOut: "You're signed out", accErr: "That didn't work. Please try again in a moment.", accRedirect: "One moment, opening the payment page…", accSynced: "Your list and recipes are saved to your account.", accNeed: { plan: "Planning your week is part of Plus. Try it free for 14 days.", recipes: "More than one recipe of your own is part of Plus. Try it free for 14 days." } });
 T.en.sorts.value = "Cheapest per kg / L";
+Object.assign(T.nl, { sgRecent: "Recent gezocht", sgFav: "Jouw favorieten in promo", sgAll: q => `Alle promo's voor “${q}”`, sgDel: q => `“${q}” uit je zoekgeschiedenis halen`, qFuzzy: "Geen exacte treffers, dit lijkt er het meest op." });
+Object.assign(T.fr, { sgRecent: "Recherches récentes", sgFav: "Vos favoris en promo", sgAll: q => `Toutes les promos pour « ${q} »`, sgDel: q => `Retirer « ${q} » de l’historique`, qFuzzy: "Pas de résultat exact, voici les plus proches." });
+Object.assign(T.en, { sgRecent: "Recent searches", sgFav: "Your favourites on promo", sgAll: q => `All deals for “${q}”`, sgDel: q => `Remove “${q}” from your history`, qFuzzy: "No exact matches, these are the closest." });
 Object.assign(T.en, { rPick: "Ingredients", rPickPh: "Search a product, e.g. mince, pasta, onion", rFree: q => `Add “${q}” as your own ingredient`,
   rSteps: "How to make it (optional)", rAmount: "Amount", rNone: "Add at least one ingredient.", editRecipe: "Edit recipe",
   stepsTitle: "How to make it", rHint: "Pick from every store's products. Each week we find the best deal for each ingredient.", rSaved: "Recipe saved" });
@@ -232,7 +235,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -337,7 +340,7 @@ function matches(d, skip) {
   if (skip !== "cat" && S.cat && d.cat !== S.cat) return false;
   if (skip !== "kind" && S.kinds.size && !S.kinds.has(d.group)) return false;
   if (skip !== "chain" && S.chains.size && !S.chains.has(d.store)) return false;
-  if (S.q) { for (const w of fold(S.q).split(/\s+/)) if (w && !d.hay.includes(w)) return false; }
+  if (S.q && !DS.search(DEALS, S.q).hits.has(d.id)) return false;  // typo-tolerant, see search.js
   return true;
 }
 const SORTS = {
@@ -499,7 +502,7 @@ function render() {
   const list = DEALS.filter(d => matches(d)).sort(SORTS[S.sort] || SORTS.value);
   const here = pcAt(S.pc) ? pcName(S.pc) : "";
   $("#secTitle").textContent = S.q ? L.searchTitle(S.q) : (S.cat ? L.cats[S.cat] : L.secTitle);
-  $("#secSub").textContent = L.secSub(list.length, Object.keys(nearest).length ? here : "", S.radius);
+  $("#secSub").textContent = (S.q && list.length && DS.search(DEALS, S.q).mode < 3 ? L.qFuzzy + " " : "") + L.secSub(list.length, Object.keys(nearest).length ? here : "", S.radius);
   $("#clearAll").hidden = !(S.q || S.cat || S.kinds.size || S.chains.size);
   $("#grid").innerHTML = list.length
     ? list.slice(0, S.shown).map(card).join("")
@@ -578,6 +581,8 @@ function closeDialogs() {
 
 function openDeal(id) {
   const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d) return;
+  if (S.q) noteSearch(S.q);  // opening a result confirms the search
+  noteProduct(d);
   const L = t(), F = L.facts, on = !!S.list[d.id], n = nearOf(d);
   const save = d.old_price ? d.old_price - d.price : null;
   const dest = n ? `${n.b.lat},${n.b.lon}` : encodeURIComponent(`${d.store} ${pcName(S.pc)} ${d.cc === "NL" ? "Nederland" : "Belgium"}`);
@@ -616,7 +621,7 @@ function openDeal(id) {
 function toggleList(id) {
   const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d) return;
   if (S.list[id]) delete S.list[id];
-  else { const { hay, until, i, ...keep } = d; S.list[id] = keep; toast(t().addedToast); }
+  else { const { hay, until, i, _sx, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); }
   store.set("list", S.list);
   const c = $("#listCount"); c.textContent = Object.keys(S.list).length; c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   document.querySelectorAll(`[data-add="${id}"]`).forEach(b => {
@@ -705,12 +710,93 @@ function setPc(raw, errEl, inputId) {
   errEl.hidden = true; S.pc = val; store.set("pc", val); computeNearest(); paintCc(ccOf(val)); return true;
 }
 
+// ---------- search suggestions (matching and ranking live in search.js) ----------
+// History of searches and opened products, used to put each person's favourites first.
+// On this device for guests; in the account (user_data.history) when signed in.
+const DS = window.DKSearch;
+let HIST = DS.clean(store.get("hist", null));
+const SG = { idx: -1, items: [] };
+function saveHist() { HIST = DS.prune(HIST, Date.now()); store.set("hist", HIST); }
+function noteSearch(q) { const k = DS.qwords(q).join(" "); if (k.length >= 2 && DS.bump(HIST, "q", k, 1, Date.now())) saveHist(); }
+function noteProduct(d, by = 1) {
+  const now = Date.now(), a = DS.bump(HIST, "p", DS.productKey(d), by, now), b = d.cat && d.cat !== "other" && DS.bump(HIST, "c", d.cat, by, now);
+  if (a || b) saveHist();
+}
+function runSearch(q) {
+  q = q.trim(); $("#q").value = q;
+  closeSuggest(); if (q) noteSearch(q);
+  if (q !== S.q) { S.q = q; S.shown = 48; render(); }
+  $("#q").blur(); $("#results").scrollIntoView({ behavior: "smooth" });
+}
+function renderSuggest() {
+  const L = t(), input = $("#q"), box = $("#qList"), q = input.value.trim(), now = Date.now();
+  const items = [], parts = [];
+  const head = txt => parts.push(`<li role="presentation" class="sg-h">${esc(txt)}</li>`);
+  const clock = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  const lens = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  const opt = (item, inner, cls = "") => { const i = items.push(item) - 1;
+    parts.push(`<li role="option" id="sg${i}" data-sg="${i}" class="${cls}" aria-selected="${i === SG.idx}">${inner}</li>`); };
+  const past = k => opt({ q: k }, `<span class="th ic">${clock}</span><span class="pn"><b>${esc(k)}</b></span>
+    <button type="button" class="sg-x" data-sgdel="${esc(k)}" tabindex="-1" aria-label="${esc(L.sgDel(k))}"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>`, "past");
+  const deal = d => opt({ id: d.id }, `<span class="th">${d.image_url ? `<img src="${esc(d.image_url)}" alt="" loading="lazy" onerror="this.remove()">` : esc((d.name || "?")[0])}</span>
+    <span class="pn"><b>${esc(d.name)}</b><span class="st">${sicon(d.store)}${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}${kmText(d.store) ? ` · ${kmText(d.store)}` : ""}</span></span>
+    <span class="pp">${money(d.price)}</span>`);
+  if (!q) {
+    const rec = DS.recent(HIST, now, "", 5), fav = DS.favourites(DEALS, HIST, now, { filter: inRadius, n: 4 });
+    if (rec.length) { head(L.sgRecent); rec.forEach(past); }
+    if (fav.length) { head(L.sgFav); fav.forEach(deal); }
+  } else {
+    DS.recent(HIST, now, q, 2).forEach(past);
+    const s = DS.suggest(DEALS, q, HIST, now, { filter: inRadius, n: 6 });
+    s.deals.forEach(deal);
+    if (s.total) opt({ all: q }, `<span class="th ic">${lens}</span><span class="pn"><b>${esc(L.sgAll(q))}</b></span><span class="pp n">${s.total}</span>`, "all");
+  }
+  SG.items = items;
+  if (SG.idx >= items.length) SG.idx = -1;
+  box.innerHTML = parts.join("");
+  const open = items.length > 0 && document.activeElement === input;
+  box.hidden = !open; input.setAttribute("aria-expanded", open);
+  input.setAttribute("aria-activedescendant", open && SG.idx >= 0 ? `sg${SG.idx}` : "");
+}
+function closeSuggest() { SG.idx = -1; $("#qList").hidden = true; $("#q").setAttribute("aria-expanded", "false"); $("#q").removeAttribute("aria-activedescendant"); }
+function pickSuggest(i) {
+  const it = SG.items[i]; if (!it) return;
+  if (it.q) { runSearch(it.q); return; }
+  if (it.all) { runSearch(it.all); return; }
+  const q = $("#q").value.trim(); closeSuggest(); $("#q").blur();
+  if (q && q !== S.q) { S.q = q; S.shown = 48; render(); }
+  openDeal(it.id);
+}
+function bindSuggest() {
+  const input = $("#q"), box = $("#qList");
+  input.addEventListener("focus", () => { SG.idx = -1; renderSuggest(); });
+  input.addEventListener("blur", () => setTimeout(() => { if (document.activeElement !== input) closeSuggest(); }, 0));
+  input.addEventListener("keydown", e => {
+    const n = SG.items.length;
+    if ((e.key === "ArrowDown" || e.key === "ArrowUp") && n) {
+      e.preventDefault();
+      if (box.hidden) { renderSuggest(); return; }
+      SG.idx = e.key === "ArrowDown" ? (SG.idx + 1 >= n ? -1 : SG.idx + 1) : (SG.idx <= -1 ? n - 1 : SG.idx - 1);
+      renderSuggest(); $("#sg" + SG.idx)?.scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter" && !box.hidden && SG.idx >= 0) { e.preventDefault(); pickSuggest(SG.idx); }
+    else if (e.key === "Escape" && !box.hidden) { e.preventDefault(); e.stopPropagation(); closeSuggest(); }  // first Esc closes, the next one clears
+  });
+  box.addEventListener("mousedown", e => e.preventDefault());  // keep focus in the search box
+  box.addEventListener("click", e => {
+    e.stopPropagation();
+    const del = e.target.closest("[data-sgdel]");
+    if (del) { delete HIST.q[del.dataset.sgdel]; saveHist(); renderSuggest(); return; }
+    const li = e.target.closest("[data-sg]"); if (li) pickSuggest(+li.dataset.sg);
+  });
+}
+
 // ---------- events ----------
 function bind() {
   let qTimer;
   $("#q").value = S.q;
-  $("#q").addEventListener("input", e => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = e.target.value.trim(); S.shown = 48; render(); }, 120); });
-  $("#searchForm").addEventListener("submit", e => { e.preventDefault(); $("#q").blur(); $("#results").scrollIntoView({ behavior: "smooth" }); });
+  $("#q").addEventListener("input", e => { SG.idx = -1; renderSuggest(); clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = e.target.value.trim(); S.shown = 48; render(); }, 120); });
+  $("#searchForm").addEventListener("submit", e => { e.preventDefault(); clearTimeout(qTimer); runSearch($("#q").value); });
+  bindSuggest();
 
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") { if (![...document.querySelectorAll(".scrim")].every(s => s.hidden)) closeDialogs(); else if (document.activeElement === $("#q")) { $("#q").value = ""; S.q = ""; render(); } }
@@ -1083,6 +1169,7 @@ async function pull() {
   R.own = [...R.own, ...(data.recipes || []).filter(r => !ids.has(r.id))];
   R.have = { ...(data.have || {}), ...R.have };
   R.plan = new Set([...(data.plan || []), ...R.plan]);
+  if (data.history) { HIST = DS.prune(DS.merge(HIST, data.history), Date.now()); store.set("hist", HIST); }
   // preferred postcode: the one saved in the account, else the one given when the account was made
   const pref = data.prefs?.pc || ACC.user.user_metadata?.pc;
   if (pref && !S.pc && pcAt(pref)) { S.pc = pref; store.set("pc", pref); computeNearest(); }
@@ -1100,6 +1187,8 @@ async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
     prefs: { pc: S.pc, radius: S.radius, lang: S.lang }, updated_at: new Date().toISOString() });
+  // separate call, so the list still syncs if the history column (migration 002) isn't there yet
+  await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
 async function callFn(name) {
   const { data, error } = await ACC.sb.functions.invoke(name, { body: {} });
