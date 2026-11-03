@@ -435,7 +435,8 @@ def build(site_dir: Path, deals_file: Path, base_url: str, today: dt.date | None
     today = today or dt.date.today()
     base = base_url.rstrip("/")
     deals = json.loads(deals_file.read_text(encoding="utf-8")) if deals_file.exists() else []
-    deals = [d for d in deals if d.get("name") and d.get("store") and d.get("price") is not None]
+    deals = [d for d in deals if d.get("name") and d.get("store") and d.get("price") is not None
+             and d.get("cc", "BE") == "BE"]  # the landing pages are for Belgium; Dutch promos stay in the app
     pages = plan_pages(deals, base, today) if deals else []
     for p in pages:
         out = site_dir / p.path / "index.html"

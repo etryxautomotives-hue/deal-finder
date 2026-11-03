@@ -1,4 +1,4 @@
-"""Lidl Belgium. The weekly offers page puts each product's data, as JSON, in a data-grid-data attribute."""
+"""Lidl Belgium and Lidl Netherlands. The weekly offers page puts each product's data, as JSON, in a data-grid-data attribute."""
 from __future__ import annotations
 
 import html as htmllib
@@ -36,8 +36,21 @@ def _promo(pct: int | None, note: str, lang: str) -> str | None:
     return f"-{pct}%"
 
 
+_PER = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:EUR|€)?\s*/\s*(kg|l)\b", re.I)            # "1,98 EUR/kg" (BE)
+_PER_NL = re.compile(r"\b1?\s*(kg|l)\s*=\s*(?:€|EUR)?\s*(\d+(?:[.,]\d+)?)", re.I)   # "1 kg = € 3,96" (NL)
+
+
+def _per_unit(text: str) -> tuple[float, str] | None:
+    if m := _PER.search(text):
+        return to_float(m.group(1)), "kg" if m.group(2).lower() == "kg" else "L"
+    if m := _PER_NL.search(text):
+        return to_float(m.group(2)), "kg" if m.group(1).lower() == "kg" else "L"
+    return None
+
+
 def parse_offers(page: str, page_url: str = OFFERS_URL) -> list[Deal]:
     lang = "fr" if "/fr-BE/" in page_url else "nl"
+    host = "https://www.lidl.nl" if "lidl.nl" in page_url else "https://www.lidl.be"
     deals, seen = [], set()
     for raw in re.findall(r'data-grid-data="([^"]+)"', page):
         try:
@@ -50,8 +63,8 @@ def parse_offers(page: str, page_url: str = OFFERS_URL) -> list[Deal]:
         if not price.get("price") or not disc.get("percentageDiscount") or p.get("productId") in seen:
             continue
         # groceries show a price per kg or litre; flowers, clothes and gadgets don't
-        m = re.search(r"(\d+(?:,\d+)?)\s*EUR/(kg|l)\b", base, re.I)
-        if not m:
+        per = _per_unit(base)
+        if not per:
             continue
         seen.add(p.get("productId"))
         pack = base.split(" - ")[0].strip() or None
@@ -63,10 +76,10 @@ def parse_offers(page: str, page_url: str = OFFERS_URL) -> list[Deal]:
             price=float(price["price"]), old_price=float(old) if old else None, pack_size=pack,
             promo_text=_promo(disc.get("percentageDiscount"), note, lang),
             # Lidl's price covers the whole offer (e.g. both packs), so its own per-kg price is the right one
-            unit_price=to_float(m.group(1)), unit="kg" if m.group(2).lower() == "kg" else "L",
+            unit_price=per[0], unit=per[1],
             valid_from=_date(p.get("storeStartDate")), valid_until=_date(p.get("storeEndDate")),
-            image_url=p.get("image"), source_url="https://www.lidl.be" + (p.get("canonicalUrl") or ""),
-            language=lang,
+            image_url=p.get("image"), source_url=host + (p.get("canonicalUrl") or ""),
+            language=lang, cc="NL" if "lidl.nl" in host else "BE",
         ))
     return deals
 
@@ -76,3 +89,22 @@ class Lidl(Store):
 
     def collect(self) -> list[Deal]:
         return parse_offers(self.client.get(OFFERS_URL).text)
+
+
+class LidlNL(Store):
+    """Lidl Nederland, for the shops in Zeeuws-Vlaanderen. The offers page address changes, so we find it from
+    the home page (robots.txt allows both)."""
+    name = "Lidl NL"
+    home = "https://www.lidl.nl/"
+
+    def collect(self) -> list[Deal]:
+        links = re.findall(r'href="(/c/[^"?#]*aanbieding[^"?#]*/a\d+)"', self.client.get(self.home).text)
+        deals: list[Deal] = []
+        for path in list(dict.fromkeys(links))[:3]:  # this week's offers, at most three pages
+            deals += parse_offers(self.client.get("https://www.lidl.nl" + path).text, "https://www.lidl.nl" + path)
+        seen, out = set(), []
+        for d in deals:
+            if (d.name, d.price) not in seen:
+                seen.add((d.name, d.price))
+                out.append(d)
+        return out
