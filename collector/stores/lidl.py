@@ -92,15 +92,18 @@ class Lidl(Store):
 
 
 class LidlNL(Store):
-    """Lidl Nederland, for the shops in Zeeuws-Vlaanderen. The offers page address changes, so we find it from
-    the home page (robots.txt allows both)."""
+    """Lidl Nederland, for the shops in Zeeuws-Vlaanderen (robots.txt allows these pages).
+
+    The offers hub (/c/aanbiedingen/a10008785) links to this week's sub-pages ("vanaf maandag", ...) whose
+    addresses change every week, so we read the hub and follow its offer links."""
     name = "Lidl NL"
-    home = "https://www.lidl.nl/"
+    hub = "https://www.lidl.nl/c/aanbiedingen/a10008785"
+    max_pages = 6
 
     def collect(self) -> list[Deal]:
-        links = re.findall(r'href="(/c/[^"?#]*aanbieding[^"?#]*/a\d+)"', self.client.get(self.home).text)
-        deals: list[Deal] = []
-        for path in list(dict.fromkeys(links))[:3]:  # this week's offers, at most three pages
+        page = self.client.get(self.hub).text
+        deals = parse_offers(page, self.hub)
+        for path in offer_links(page, self.hub)[: self.max_pages]:
             deals += parse_offers(self.client.get("https://www.lidl.nl" + path).text, "https://www.lidl.nl" + path)
         seen, out = set(), []
         for d in deals:
@@ -108,3 +111,13 @@ class LidlNL(Store):
                 seen.add((d.name, d.price))
                 out.append(d)
         return out
+
+
+_OFFER_WORDS = ("aanbieding", "deze-week", "vanaf", "actie", "week", "korting")
+
+
+def offer_links(page: str, current: str) -> list[str]:
+    """Offer sub-pages linked from a Lidl NL page, relative or absolute, without the page itself."""
+    here = current.replace("https://www.lidl.nl", "")
+    found = re.findall(r'href="(?:https://www\.lidl\.nl)?(/c/[^"?#]+/[as]\d+)"', page)
+    return [p for p in dict.fromkeys(found) if p != here and any(w in p.lower() for w in _OFFER_WORDS)]

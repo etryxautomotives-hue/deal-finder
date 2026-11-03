@@ -30,3 +30,14 @@ def test_dutch_lidl_price_per_kg_and_country():
     assert _per_unit("1,5 L | 1 l = 0,66") == (0.66, "L")
     [d] = [d for d in parse_offers(HTML, "https://www.lidl.nl/c/aanbiedingen/a1") if d.name == "TROPICANA Jus d'orange"]
     assert d.cc == "NL" and d.source_url.startswith("https://www.lidl.nl/p/")
+
+
+def test_dutch_offer_links_relative_and_absolute():
+    from collector.stores.lidl import offer_links
+    page = ('<a href="https://www.lidl.nl/c/aanbiedingen/a10008785">x</a>'
+            '<a href="/c/vanaf-maandag-02-11/a10091234">x</a>'
+            '<a href="https://www.lidl.nl/c/deze-week-alleen/a10095678">x</a>'
+            '<a href="/c/vanaf-maandag-02-11/a10091234">dup</a>'
+            '<a href="/c/service-contact-folders/s10008124">folder</a>')
+    assert offer_links(page, "https://www.lidl.nl/c/aanbiedingen/a10008785") == [
+        "/c/vanaf-maandag-02-11/a10091234", "/c/deze-week-alleen/a10095678"]
