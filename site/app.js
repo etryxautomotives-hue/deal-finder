@@ -18,7 +18,8 @@ const T = {
     skip: "Naar de promoties", search: "Wat zoek je? Bv. melk, gehakt, Coca-Cola", myList: "Mijn lijst",
     heroH: "Goed eten,<br><em>voor minder.</em>",
     heroSub: "Alle promoties van de Belgische supermarkten in je buurt, vergeleken op de echte prijs per kilo. Elke ochtend vernieuwd.",
-    postcode: "Postcode", showDeals: "Toon mijn promo's", badPc: "Die postcode kennen we niet. Probeer bv. 9000 of 4531 AB.",
+    postcode: "Postcode of adres", showDeals: "Toon mijn promo's", badPc: "Die postcode of dat adres vinden we niet. Probeer bv. 9000 of Veldstraat 1, Gent.",
+    pcPh: "9000 of straat + nr", addrBusy: "Adres zoeken…", addrCredit: "Adressen: © OpenStreetMap",
     trust: (n, c) => `<b>${n}</b> promo's van <b>${c}</b> ketens, vanochtend gecheckt`,
     sample: "Voorbeeldpromo's: de echte promo's verschijnen na de eerste automatische ronde van de verzamelaar.",
     dealType: "Soort promo", stores: "Winkels", sortBy: "Sorteer", clearAll: "Wis filters", showMore: "Toon meer",
@@ -53,7 +54,8 @@ const T = {
     skip: "Aller aux promos", search: "Que cherchez-vous ? Ex. lait, haché, Coca-Cola", myList: "Ma liste",
     heroH: "Bien manger,<br><em>pour moins.</em>",
     heroSub: "Toutes les promotions des supermarchés belges près de chez vous, comparées au vrai prix au kilo. Mises à jour chaque matin.",
-    postcode: "Code postal", showDeals: "Voir mes promos", badPc: "Code postal inconnu. Essayez par ex. 1000 ou 4531 AB.",
+    postcode: "Code postal ou adresse", showDeals: "Voir mes promos", badPc: "Code postal ou adresse introuvable. Essayez par ex. 1000 ou Rue Neuve 1, Bruxelles.",
+    pcPh: "1000 ou rue + n°", addrBusy: "Recherche de l’adresse…", addrCredit: "Adresses : © OpenStreetMap",
     trust: (n, c) => `<b>${n}</b> promos de <b>${c}</b> enseignes vérifiées ce matin`,
     sample: "Promos d’exemple : les vraies promos apparaissent après le premier passage automatique du collecteur.",
     dealType: "Type de promo", stores: "Magasins", sortBy: "Trier", clearAll: "Effacer les filtres", showMore: "Voir plus",
@@ -88,7 +90,8 @@ const T = {
     skip: "Skip to deals", search: "What are you looking for? E.g. milk, mince, Coca-Cola", myList: "My list",
     heroH: "Good food,<br><em>for less.</em>",
     heroSub: "Every promotion from Belgian supermarkets near you, compared on the real price per kilo. Fresh every morning.",
-    postcode: "Postal code", showDeals: "Show my deals", badPc: "We don't know that postal code. Try 9000 or 4531 AB, for example.",
+    postcode: "Postal code or address", showDeals: "Show my deals", badPc: "We can't find that postal code or address. Try 9000 or Veldstraat 1, Gent, for example.",
+    pcPh: "9000 or street + no.", addrBusy: "Looking up the address…", addrCredit: "Addresses: © OpenStreetMap",
     trust: (n, c) => `<b>${n}</b> deals from <b>${c}</b> chains checked this morning`,
     sample: "Example deals: the real deals appear after the collector's first automatic run.",
     dealType: "Deal type", stores: "Stores", sortBy: "Sort", clearAll: "Clear filters", showMore: "Show more",
@@ -139,13 +142,13 @@ Object.assign(T.nl, {
 });
 Object.assign(T.nl, { nearT: (n, r) => `${n} winkels binnen ${r} km`, nearSub: (n, pc) => `${n} ketens rond ${pc}. Tik op een winkel om hem op de kaart te zien.`, nearNo: "nog geen promo's online", nearRoute: "Route",
   nearNL: "in Nederland, nog geen promo's online", country: "Land", cc: { BE: "België", NL: "Nederland" },
-  accPc: "Je postcode", accPcWhy: "Zo tonen we meteen de promo's bij jou in de buurt. Je kunt dit altijd aanpassen.", accChange: "Wijzig" });
+  accPc: "Je postcode of adres", accPcWhy: "Zo tonen we meteen de promo's bij jou in de buurt. Je kunt dit altijd aanpassen.", accChange: "Wijzig" });
 Object.assign(T.fr, { nearT: (n, r) => `${n} magasins à moins de ${r} km`, nearSub: (n, pc) => `${n} enseignes autour de ${pc}. Touchez un magasin pour le voir sur la carte.`, nearNo: "pas encore de promos en ligne", nearRoute: "Itinéraire",
   nearNL: "aux Pays-Bas, pas encore de promos en ligne", country: "Pays", cc: { BE: "Belgique", NL: "Pays-Bas" },
-  accPc: "Votre code postal", accPcWhy: "Pour voir directement les promos près de chez vous. Modifiable à tout moment.", accChange: "Modifier" });
+  accPc: "Votre code postal ou adresse", accPcWhy: "Pour voir directement les promos près de chez vous. Modifiable à tout moment.", accChange: "Modifier" });
 Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n, pc) => `${n} chains around ${pc}. Tap a shop to see it on the map.`, nearNo: "no promos online yet", nearRoute: "Directions",
   nearNL: "in the Netherlands, no promos online yet", country: "Country", cc: { BE: "Belgium", NL: "Netherlands" },
-  accPc: "Your postal code", accPcWhy: "So we show the promos near you straight away. You can change it any time.", accChange: "Change" });
+  accPc: "Your postal code or address", accPcWhy: "So we show the promos near you straight away. You can change it any time.", accChange: "Change" });
 Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
@@ -310,9 +313,15 @@ function haversine(a, b, c, d) {
 // Postcodes: Belgian ones are stored as "9000", Dutch ones (Zeeuws-Vlaanderen) as "NL-4531",
 // because 4500-4589 exist in both countries (Huy/Liège and Terneuzen/Hulst/Sluis).
 const isNL = pc => String(pc || "").startsWith("NL-");
-const pcAt = pc => !pc ? null : isNL(pc) ? PCS_NL[pc.slice(3)] : PCS[pc];
-const pcName = pc => { const p = pcAt(pc); return p ? `${isNL(pc) ? pc.slice(3) : pc} ${p[2]}${isNL(pc) ? " (NL)" : ""}` : (isNL(pc) ? pc.slice(3) : pc || ""); };
-const ccOf = pc => isNL(pc) ? "NL" : "BE";
+// An address is stored as "@BE|51.054|3.722|Veldstraat 1, 9000 Gent" (rounded to ~100 m).
+const isGeo = pc => String(pc || "").startsWith("@");
+const geo = pc => { const [cc, lat, lon, ...rest] = pc.slice(1).split("|"); return { cc, lat: +lat, lon: +lon, label: rest.join("|") }; };
+const pcAt = pc => { if (!pc) return null; if (isGeo(pc)) { const g = geo(pc); return [g.lat, g.lon, g.label]; } return isNL(pc) ? PCS_NL[pc.slice(3)] : PCS[pc]; };
+const pcName = pc => { if (isGeo(pc)) { const g = geo(pc); return g.label + (g.cc === "NL" ? " (NL)" : ""); }
+  const p = pcAt(pc); return p ? `${isNL(pc) ? pc.slice(3) : pc} ${p[2]}${isNL(pc) ? " (NL)" : ""}` : (isNL(pc) ? pc.slice(3) : pc || ""); };
+const pcShort = pc => !pc ? "" : isGeo(pc) ? geo(pc).label.split(",")[0] : isNL(pc) ? pc.slice(3) : pc;  // "9000" or "Veldstraat 1"
+const pcInput = pc => !pc ? "" : isGeo(pc) ? geo(pc).label : pcShort(pc);                                  // what goes back in the box
+const ccOf = pc => isGeo(pc) ? geo(pc).cc : isNL(pc) ? "NL" : "BE";
 // Nearest branch per chain *and country*: a Dutch Lidl promo only counts Dutch Lidl branches, and the other way round.
 // Near the border you get the promos of both countries inside your radius.
 function computeNearest() {
@@ -551,7 +560,7 @@ function renderHero() {
   $("#eyebrow").textContent = L.eyebrow(chains.length);
   $("#heroH").innerHTML = L.heroH;
   $("#heroSub").textContent = L.heroSub(chains.length, S.radius);
-  $("#heroGo").textContent = L.heroGo(S.pc ? pcName(S.pc).split(" ")[0] : ($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""));
+  $("#heroGo").textContent = L.heroGo(S.pc ? pcShort(S.pc) : ($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""));
   const top = [...live].filter(d => pct(d)).sort((a, b) => pct(b) - pct(a));
   const best = top[0];
   $("#biggest").innerHTML = best ? L.biggest(pct(best), esc(best.name), `${esc(best.store)}, ${money(best.price)}`) : "";
@@ -703,10 +712,72 @@ function paintCc(cc, inputId) {
     el.innerHTML = ["BE", "NL"].map(c => `<button type="button" data-cc="${c}" aria-pressed="${c === sel}" title="${esc(L.cc[c])}"><i class="flag ${c.toLowerCase()}"></i>${c}</button>`).join("");
   });
 }
-function setPc(raw, errEl, inputId) {
-  const pc = readPc(raw, ccPicked(inputId));
+// Addresses: Photon (photon.komoot.io), an open geocoder on OpenStreetMap data that allows search-as-you-type
+// with fair use. Only Belgium and Zeeuws-Vlaanderen count; the BE/NL picker puts that country's results first.
+const GEO_BOX = "2.5,49.45,6.45,51.52";
+const ZV = [51.17, 3.35, 51.46, 4.30]; // same box as collector/locations.py
+const geoCache = new Map();
+async function geocode(q, cc) {
+  q = q.trim(); if (q.length < 3) return [];
+  const key = `${S.lang}|${q.toLowerCase()}`;
+  if (!geoCache.has(key)) {
+    const lang = S.lang === "fr" ? "fr" : S.lang === "en" ? "en" : "default";
+    geoCache.set(key, fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=10&lang=${lang}&bbox=${GEO_BOX}`)
+      .then(r => r.ok ? r.json() : { features: [] }).then(j => j.features || []).catch(() => { geoCache.delete(key); return []; }));
+  }
+  const out = [], seen = new Set();
+  for (const f of await geoCache.get(key)) {
+    const p = f.properties || {}, [lon, lat] = f.geometry?.coordinates || [];
+    const c = (p.countrycode || "").toUpperCase();
+    if (lat == null || !(c === "BE" || (c === "NL" && lat >= ZV[0] && lat <= ZV[2] && lon >= ZV[1] && lon <= ZV[3]))) continue;
+    const street = p.street ? [p.street, p.housenumber].filter(Boolean).join(" ") : p.name;
+    const place = [p.postcode, p.city || p.town || p.village || (p.street ? null : p.county)].filter(Boolean).join(" ");
+    const label = [street, place].filter(Boolean).join(", ").replace(/\|/g, "/");
+    if (!label || seen.has(label)) continue;
+    seen.add(label);
+    out.push({ label, cc: c, pc: `@${c}|${lat.toFixed(3)}|${lon.toFixed(3)}|${label}` });
+  }
+  return out.sort((a, b) => (b.cc === cc) - (a.cc === cc)).slice(0, 5);
+}
+function sugBox(input) {
+  let ul = input.closest("form")?.querySelector(`.addr-sug[data-for="${input.id}"]`);
+  if (!ul) {
+    ul = document.createElement("ul"); ul.className = "addr-sug"; ul.dataset.for = input.id; ul.hidden = true;
+    ul.setAttribute("role", "listbox");
+    (input.closest(".pcbox, .pc-row") || input).after(ul);
+    ul.addEventListener("click", e => {
+      const b = e.target.closest("[data-loc]"); if (!b) return;
+      input.value = b.dataset.label; input.dataset.loc = b.dataset.loc; input.dataset.locFor = b.dataset.label;
+      hideSug(input); input.form.requestSubmit();
+    });
+  }
+  return ul;
+}
+function hideSug(input) { const ul = input && input.form?.querySelector(`.addr-sug[data-for="${input.id}"]`); if (ul) ul.hidden = true; }
+let sugTimer, sugSeq = 0;
+function suggestAddress(input) {
+  clearTimeout(sugTimer);
+  const q = input.value.trim(), seq = ++sugSeq;
+  if (q.length < 4 || !/[a-zà-ÿ]{2}/i.test(q) || readPc(q, ccPicked(input.id))) { hideSug(input); return; }
+  sugTimer = setTimeout(async () => {
+    const res = await geocode(q, ccPicked(input.id));
+    if (seq !== sugSeq) return;  // the person kept typing
+    const ul = sugBox(input);
+    ul.hidden = !res.length;
+    ul.innerHTML = res.map(r => `<li><button type="button" role="option" data-loc="${esc(r.pc)}" data-label="${esc(r.label)}">${r.cc === "NL" ? '<i class="flag nl"></i>' : '<i class="flag be"></i>'}${esc(r.label)}</button></li>`).join("")
+      + `<li class="credit">${esc(t().addrCredit)}</li>`;
+  }, 250);
+}
+async function setPc(raw, errEl, inputId) {
+  const input = document.getElementById(inputId), text = String(raw || "").trim();
+  let pc = input?.dataset.loc && input.dataset.locFor === text ? input.dataset.loc : readPc(text, ccPicked(inputId));
+  if (!pc && /[a-zà-ÿ]{2}/i.test(text)) {            // an address typed without picking a suggestion: take the best match
+    errEl.textContent = t().addrBusy; errEl.hidden = false;
+    pc = (await geocode(text, ccPicked(inputId)))[0]?.pc || null;
+  }
+  if (input) hideSug(input);
   if (!pc && Object.keys(PCS).length) { errEl.textContent = t().badPc; errEl.hidden = false; return false; }
-  const val = pc || String(raw || "").trim();
+  const val = pc || text;
   errEl.hidden = true; S.pc = val; store.set("pc", val); computeNearest(); paintCc(ccOf(val)); return true;
 }
 
@@ -827,19 +898,21 @@ function bind() {
   $("#clearAll").addEventListener("click", () => { S.q = ""; $("#q").value = ""; S.cat = ""; S.kinds.clear(); S.chains.clear(); render(); });
   $("#moreBtn").addEventListener("click", () => { S.shown += 48; render(); });
 
-  $("#heroForm").addEventListener("submit", e => {
+  for (const id of ["heroPc", "locPc"]) $("#" + id).addEventListener("input", e => suggestAddress(e.target));
+  document.addEventListener("input", e => { if (e.target.id === "accPc") suggestAddress(e.target); });
+  $("#heroForm").addEventListener("submit", async e => {
     e.preventDefault();
-    if (!setPc($("#heroPc").value, $("#heroErr"), "heroPc")) return;
+    if (!await setPc($("#heroPc").value, $("#heroErr"), "heroPc")) return;
     renderStatic(); render(); $("#results").scrollIntoView({ behavior: "smooth" });
   });
   document.addEventListener("click", e => {
     const b = e.target.closest(".cc-seg [data-cc]"); if (!b) return;
     b.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
   });
-  $("#locBtn").addEventListener("click", () => { $("#locPc").value = S.pc ? pcName(S.pc).split(" ")[0] : ""; paintCc(guessCc(), "locPc"); $("#locErr").hidden = true; renderRadius(S.radius); openDialog($("#locDlg"), $("#locPc")); });
-  $("#locForm").addEventListener("submit", e => {
+  $("#locBtn").addEventListener("click", () => { $("#locPc").value = pcInput(S.pc); hideSug($("#locPc")); paintCc(guessCc(), "locPc"); $("#locErr").hidden = true; renderRadius(S.radius); openDialog($("#locDlg"), $("#locPc")); });
+  $("#locForm").addEventListener("submit", async e => {
     e.preventDefault();
-    if (!setPc($("#locPc").value, $("#locErr"), "locPc")) return;
+    if (!await setPc($("#locPc").value, $("#locErr"), "locPc")) return;
     const r = +($("#radiusSeg [aria-pressed=true]")?.dataset.r || S.radius); S.radius = r; store.set("radius", r);
     computeNearest(); closeDialogs(); renderStatic(); render();
   });
@@ -1220,7 +1293,7 @@ function openAccount(why) {
     box.innerHTML = `<h3 id="accTitle">${L.accSignIn}</h3>${upsell}<p class="muted">${L.accWhy}</p>
       <form id="accForm" class="acc-form"><label class="field"><span>${L.accEmail}</span><input id="accEmail" type="email" required autocomplete="email" inputmode="email"></label>
       <div class="field"><label for="accPc">${L.accPc}</label>
-        <div class="pc-row"><input id="accPc" inputmode="numeric" maxlength="8" autocomplete="postal-code" value="${S.pc ? esc(pcName(S.pc).split(" ")[0]) : ""}" placeholder="9000">
+        <div class="pc-row"><input id="accPc" maxlength="120" autocomplete="off" value="${esc(pcInput(S.pc))}" placeholder="${esc(L.pcPh)}">
           <span class="cc-seg" role="group" data-for="accPc"></span></div>
         <small class="muted">${L.accPcWhy}</small></div>
       <p class="pc-error" id="accPcErr" role="alert" hidden></p>
@@ -1230,7 +1303,7 @@ function openAccount(why) {
     $("#accForm").addEventListener("submit", async e => {
       e.preventDefault();
       const email = $("#accEmail").value.trim();
-      if ($("#accPc").value.trim() && !setPc($("#accPc").value, $("#accPcErr"), "accPc")) return; // optional, but must be valid
+      if ($("#accPc").value.trim() && !await setPc($("#accPc").value, $("#accPcErr"), "accPc")) return; // optional, but must be valid
       renderStatic(); render();
       const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { data: S.pc ? { pc: S.pc, radius: S.radius } : {}, emailRedirectTo: location.origin + location.pathname + (why === "trial" ? "#pricing" : "") } });
       const sent = $("#accSent"); if (sent) { sent.textContent = error ? L.accErr : L.accSent(email); sent.hidden = false; }
