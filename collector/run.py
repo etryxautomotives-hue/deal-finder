@@ -44,7 +44,7 @@ def is_current(deal: Deal, today: date) -> bool:
     return True
 
 
-KEEP_DAYS_UNDATED = 3   # a carried-over deal without an end date is kept this many days after it was last seen
+KEEP_DAYS_UNDATED = 7   # a kept deal without an end date stays at most a week, so a shop that blocks us for good cannot show old promos forever
 DROP_SHARE = 0.5        # a shop that suddenly returns less than half of yesterday's deals is treated as a bad day
 
 

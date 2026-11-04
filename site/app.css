@@ -104,8 +104,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @keyframes bump{50%{transform:scale(1.3)}}
 
 /* trust bar */
-.trustbar{margin-top:var(--s5);display:flex;align-items:center;gap:var(--s4);flex-wrap:wrap;background:var(--card);border-radius:var(--r);
-  padding:var(--s3) var(--s4);box-shadow:var(--shadow);font-size:var(--t-sm);color:var(--muted)}
+.trustbar{margin-top:var(--s4);display:flex;align-items:center;gap:var(--s2) var(--s3);flex-wrap:wrap;font-size:var(--t-sm);color:var(--muted)}
 .trustbar .icons{display:flex}
 .trustbar .icons .sicon{box-shadow:0 0 0 2px var(--card)}
 .trustbar .icons .sicon+.sicon{margin-left:-4px}
@@ -151,6 +150,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .pv-row .pr small{display:block;font-size:12px;font-weight:700;color:var(--lime-ink)}
 .pv-row:hover .nm{text-decoration:underline}
 .pv-cap{margin:var(--s3) 0 0;text-align:center;font-size:12.5px;color:var(--muted)}
+/* first visit: a slim postcode card instead of a full welcome page, so the deals start on the first screen */
+.hero.slim{display:block;padding-block:var(--s4)}
+.hero.slim .hero-text{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--s5)}
+.hero.slim>div:last-child,.hero.slim .trial,.hero.slim .note,.hero.slim .eyebrow{display:none}
+.hero.slim h1{font-size:var(--t-2xl);margin:0 0 var(--s2)}
+.hero.slim .lead{font-size:var(--t-sm);margin:0 0 var(--s4)}
+.after{margin-top:var(--s8)}
 .hero.compact{display:none}
 
 /* week band */
@@ -337,6 +343,34 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .total b{font-size:var(--t-xl);font-weight:800}
 .total .good{color:var(--lime-ink);font-weight:700}
 .drawer-empty{color:var(--muted);text-align:center;padding:var(--s8) var(--s4)}
+/* shopping list: what you need, matched to this week's deals */
+.wantform{display:flex;gap:var(--s2)}
+.wantform input{flex:1;min-width:0;min-height:var(--tap);border:0;border-radius:var(--r-sm);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 var(--s4);font-size:var(--t-md);outline:none}
+.wantform input:focus{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.wantform .btn{min-height:var(--tap)}
+.tip{margin:0;background:var(--card);border-radius:var(--r-sm);padding:var(--s3) var(--s4);font-size:var(--t-sm);font-weight:600;box-shadow:inset 3px 0 0 var(--mustard)}
+.othershops{display:grid;gap:var(--s1);font-size:12.5px;color:var(--muted)}
+.othershops small{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.othershops span{display:flex;align-items:center;gap:6px}
+.othershops b{color:var(--ink);font-variant-numeric:tabular-nums}
+.othershops .sicon{flex:none;width:18px;min-width:18px;height:18px;padding:0;justify-content:center;border-radius:5px;font-size:8px}
+.drawer-foot{grid-template-columns:1fr 1fr}
+.drawer-foot .total{grid-column:1/-1}
+.drawer-body{grid-template-columns:minmax(0,1fr)}
+.drawer li .wq{display:block;font-weight:700}
+.drawer li .p.linkish{width:auto;height:auto;min-height:36px;border-radius:var(--r-sm);padding:0 var(--s2);color:var(--ink);font-weight:700;font-size:var(--t-sm)}
+.myshop{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);font-size:var(--t-sm);color:var(--muted)}
+.myshop select{max-width:65%;min-width:0;min-height:var(--tap);border:0;border-radius:var(--pill);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 var(--s4);font-size:var(--t-sm);color:var(--ink)}
+.drawer li.tickrow{grid-template-columns:36px minmax(0,1fr) auto auto}
+.drawer li button.tick{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);color:transparent}
+.drawer li button.tick:hover{color:var(--muted);background:transparent}
+.drawer li button.tick[aria-pressed="true"]{background:var(--lime);box-shadow:none;color:var(--ink)}
+.drawer li.done>span:not(.p){text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.drawer .hint{margin:0 0 var(--s2);font-size:12.5px;color:var(--muted)}
+.savedbox{display:grid;gap:2px;background:var(--lime-soft);color:var(--lime-ink);border-radius:var(--r-sm);padding:var(--s3) var(--s4)}
+.savedbox b{font-size:var(--t-lg);font-variant-numeric:tabular-nums}
+.savedbox small{font-size:12.5px;font-weight:600}
+.dealsT{margin:var(--s3) 0 0;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
 .toast{position:fixed;left:50%;bottom:calc(var(--s5) + env(safe-area-inset-bottom));transform:translate(-50%,24px);opacity:0;pointer-events:none;
   background:var(--dark);color:#fff;padding:var(--s3) var(--s5);border-radius:var(--pill);font-size:var(--t-sm);font-weight:600;transition:.25s var(--ease);z-index:60}
@@ -347,6 +381,26 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .page .sechead{padding-top:var(--s7)}
 .page .sechead h2{font-size:var(--t-3xl)}
 .rtools{display:flex;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s5)}
+/* week menu */
+.menu{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--s4) var(--s5);margin-bottom:var(--s5);display:grid;gap:var(--s3)}
+.menu-h{display:flex;gap:var(--s3) var(--s4);align-items:center;justify-content:space-between;flex-wrap:wrap}
+.menu-h h3{font-family:var(--serif);font-size:var(--t-lg);margin:0}
+.menu-h p{margin:2px 0 0;font-size:var(--t-sm);color:var(--muted);max-width:60ch}
+.menu-act{display:flex;gap:var(--s2);align-items:center}
+.menu .seg{display:inline-flex;background:var(--soft);border-radius:var(--pill);padding:3px}
+.menu .seg button{min-width:40px;min-height:38px;border:0;border-radius:var(--pill);background:transparent;font-weight:700;font-size:var(--t-sm)}
+.menu .seg button[aria-pressed="true"]{background:var(--lime)}
+.days{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.days li{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:var(--s2);border-top:1px solid var(--line);padding-top:var(--s2)}
+.days li:first-child{border-top:0;padding-top:0}
+.days .day{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.days .dish{border:0;background:none;text-align:left;padding:var(--s1) 0;min-height:var(--tap);color:inherit;cursor:pointer;min-width:0}
+.days .dish b{display:block;font-size:var(--t-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.days .dish small{display:block;font-size:12.5px;color:var(--muted)}
+.days .dish:hover b{text-decoration:underline;text-decoration-color:var(--lime-d)}
+.days .swap{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--muted);display:grid;place-items:center}
+.days .swap:hover{background:var(--soft);color:var(--ink)}
+.menu>.btn{justify-self:start}
 .plan-in{display:flex;gap:var(--s4);align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--lime);border-radius:var(--r);padding:var(--s4) var(--s5);margin-bottom:var(--s4)}
 .plan-in h3{font-family:var(--serif);font-size:var(--t-lg);margin:0}
 .plan-in p{margin:2px 0 var(--s2);font-size:var(--t-sm);font-weight:500}
@@ -429,6 +483,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .mylist .lbl{display:none}
   .mylist{padding:0 6px 0 12px}
   .trustbar{gap:var(--s2) var(--s3);margin-top:var(--s4)}
+  .trustbar .icons{display:none}
+  .hero.slim{padding-block:var(--s3)}
+  .hero.slim .hero-text{padding:var(--s4)}
+  .hero.slim h1{font-size:var(--t-xl)}
+  .hero.slim .lead{display:none}
+  .results .sechead{padding-block:var(--s4) var(--s3)}
+  .results .sechead h2{font-size:var(--t-xl)}
   .trustbar .pill{margin-left:0}
   .hero{padding-block:var(--s6) var(--s5)}
   .hero h1{font-size:var(--t-3xl)}
@@ -543,3 +604,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .addr-sug button{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 10px;border:0;border-radius:8px;background:none;font:inherit;font-size:var(--t-sm);text-align:left;color:var(--ink);cursor:pointer}
 .addr-sug button:hover,.addr-sug button:focus-visible{background:var(--soft);outline:none}
 .addr-sug .credit{padding:4px 10px 2px;font-size:11px;color:var(--muted)}
+
+/* account: daily email switch */
+.alerts{display:flex;gap:var(--s3);align-items:flex-start;margin:var(--s4) 0;cursor:pointer}
+.alerts input{width:22px;height:22px;margin-top:2px;accent-color:var(--lime-d);flex:none}
+.alerts b{display:block;font-size:var(--t-sm)}
+.alerts small{display:block;font-size:12.5px}

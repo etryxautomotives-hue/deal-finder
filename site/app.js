@@ -117,6 +117,23 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
+  accAlerts: "Dagelijkse e-mail", accAlertsWhy: "Eén mail per dag, alleen als iets van je lijst nieuw in promo is in je buurt.",
+  menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
+  menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
+  menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
+  wantsAdded: n => n ? `${n} op je lijst gezet` : "Staat al op je lijst",
+  splitTip: (c, v, n) => `Haal ${n} ${n === 1 ? "product" : "producten"} bij ${c} en bespaar ${v} extra`,
+  savedMonth: v => `${v} bespaard deze maand`, savedWeek: v => `${v} deze week`, savedTop: c => `meest bij ${c}`,
+  savedVs: v => `al ${v} meer dan heel vorige maand`, bought: "Gekocht", notBought: "Nog niet gekocht",
+  tickHint: "Vink af wat je koopt: we tellen alleen wat je echt bespaart.", youSaved: v => `Jij bespaarde ${v} deze maand`,
+  wantPh: "Voeg toe: koffie, melk, kipfilet…", wantAdd: "Voeg toe", wantsT: "Wat je nodig hebt",
+  wantNone: "deze week geen promo in de buurt", wantAt: (c, p) => `${c} · ${p}`,
+  cheapT: "Goedkoopste winkel voor je lijst", myShopT: "Jouw winkel", myShop: "Mijn winkel", myShopAny: "Geen voorkeur",
+  covers: (a, b) => `${a} van ${b} in promo`, tipCheaper: (c, v, n) => `${c} is ${v} goedkoper voor dezelfde ${n}`,
+  tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`,
+  otherShops: "Andere winkels", dealsT: "Bewaarde promo's",
+  listSub2: "Typ wat je nodig hebt. Elke dag zoeken we de beste promo in de buurt.",
+  checked: (n, here, time) => `<b>${n}</b> promo's${here ? ` bij ${here}` : ""} · gecontroleerd ${time}`, today: t => `vandaag om ${t}`,
   navHome: "Home", navPricing: "Tarieven",
   eyebrow: c => `België · ${c} ketens · één eerlijke prijs per kg`,
   heroH: "Betaal minder voor <em>dezelfde</em> boodschappen.",
@@ -155,6 +172,23 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
+  accAlerts: "E-mail quotidien", accAlertsWhy: "Un e-mail par jour, seulement si un produit de votre liste passe en promo près de chez vous.",
+  menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
+  menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
+  menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
+  wantsAdded: n => n ? `${n} ajoutés à votre liste` : "Déjà dans votre liste",
+  splitTip: (c, v, n) => `Prenez ${n} produit${n === 1 ? "" : "s"} chez ${c} et économisez ${v} de plus`,
+  savedMonth: v => `${v} économisés ce mois-ci`, savedWeek: v => `${v} cette semaine`, savedTop: c => `surtout chez ${c}`,
+  savedVs: v => `déjà ${v} de plus que tout le mois passé`, bought: "Acheté", notBought: "Pas encore acheté",
+  tickHint: "Cochez ce que vous achetez : on ne compte que ce que vous économisez vraiment.", youSaved: v => `Vous avez économisé ${v} ce mois-ci`,
+  wantPh: "Ajoutez : café, lait, filet de poulet…", wantAdd: "Ajouter", wantsT: "Ce qu’il vous faut",
+  wantNone: "pas de promo près de chez vous cette semaine", wantAt: (c, p) => `${c} · ${p}`,
+  cheapT: "Magasin le moins cher pour votre liste", myShopT: "Votre magasin", myShop: "Mon magasin", myShopAny: "Pas de préférence",
+  covers: (a, b) => `${a} sur ${b} en promo`, tipCheaper: (c, v, n) => `${c} est ${v} moins cher pour les mêmes ${n}`,
+  tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`,
+  otherShops: "Autres magasins", dealsT: "Promos gardées",
+  listSub2: "Tapez ce qu’il vous faut. Chaque jour, on cherche la meilleure promo près de chez vous.",
+  checked: (n, here, time) => `<b>${n}</b> promos${here ? ` près de ${here}` : ""} · vérifiées ${time}`, today: t => `aujourd’hui à ${t}`,
   navHome: "Accueil", navPricing: "Tarifs",
   eyebrow: c => `Belgique · ${c} enseignes · un prix honnête au kilo`,
   heroH: "Payez moins pour <em>les mêmes</em> courses.",
@@ -184,6 +218,23 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
+  accAlerts: "Daily email", accAlertsWhy: "One email a day, only when something on your list is newly on promo near you.",
+  menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
+  menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
+  menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
+  wantsAdded: n => n ? `${n} added to your list` : "Already on your list",
+  splitTip: (c, v, n) => `Get ${n} item${n === 1 ? "" : "s"} at ${c} and save ${v} more`,
+  savedMonth: v => `${v} saved this month`, savedWeek: v => `${v} this week`, savedTop: c => `most at ${c}`,
+  savedVs: v => `already ${v} more than all of last month`, bought: "Bought", notBought: "Not bought yet",
+  tickHint: "Tick what you buy: we only count what you really save.", youSaved: v => `You saved ${v} this month`,
+  wantPh: "Add: coffee, milk, chicken…", wantAdd: "Add", wantsT: "What you need",
+  wantNone: "no deal nearby this week", wantAt: (c, p) => `${c} · ${p}`,
+  cheapT: "Cheapest shop for your list", myShopT: "Your shop", myShop: "My shop", myShopAny: "No preference",
+  covers: (a, b) => `${a} of ${b} on promo`, tipCheaper: (c, v, n) => `${c} is ${v} cheaper for the same ${n}`,
+  tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`,
+  otherShops: "Other shops", dealsT: "Saved deals",
+  listSub2: "Type what you need. Every day we find the best deal nearby.",
+  checked: (n, here, time) => `<b>${n}</b> deals${here ? ` near ${here}` : ""} · checked ${time}`, today: t => `today at ${t}`,
   navHome: "Home", navPricing: "Pricing",
   eyebrow: c => `Belgium · ${c} chains · one honest price per kg`,
   heroH: "Pay less for <em>the same</em> groceries.",
@@ -238,7 +289,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -253,6 +304,10 @@ const S = {
   chains: new Set((url.get("store") || "").split(",").filter(Boolean)),
   sort: url.get("sort") || store.get("sort", "value"),
   list: store.get("list", {}), // id -> deal snapshot, so the list survives a new week of data
+  wants: store.get("wants", []), // [{ id, q }]: products in your own words ("koffie"), matched to deals every day
+  shop: store.get("shop", ""),   // preferred chain: shown first, cheaper options still shown
+  alerts: store.get("alerts", false), // daily summary email (sent by alerts/daily.py on GitHub Actions)
+  bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
   shown: 48,
 };
 let DEALS = [], BRANCHES = [], PCS = {}, PCS_NL = {}, SAMPLE = false, UPDATED = null;
@@ -533,7 +588,8 @@ function renderStatic() {
   paintCc();
   $("#footUpdated").textContent = UPDATED ? L.updated(new Date(UPDATED).toLocaleString(LOCALE[S.lang], { dateStyle: "medium", timeStyle: "short" })) : "";
   $("#hero").classList.toggle("compact", !!S.pc && !url.has("hero"));
-  $("#listCount").textContent = Object.keys(S.list).length;
+  $("#hero").classList.toggle("slim", !S.pc && !url.has("hero"));  // first visit: one postcode box, then straight to the deals
+  $("#listCount").textContent = listN();
 }
 
 function syncURL() {
@@ -555,8 +611,14 @@ function renderHero() {
   const chains = [...new Set(live.map(d => d.store))];
   const saves = live.filter(d => d.old_price > d.price).map(d => d.old_price - d.price);
   const avg = saves.length ? saves.reduce((a, b) => a + b, 0) / saves.length : 0;
-  $("#trustbar").innerHTML = `<span class="icons">${chains.map(c => sicon(c, "lg")).join("")}</span><span>${L.trustbar(live.length, chains.length)}</span>
-    ${avg ? `<span class="pill lime">${L.avgSave(money(avg))}</span>` : ""}`;
+  // one slim line above the deals: how many, where, and when we last looked (stale deals are what people hate most)
+  const when = UPDATED ? new Date(UPDATED) : null;
+  const time = when ? (when.toDateString() === new Date().toDateString()
+    ? L.today(when.toLocaleTimeString(LOCALE[S.lang], { hour: "2-digit", minute: "2-digit" }))
+    : when.toLocaleString(LOCALE[S.lang], { weekday: "short", hour: "2-digit", minute: "2-digit" })) : "";
+  $("#trustbar").innerHTML = `<span class="icons">${chains.map(c => sicon(c)).join("")}</span><span>${L.checked(live.length, pcAt(S.pc) ? pcName(S.pc) : "", time)}</span>
+    ${(() => { const m = DKBasket.savings(S.bought, Date.now()).month;
+      return m ? `<span class="pill lime">${L.youSaved(money(m))}</span>` : avg ? `<span class="pill lime">${L.avgSave(money(avg))}</span>` : ""; })()}`;
   $("#eyebrow").textContent = L.eyebrow(chains.length);
   $("#heroH").innerHTML = L.heroH;
   $("#heroSub").textContent = L.heroSub(chains.length, S.radius);
@@ -632,7 +694,7 @@ function toggleList(id) {
   if (S.list[id]) delete S.list[id];
   else { const { hay, until, i, _sx, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); }
   store.set("list", S.list);
-  const c = $("#listCount"); c.textContent = Object.keys(S.list).length; c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+  const c = $("#listCount"); c.textContent = listN(); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   document.querySelectorAll(`[data-add="${id}"]`).forEach(b => {
     const on = !!S.list[id]; b.setAttribute("aria-pressed", on);
     b.innerHTML = b.classList.contains("btn") ? `${plus(on)} ${on ? t().added : t().add}` : plus(on);
@@ -641,9 +703,76 @@ function toggleList(id) {
   if (!$("#listBg").hidden) renderList();
 }
 
+// ---------- money saved: only what people tick as bought ----------
+const today = () => DKBasket.dayOf(Date.now());
+const boughtOf = k => S.bought.find(b => b.k === k && (k.startsWith("d:") || b.day === today()));  // a need ticks again every day
+function toggleBought(k, d, label) {
+  const hit = boughtOf(k);
+  if (hit) S.bought = S.bought.filter(b => b !== hit);
+  else S.bought.push({ k, day: today(), name: (d?.name || label || "").slice(0, 80), store: d?.store || "", paid: d?.price || 0, save: DKBasket.saveOf(d) });
+  S.bought = DKBasket.pruneBought(S.bought, Date.now()); store.set("bought", S.bought);
+  if (!hit && DKBasket.saveOf(d) > 0) toast(t().savedMonth(money(DKBasket.savings(S.bought, Date.now()).month)));
+  renderList(); renderHero();
+}
+const tickBtn = (k, d, label) => { const on = !!boughtOf(k), L = t();
+  return `<button type="button" class="tick" data-buy="${k}"${d ? ` data-deal="${d.id}"` : ""} data-label="${esc(label || "")}" aria-pressed="${on}" aria-label="${on ? L.bought : L.notBought}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`; };
+function savedHTML(L) {
+  const s = DKBasket.savings(S.bought, Date.now());
+  if (!s.month) return "";
+  // only compare when it's good news: early in the month a partial month always looks worse than a full one
+  const diff = s.lastMonth && s.month > s.lastMonth ? Math.round((s.month - s.lastMonth) * 100) / 100 : 0;
+  const bits = [s.week ? L.savedWeek(money(s.week)) : "", s.topShop ? L.savedTop(esc(s.topShop)) : "",
+    diff ? L.savedVs(money(diff)) : ""].filter(Boolean);
+  return `<div class="savedbox"><b>${L.savedMonth(money(s.month))}</b>${bits.length ? `<small>${bits.join(" · ")}</small>` : ""}</div>`;
+}
+const listN = () => Object.keys(S.list).length + S.wants.length;
+const nearDeals = () => DEALS.filter(d => inRadius(d));
+function addWants(text) {
+  const have = new Set(S.wants.map(w => DS.fold(w.q))); let n = 0;
+  for (const q of (Array.isArray(text) ? text : String(text).split(/[,;\n]+/)).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30)) {
+    if (have.has(DS.fold(q))) continue;
+    have.add(DS.fold(q)); n++; S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
+  }
+  store.set("wants", S.wants); $("#listCount").textContent = listN();
+  return n;
+}
+// "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
+function wantsHTML(L) {
+  const N = S.wants.length;
+  const c = DKBasket.compare(S.wants, nearDeals(), S.shop);
+  const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  const chains = [...new Set(nearDeals().map(d => d.store))].sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9));
+  const shopSel = `<label class="myshop"><span>${L.myShop}</span><select id="myShop"><option value="">${L.myShopAny}</option>
+    ${[...new Set([S.shop, ...chains].filter(Boolean))].map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>`;
+  const p = c.pick;
+  const pickBox = p ? `<div class="starthere">${sicon(p.chain)}<div><small>${p.chain === S.shop ? L.myShopT : L.cheapT}</small><b>${esc(p.chain)}</b>
+      <div class="sub">${L.covers(p.n, N)}${kmText(p.chain) ? ` · ${kmText(p.chain)}` : ""}</div></div>
+      <div class="tot"><b>${money(p.total)}</b></div></div>` : "";
+  const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}</p>`
+    : c.preferredMissing ? `<p class="tip">${L.prefMissing(esc(S.shop))}</p>` : "";
+  const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}</p>` : "";
+  const others = c.shops.filter(s => s !== p).slice(0, 3);
+  const rows = c.items.map(({ item, best, byShop }) => {
+    const d = (c.split?.moved.includes(item.id) && byShop[c.split.chain]) || (p && byShop[p.chain]) || best;
+    const on = !!boughtOf("w:" + item.id);
+    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q)}<span><b class="wq">${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
+      ${d ? `<button type="button" class="p linkish" data-open="${d.id}">${money(d.price)}</button>` : `<span class="p"></span>`}
+      <button type="button" data-unwant="${item.id}" aria-label="${L.remove}">${x}</button></li>`;
+  }).join("");
+  return `${savedHTML(L)}<form class="wantform" id="wantForm"><input id="wantIn" autocomplete="off" enterkeyhint="done" placeholder="${L.wantPh}" aria-label="${L.wantPh}">
+      <button type="submit" class="btn">${L.wantAdd}</button></form>
+    ${N ? `${pickBox}${tip}${split}${chains.length ? shopSel : ""}
+    ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b></span>`).join("")}</div>` : ""}
+    <section class="shop"><div class="shop-h">${L.wantsT}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul></section>` : ""}`;
+}
 function listText() {
   const L = t(), by = groupList();
-  return Object.entries(by).map(([c, items]) => `${c}${kmText(c) ? ` (${kmText(c)})` : ""}\n` +
+  const c = S.wants.length ? DKBasket.compare(S.wants, nearDeals(), S.shop) : null;
+  const need = c ? `${L.wantsT}${c.pick ? ` (${c.pick.chain})` : ""}\n` + c.items.map(({ item, best, byShop }) => {
+    const d = (c.pick && byShop[c.pick.chain]) || best;
+    return `- ${item.q}${d ? `: ${d.name}, ${d.store}, ${money(d.price)}` : ""}`; }).join("\n") + "\n\n" : "";
+  if (!Object.keys(S.list).length) return need.trim();
+  return need + Object.entries(by).map(([c, items]) => `${c}${kmText(c) ? ` (${kmText(c)})` : ""}\n` +
     items.map(d => `- ${d.name}${d.pack_size ? `, ${d.pack_size}` : ""}: ${money(d.price)}${d.promo_text ? ` [${d.promo_text}]` : ""}`).join("\n")).join("\n\n") + `\n\n${L.total}: ${money(listTotals().total)}`;
 }
 function groupList() {
@@ -657,7 +786,7 @@ function listTotals() {
   return { total, saved };
 }
 function renderList() {
-  const L = t(), by = groupList(), n = Object.keys(S.list).length, { total, saved } = listTotals();
+  const L = t(), by = groupList(), n = Object.keys(S.list).length, { total, saved } = listTotals(), focusWant = document.activeElement?.id === "wantIn";
   const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
   const shops = Object.entries(by).map(([c, items]) => ({ c, items,
     sum: items.reduce((a, d) => a + d.price, 0), save: items.reduce((a, d) => a + (d.old_price > d.price ? d.old_price - d.price : 0), 0) }));
@@ -665,24 +794,26 @@ function renderList() {
   const best = [...shops].sort((a, b) => b.save - a.save || b.items.length - a.items.length || (dist(a.c) ?? 1e9) - (dist(b.c) ?? 1e9))[0];
   if (best) shops.sort((a, b) => (b === best) - (a === best));
   $("#drawer").innerHTML = `
-    <div class="drawer-head"><div><h3 id="listTitle">${L.listTitle}</h3>${n ? `<p>${L.listSub}</p>` : ""}</div>
+    <div class="drawer-head"><div><h3 id="listTitle">${L.listTitle}</h3><p>${L.listSub2}</p></div>
       <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-    <div class="drawer-body">${n ? `
+    <div class="drawer-body">${wantsHTML(L)}${n ? `
+      ${S.wants.length ? `<h4 class="dealsT">${L.dealsT}</h4>` : ""}
       ${shops.length > 1 || best ? `<div class="starthere">${sicon(best.c)}<div><small>${L.startHere}</small><b>${esc(best.c)}</b>
         <div class="sub">${L.ofItems(best.items.length, n)}${kmText(best.c) ? ` · ${kmText(best.c)}` : ""}</div></div>
         <div class="tot"><b>${money(best.sum)}</b>${best.save ? L.totalSave(money(best.save)) : ""}</div></div>` : ""}
       ${shops.map(s => `<section class="shop${s === best && shops.length > 1 ? " best" : ""}"><div class="shop-h">${sicon(s.c, "lg")}${esc(s.c)}
           ${kmText(s.c) ? `<span class="km">${kmText(s.c)}</span>` : ""}
           ${s === best && shops.length > 1 ? `<span class="pill lime">${L.bestStore}</span>` : ""}<span class="sum">${money(s.sum)}</span></div>
-        <ul>${s.items.map(d => `<li><span>${esc(d.name)}${d.promo_text || d.pack_size ? `<span class="unit">${esc([d.pack_size, d.promo_text].filter(Boolean).join(" · "))}</span>` : ""}</span>
+        <ul>${s.items.map(d => `<li class="tickrow${boughtOf("d:" + d.id) ? " done" : ""}">${tickBtn("d:" + d.id, d, d.name)}<span>${esc(d.name)}${d.promo_text || d.pack_size ? `<span class="unit">${esc([d.pack_size, d.promo_text].filter(Boolean).join(" · "))}</span>` : ""}</span>
           <span class="p">${money(d.price)}</span>
           <button type="button" data-add="${d.id}" aria-label="${L.remove}">${x}</button></li>`).join("")}</ul></section>`).join("")}`
-      : `<p class="drawer-empty">${L.listEmpty}</p>`}</div>
-    ${n ? `<div class="drawer-foot">
-      <div class="total"><span>${L.total}</span><b>${money(total)}</b></div>
+      : S.wants.length ? "" : `<p class="drawer-empty">${L.listEmpty}</p>`}</div>
+    ${n || S.wants.length ? `<div class="drawer-foot">
+      ${n ? `<div class="total"><span>${L.total}</span><b>${money(total)}</b></div>` : ""}
       ${saved > 0 ? `<div class="total"><span>${L.saved}</span><span class="good">${money(saved)}</span></div>` : ""}
       <button type="button" class="btn block" id="shareList">${L.share}</button>
       <button type="button" class="btn ghost" id="clearList">${L.clearList}</button></div>` : ""}`;
+  if (focusWant) $("#wantIn")?.focus();
 }
 
 let toastTimer;
@@ -918,12 +1049,24 @@ function bind() {
   });
   $("#listBtn").addEventListener("click", () => { renderList(); openDialog($("#listBg"), $("#drawer .x")); });
   $("#drawer").addEventListener("click", async e => {
-    if (e.target.closest("#clearList")) { S.list = {}; store.set("list", S.list); $("#listCount").textContent = 0; renderList(); render(); }
+    const tb = e.target.closest("[data-buy]");
+    if (tb) { const id = tb.dataset.deal; toggleBought(tb.dataset.buy, id ? (DEALS.find(x => x.id === id) || S.list[id]) : null, tb.dataset.label); return; }
+    const uw = e.target.closest("[data-unwant]");
+    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); return; }
+    if (e.target.closest("#clearList")) { S.list = {}; S.wants = []; store.set("list", S.list); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); render(); }
     if (e.target.closest("#shareList")) {
       const text = listText();
       try { await navigator.share({ title: t().listTitle, text }); return; } catch (err) { if (err?.name === "AbortError") return; }
       try { await navigator.clipboard.writeText(text); toast(t().copied); } catch { /* no clipboard either */ }
     }
+  });
+  $("#drawer").addEventListener("submit", e => {
+    if (e.target.id !== "wantForm") return;
+    e.preventDefault(); addWants($("#wantIn").value); renderList(); $("#wantIn").focus();
+  });
+  $("#drawer").addEventListener("change", e => {
+    if (e.target.id !== "myShop") return;
+    S.shop = e.target.value; store.set("shop", S.shop); renderList();
   });
   $("#heroPc").addEventListener("input", () => { if (!S.pc) $("#heroGo").textContent = t().heroGo($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""); });
 }
@@ -939,7 +1082,8 @@ function trap(e, root) {
 const R = {
   own: store.get("recipes", []),            // recipes the user added
   have: store.get("have", {}),              // recipe id -> {ingredient index: true/false}
-  plan: new Set(store.get("plan", [])),     // recipe ids planned this week
+  plan: new Set(store.get("plan", [])),     // recipe ids planned this week, in day order (the week menu)
+  menuN: store.get("menuN", 5),             // how many evenings the week menu fills
 };
 const allRecipes = () => [...R.own, ...(window.DK_RECIPES || [])];
 const rTitle = r => r.t[S.lang] || r.t.nl || Object.values(r.t)[0];
@@ -991,15 +1135,48 @@ function renderRecipes() {
       ${meter(r)}
     </article>`;
   }).join("");
-  const planned = list.filter(x => R.plan.has(x.r.id));
-  if (!planned.length) { $("#plan").innerHTML = ""; return; }
-  const deals = new Map();
-  for (const { st } of planned) for (const d of st.deals) deals.set(d.id, d);
-  const est = [...deals.values()].reduce((a, d) => a + d.price, 0);
-  $("#plan").innerHTML = `<div class="plan-in">
-    <div><h3>${L.planTitle}</h3><p>${L.planSum(planned.length, deals.size, money(est))}</p>
-      <div class="plan-chips">${planned.map(({ r }) => `<button type="button" class="chip" data-recipe="${esc(r.id)}">${esc(rTitle(r))}</button>`).join("")}</div></div>
-    <button type="button" class="btn" data-planadd ${deals.size ? "" : "disabled"}>${L.planAdd}</button></div>`;
+  const byId = new Map(list.map(x => [x.r.id, x]));
+  const planned = [...R.plan].map(id => byId.get(id)).filter(Boolean);
+  const seg = [3, 5, 7].map(n => `<button type="button" data-menun="${n}" aria-pressed="${n === R.menuN}">${n}</button>`).join("");
+  const est = planned.reduce((a, x) => a + x.st.cost, 0);
+  const promo = new Set(planned.flatMap(x => x.st.deals.map(d => d.id))).size;
+  $("#plan").innerHTML = `<div class="menu">
+    <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : L.menuSub}</p></div>
+      <div class="menu-act"><span class="seg" role="group" aria-label="${L.menuN}">${seg}</span>
+        <button type="button" class="btn${planned.length ? " ghost" : ""}" data-automenu>${planned.length ? L.menuRedo : L.menuMake}</button></div></div>
+    ${planned.length ? `<ol class="days">${planned.map((x, i) => `<li><span class="day">${L.menuDays[i % 7]}</span>
+        <button type="button" class="dish" data-recipe="${esc(x.r.id)}"><b>${esc(rTitle(x.r))}</b><small>${[x.r.own ? L.mine : "", x.st.cost ? `≈ ${money(x.st.cost)}` : "", menuSave(x.st) ? L.menuSaves(money(menuSave(x.st))) : ""].filter(Boolean).join(" · ")}</small></button>
+        <button type="button" class="swap" data-swap="${esc(x.r.id)}" aria-label="${L.menuSwap}" title="${L.menuSwap}"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3-3M20 15H7l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></li>`).join("")}</ol>
+      <button type="button" class="btn" data-planadd>${L.menuToList}</button>` : ""}
+  </div>`;
+}
+// Week menu: dinners ranked by what this week's deals save on the ingredients you still need to buy.
+// Your own recipes get a small head start, so the menu uses them when they're about as good.
+const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * 100) / 100;
+function menuRank(skip) {
+  return allRecipes().filter(r => !skip.has(r.id)).map(r => { const st = recipeStats(r);
+    return { r, score: menuSave(st) + 3 * st.promo / r.i.length + (r.own ? 1 : 0) }; })
+    .sort((a, b) => b.score - a.score).map(x => x.r.id);
+}
+const swappedOut = new Set();  // recipes you swapped away, so "other recipe" keeps offering new ones
+function autoMenu() { matchCache.clear(); swappedOut.clear(); R.plan = new Set(menuRank(new Set()).slice(0, R.menuN)); store.set("plan", [...R.plan]); }
+function resizeMenu(n) {  // keep the dinners you have, drop from the end or add the next best
+  const keep = [...R.plan].slice(0, n);
+  R.plan = new Set([...keep, ...menuRank(new Set([...keep, ...swappedOut])).slice(0, Math.max(0, n - keep.length))]); store.set("plan", [...R.plan]);
+}
+function swapMenu(id) {
+  swappedOut.add(id);
+  let next = menuRank(new Set([...R.plan, ...swappedOut]))[0];
+  if (!next) { swappedOut.clear(); swappedOut.add(id); next = menuRank(new Set([...R.plan, id]))[0]; }  // seen them all: start over
+  if (!next) return;
+  R.plan = new Set([...R.plan].map(x => x === id ? next : x)); store.set("plan", [...R.plan]);
+}
+// an ingredient as a shopping-list word: "Aardappelen of frieten" -> "Aardappelen"
+const wantWord = ing => iName(ing).split(/\s+(?:of|ou|or)\s+/i)[0].replace(/\(.*?\)/g, "").trim();
+function missingWants(rs) {
+  const out = [];
+  for (const r of rs) r.i.forEach((ing, i) => { if (!hasIt(r, i)) out.push(wantWord(ing)); });
+  return out;
 }
 
 function openRecipe(id, keepFocus) {
@@ -1038,7 +1215,7 @@ function addDeals(deals) {
   let n = 0;
   for (const d of deals) if (!S.list[d.id]) { const { hay, until, i, ...keep } = d; S.list[d.id] = keep; n++; }
   store.set("list", S.list);
-  $("#listCount").textContent = Object.keys(S.list).length;
+  $("#listCount").textContent = listN();
   toast(t().addedMissing(n));
 }
 
@@ -1139,7 +1316,10 @@ function showView() {
 function bindRecipes() {
   window.addEventListener("hashchange", () => { showView(); window.scrollTo(0, 0); });
   document.addEventListener("click", e => {
-    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe]"); if (!el) return;
+    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe],[data-automenu],[data-swap],[data-menun]"); if (!el) return;
+    if ("automenu" in el.dataset) { if (!allowed("plan")) return; autoMenu(); renderRecipes(); return; }
+    if (el.dataset.swap) { swapMenu(el.dataset.swap); renderRecipes(); return; }
+    if (el.dataset.menun) { R.menuN = +el.dataset.menun; store.set("menuN", R.menuN); if (R.plan.size) resizeMenu(R.menuN); renderRecipes(); return; }
     if (el.dataset.plan) {
       e.stopPropagation();
       if (!R.plan.has(el.dataset.plan) && !allowed("plan")) return;
@@ -1149,7 +1329,7 @@ function bindRecipes() {
     } else if (el.dataset.addmissing) {
       const r = allRecipes().find(x => x.id === el.dataset.addmissing); addDeals(recipeStats(r).deals); openRecipe(r.id); renderRecipes();
     } else if ("planadd" in el.dataset) {
-      addDeals(allRecipes().filter(r => R.plan.has(r.id)).flatMap(r => recipeStats(r).deals)); renderRecipes();
+      toast(t().wantsAdded(addWants(missingWants(allRecipes().filter(r => R.plan.has(r.id)))))); renderRecipes();
     } else if (el.dataset.editrecipe) {
       const r = R.own.find(x => x.id === el.dataset.editrecipe); closeDialogs(); if (r) openMaker(r);
     } else if (el.dataset.delrecipe) {
@@ -1246,11 +1426,20 @@ async function pull() {
   // preferred postcode: the one saved in the account, else the one given when the account was made
   const pref = data.prefs?.pc || ACC.user.user_metadata?.pc;
   if (pref && !S.pc && pcAt(pref)) { S.pc = pref; store.set("pc", pref); computeNearest(); }
+  // list items and preferred shop live in prefs, so no database change is needed
+  const known = new Set(S.wants.map(w => DS.fold(w.q)));
+  S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
+  if (!S.shop && data.prefs?.shop) S.shop = data.prefs.shop;
+  if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
+  const seen = new Set(S.bought.map(b => `${b.k}|${b.day}`));
+  S.bought = DKBasket.pruneBought([...(data.prefs?.bought || []).filter(b => b?.k && b.day && !seen.has(`${b.k}|${b.day}`)), ...S.bought]
+    .sort((a, b) => a.day.localeCompare(b.day)), Date.now());
+  store.set("wants", S.wants); store.set("shop", S.shop); store.set("bought", S.bought);
   const r = data.prefs?.radius || ACC.user.user_metadata?.radius;
   if (r && RADII.includes(+r) && !localStorage.getItem("dk.radius")) { S.radius = +r; store.set("radius", S.radius); }
   store.set("list", S.list); store.set("recipes", R.own); store.set("have", R.have); store.set("plan", [...R.plan]);
   ACC.pulling = false;
-  $("#listCount").textContent = Object.keys(S.list).length;
+  $("#listCount").textContent = listN();
   renderStatic(); render(); if (location.hash === "#recipes") renderRecipes();
   push();
 }
@@ -1259,7 +1448,7 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
@@ -1312,6 +1501,7 @@ function openAccount(why) {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
+      <label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>
       <div class="cta">${!PAY() ? "" : isPlus() || ACC.profile?.subscription_status === "past_due"
         ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
         : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
@@ -1319,6 +1509,7 @@ function openAccount(why) {
       <p class="muted small">${L.accSynced}</p>`;
   }
   paintCc(guessCc(), "accPc");
+  box.querySelector("#accAlerts")?.addEventListener("change", e => { S.alerts = e.target.checked; store.set("alerts", S.alerts); });
   box.querySelector("[data-acc-pc]")?.addEventListener("click", () => { closeDialogs(); $("#locBtn").click(); });
   if ($("#accDlg").hidden) openDialog($("#accDlg"));
 }

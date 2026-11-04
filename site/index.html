@@ -83,14 +83,6 @@
   </section>
 
   <div class="wrap">
-    <div class="band" id="band"></div>
-    <section class="near" id="near" hidden aria-labelledby="nearT">
-      <div class="near-h"><h2 id="nearT"></h2><p id="nearSub"></p></div>
-      <div class="near-body">
-        <div class="map" id="map" role="region" aria-label="Map"></div>
-        <ul class="near-list" id="nearList"></ul>
-      </div>
-    </section>
     <div class="sample" id="sampleNote" hidden><span data-t="sample"></span></div>
     <nav class="tabs" id="tabs" aria-label="Categories"></nav>
   </div>
@@ -110,6 +102,18 @@
     <div class="grid" id="grid"></div>
     <div class="more" id="more" hidden><button type="button" class="btn ghost" id="moreBtn" data-t="showMore">Show more</button></div>
   </section>
+
+  <!-- below the deals: the week in numbers and the shops near you (the list comes first) -->
+  <div class="wrap after">
+    <div class="band" id="band"></div>
+    <section class="near" id="near" hidden aria-labelledby="nearT">
+      <div class="near-h"><h2 id="nearT"></h2><p id="nearSub"></p></div>
+      <div class="near-body">
+        <div class="map" id="map" role="region" aria-label="Map"></div>
+        <ul class="near-list" id="nearList"></ul>
+      </div>
+    </section>
+  </div>
 </div>
 
 <section class="wrap" id="viewRecipes" hidden>
@@ -203,6 +207,7 @@
 <script src="config.js" defer></script>
 <script src="recipes-data.js" defer></script>
 <script src="search.js" defer></script>
+<script src="basket.js" defer></script>
 <script src="app.js" defer></script>
 </body>
 </html>

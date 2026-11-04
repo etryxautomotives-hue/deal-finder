@@ -29,6 +29,9 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt
       - run: python -m pytest -q
+      - name: Keep yesterday's deals (to tell what's new for the daily email)
+        if: github.event_name != 'push'
+        run: cp data/deals.json "$RUNNER_TEMP/prev-deals.json" 2>/dev/null || true
       - name: Collect today's deals
         if: github.event_name != 'push'
         run: python -m collector.run
@@ -51,6 +54,16 @@ jobs:
           git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
           # main may have moved while collecting (a merged PR): put the data commit on top, retry a few times
           ok=; for i in 1 2 3; do if git pull --rebase origin main && git push; then ok=1; break; fi; sleep 5; done; [ -n "$ok" ]
+      - name: Daily email (only the morning run; skipped until the secrets in docs/SETUP-ALERTS.md exist)
+        if: github.event_name == 'schedule'
+        continue-on-error: true   # an email problem must never stop the site from updating
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_FROM: ${{ vars.ALERT_FROM }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: python -m alerts.daily --prev "$RUNNER_TEMP/prev-deals.json"
       - name: Build the site
         run: |
           mkdir -p _site
