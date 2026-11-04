@@ -63,3 +63,22 @@ test("a preferred shop without any of the items is said, not hidden", () => {
   assert.equal(c.preferredMissing, true);
   assert.equal(c.pick.chain, "Delhaize");   // both have coffee, Delhaize's is cheaper
 });
+
+test("saving per deal: normal price first, else what the deal itself gives", () => {
+  assert.equal(B.saveOf({ price: 2, old_price: 3 }), 1);
+  assert.equal(B.saveOf({ price: 2, deal_kind: "1+1" }), 2);     // second pack free
+  assert.equal(B.saveOf({ price: 3, deal_kind: "2+1" }), 1.5);   // one free per two paid
+  assert.equal(B.saveOf({ price: 2, deal_kind: "2nd_half" }), 1);
+  assert.equal(B.saveOf({ price: 2, deal_kind: "percent" }), 0); // no normal price given: don't guess
+});
+
+test("money saved counts ticked items per week and month, and compares with last month", () => {
+  const now = Date.UTC(2026, 10, 4, 12);   // Wednesday 4 Nov 2026
+  const bought = [
+    { day: "2026-11-02", store: "Lidl", save: 1.5 },  // Monday: this week
+    { day: "2026-11-01", store: "Aldi", save: 2 },    // Sunday: last week, this month
+    { day: "2026-10-20", store: "Aldi", save: 4 },
+  ];
+  const s = B.savings(bought, now);
+  assert.deepEqual([s.month, s.week, s.lastMonth, s.items, s.topShop], [3.5, 1.5, 4, 2, "Aldi"]);
+});

@@ -8,7 +8,8 @@
      "Oploskoffie", but "melk" never finds "Melkchocolade"); the product found is always shown,
    - then the lowest price you pay at the till.
    Shops are ranked by how many of your items they have on promo, then by the total for those items.
-   Your preferred shop comes first, and we say when another shop is cheaper for the same items or has more. */
+   Your preferred shop comes first, and we say when another shop is cheaper for the same items or has more.
+   Money saved: only items ticked as bought count (normal price minus deal price), per week and month. */
 (function (root) {
   const S = root.DKSearch || (typeof require === "function" ? require("./search.js") : null);
   const fold = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -69,6 +70,38 @@
     return { items: rows, shops: ranked, pick, tip, preferredMissing: !!preferred && !mine };
   }
 
-  const api = { compare, matchesFor, fit };
+  // ---------- money saved ----------
+  // What you save on one deal: the store's normal price minus the deal price. Without a normal price we only count
+  // deals whose saving follows from the deal itself: 1+1 saves one pack, 2+1 half a pack per pack paid, etc.
+  function saveOf(d) {
+    if (!d) return 0;
+    if (d.old_price > d.price) return Math.round((d.old_price - d.price) * 100) / 100;
+    const m = /^(\d+)\+(\d+)$/.exec(d.deal_kind || d.kind || "");
+    if (m) return Math.round(d.price * (+m[2] / +m[1]) * 100) / 100;
+    if ((d.deal_kind || d.kind) === "2nd_half") return Math.round(d.price * 0.5 * 100) / 100;
+    return 0;
+  }
+  const dayOf = t => new Date(t).toISOString().slice(0, 10);
+  /* bought: [{ k, day: "YYYY-MM-DD", name, store, paid, save }]. Only what people tick as bought counts, so the
+     number is honest. Returns this month, this week (Mon-Sun), last month, and the shop where you saved most. */
+  function savings(bought, now) {
+    const d = new Date(now), ym = dayOf(now).slice(0, 7);
+    const last = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - 1, 1)).toISOString().slice(0, 7);
+    const mon = new Date(now - ((d.getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10);
+    let month = 0, week = 0, lastMonth = 0, n = 0; const byShop = {};
+    for (const b of bought || []) {
+      const v = +b.save || 0;
+      if (b.day.slice(0, 7) === ym) { month += v; n++; byShop[b.store] = (byShop[b.store] || 0) + v; }
+      if (b.day.slice(0, 7) === last) lastMonth += v;
+      if (b.day >= mon) week += v;
+    }
+    const top = Object.entries(byShop).sort((a, b) => b[1] - a[1])[0];
+    const r = x => Math.round(x * 100) / 100;
+    return { month: r(month), week: r(week), lastMonth: r(lastMonth), items: n, topShop: top && top[1] > 0 ? top[0] : null };
+  }
+  // keep a year, at most 500 ticks, so the account row stays small
+  const pruneBought = (bought, now) => (bought || []).filter(b => b.day >= dayOf(now - 366 * 864e5)).slice(-500);
+
+  const api = { compare, matchesFor, fit, saveOf, savings, pruneBought, dayOf };
   if (typeof module === "object" && module.exports) module.exports = api; else root.DKBasket = api;
 })(typeof window !== "undefined" ? window : globalThis);

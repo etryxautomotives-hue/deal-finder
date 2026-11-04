@@ -361,6 +361,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .drawer li .p.linkish{width:auto;height:auto;min-height:36px;border-radius:var(--r-sm);padding:0 var(--s2);color:var(--ink);font-weight:700;font-size:var(--t-sm)}
 .myshop{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);font-size:var(--t-sm);color:var(--muted)}
 .myshop select{max-width:65%;min-width:0;min-height:var(--tap);border:0;border-radius:var(--pill);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 var(--s4);font-size:var(--t-sm);color:var(--ink)}
+.drawer li.tickrow{grid-template-columns:36px minmax(0,1fr) auto auto}
+.drawer li button.tick{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);color:transparent}
+.drawer li button.tick:hover{color:var(--muted);background:transparent}
+.drawer li button.tick[aria-pressed="true"]{background:var(--lime);box-shadow:none;color:var(--ink)}
+.drawer li.done>span:not(.p){text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.drawer .hint{margin:0 0 var(--s2);font-size:12.5px;color:var(--muted)}
+.savedbox{display:grid;gap:2px;background:var(--lime-soft);color:var(--lime-ink);border-radius:var(--r-sm);padding:var(--s3) var(--s4)}
+.savedbox b{font-size:var(--t-lg);font-variant-numeric:tabular-nums}
+.savedbox small{font-size:12.5px;font-weight:600}
 .dealsT{margin:var(--s3) 0 0;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
 .toast{position:fixed;left:50%;bottom:calc(var(--s5) + env(safe-area-inset-bottom));transform:translate(-50%,24px);opacity:0;pointer-events:none;
