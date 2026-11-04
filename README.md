@@ -63,6 +63,8 @@ Off until `site/config.js` has the Supabase keys. Step-by-step setup (Supabase l
 
 Daily notification (one summary a day of list items newly on promo nearby, on the phone or computer through web push, sent by `alerts/daily.py` on GitHub Actions; email optional): off until the secrets in [docs/SETUP-ALERTS.md](docs/SETUP-ALERTS.md) exist. Without any setup the site itself shows "N things from your list on promo" when you open it.
 
+Shared family list ("Mijn huis" in the account: invite link, everyone's picture, one list everyone ticks off): off until `supabase/migrations/003_households.sql` is run once, see [docs/SETUP-FAMILY.md](docs/SETUP-FAMILY.md).
+
 ## Search engines
 
 `seo/build.py` runs in the workflow after the site is built. It writes Dutch and French landing pages

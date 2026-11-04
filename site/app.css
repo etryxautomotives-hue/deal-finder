@@ -387,6 +387,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .menu-h h3{font-family:var(--serif);font-size:var(--t-lg);margin:0}
 .menu-h p{margin:2px 0 0;font-size:var(--t-sm);color:var(--muted);max-width:60ch}
 .menu-act{display:flex;gap:var(--s2);align-items:center}
+.homesize{display:flex;flex-wrap:wrap;gap:var(--s3);margin:var(--s3) 0 0}
+.homesize label{display:inline-flex;align-items:center;gap:var(--s2);font-size:var(--t-sm);color:var(--muted)}
+.homesize select{min-height:36px;padding:0 var(--s2);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--card);font:600 var(--t-sm)/1 var(--sans);color:var(--ink)}
 .menu .seg{display:inline-flex;background:var(--soft);border-radius:var(--pill);padding:3px}
 .menu .seg button{min-width:40px;min-height:38px;border:0;border-radius:var(--pill);background:transparent;font-weight:700;font-size:var(--t-sm)}
 .menu .seg button[aria-pressed="true"]{background:var(--lime)}
@@ -610,7 +613,41 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .alerts input{width:22px;height:22px;margin-top:2px;accent-color:var(--lime-d);flex:none}
 .alerts b{display:block;font-size:var(--t-sm)}
 .alerts small{display:block;font-size:12.5px}
-.accshop{display:grid;gap:var(--s2);margin:var(--s4) 0}
+/* profile picture and the shared home */
+.av{display:inline-block;border-radius:50%;overflow:hidden;flex:none;object-fit:cover;background:var(--soft);vertical-align:middle}
+.av svg{display:block;width:100%;height:100%}
+.mecard{display:flex;align-items:center;gap:var(--s4);margin:var(--s4) 0}
+.mepic{position:relative;border:0;background:none;padding:0;border-radius:50%;cursor:pointer;flex:none}
+.mepic .pen{position:absolute;right:-2px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:var(--lime);display:grid;place-items:center;border:2px solid var(--card)}
+.mename{flex:1;min-width:0}
+.mename input{width:100%}
+.avpick{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--s2);margin:0 0 var(--s4)}
+.avpick[hidden]{display:none}
+.avpick button{border:2px solid transparent;border-radius:50%;padding:0;background:none;aspect-ratio:1;cursor:pointer}
+.avpick button svg{width:100%;height:100%;display:block}
+.avpick button[aria-pressed="true"]{border-color:var(--lime-d)}
+.avpick .avup{grid-column:1/-1;margin-top:var(--s1)}
+.famcard{margin:var(--s4) 0;padding:var(--s4);border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+.famcard h4{margin:0 0 var(--s2);font-family:var(--serif);font-size:var(--t-lg)}
+.house{position:relative;aspect-ratio:320/210;max-width:360px;margin:0 auto var(--s3)}
+.house-bg{position:absolute;inset:0;width:100%;height:100%}
+.house .people{position:absolute;left:14%;right:14%;top:46%;bottom:6%;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:var(--s2) var(--s3)}
+.person{display:grid;justify-items:center;gap:2px;max-width:76px}
+.person small{font-size:11.5px;font-weight:600;max-width:76px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.famcard .leave{display:block;margin:var(--s3) auto 0;font-size:13px;color:var(--muted)}
+.famlink{width:100%;min-height:40px;padding:0 var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);font:500 13px/1 var(--sans);background:var(--soft)}
+.members{list-style:none;margin:var(--s3) 0 0;padding:0;display:grid;gap:var(--s2)}
+.members li{display:flex;align-items:center;gap:var(--s2);font-size:var(--t-sm)}
+.members li > span:not(.av){flex:1}
+.by{display:inline-flex;vertical-align:-3px;margin-right:6px}
+.sharedwith{display:inline-flex;align-items:center;gap:2px;margin-left:var(--s2);font:500 12.5px/1 var(--sans);color:var(--muted);text-transform:none;letter-spacing:0}
+.sharedwith .av:last-of-type{margin-right:4px}
+.accdiet{display:grid;gap:var(--s2);margin:var(--s4) 0}
+.accdiet b{font-size:var(--t-sm)}
+.accdiet small{font-size:12.5px}
+.accdiet .chips{flex-wrap:wrap;overflow:visible}
+.dietnote{margin:var(--s2) 0 0;font-size:12.5px;color:var(--muted)}
+.dietnote[hidden]{display:none}display:grid;gap:var(--s2);margin:var(--s4) 0}
 .accshop b{display:block;font-size:var(--t-sm)}
 .accshop small{display:block;font-size:12.5px}
 .accshop select{width:100%;max-width:100%;min-height:var(--tap);padding:0 var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--card);font:500 var(--t-md)/1 var(--sans);color:var(--ink)}

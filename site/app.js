@@ -27,6 +27,9 @@ const T = {
     secTitle: "Promo's van deze week", searchTitle: q => `Resultaten voor “${q}”`,
     secSub: (n, pc, r) => `${n} promo's${pc ? ` binnen ${r} km van ${pc}` : ""}`,
     sorts: { value: "Beste prijs per kg/L", price: "Laagste prijs", discount: "Grootste korting", near: "Dichtstbij", ending: "Eindigt binnenkort" },
+    dietT: "Dieet", diets: { bio: "Bio", veg: "Vegetarisch", vegan: "Vegan", gf: "Glutenvrij", nomilk: "Zonder melk", halal: "Halal", nonuts: "Zonder noten" },
+    dietNote: "Gekozen op basis van de productnaam: check altijd het etiket als het om een allergie gaat.",
+    dietAcc: "Mijn dieet en allergieën", dietAccWhy: "Geldt voor de promo's, je lijst en het weekmenu. Het zijn dezelfde knoppen als in de filters.",
     kinds: { "1+1": "1+1 (2 voor 1)", "2+1": "2+1 (3 voor 2)", multi: "Meer kopen", "2nd_half": "2de halve prijs", "2nd_pct": "2de met korting", percent: "% korting", bundle: "Bundelprijs", price_drop: "Prijsdaling", other: "Andere" },
     tag: { free: n => `${n} gratis`, "2nd_half": "2de halve prijs", price_drop: "Prijsdaling", promo: "Promo" },
     cats: { fruit_veg: "Groenten & fruit", meat_fish: "Vlees & vis", dairy: "Zuivel & eieren", bread: "Brood", pantry: "Voorraad & maaltijden", snacks: "Snacks & snoep", drinks: "Dranken", household: "Huishouden", other: "Andere" },
@@ -63,6 +66,9 @@ const T = {
     secTitle: "Les promos de la semaine", searchTitle: q => `Résultats pour « ${q} »`,
     secSub: (n, pc, r) => `${n} promos${pc ? ` à moins de ${r} km de ${pc}` : ""}`,
     sorts: { value: "Meilleur prix au kg/L", price: "Prix le plus bas", discount: "Plus grosse remise", near: "Le plus proche", ending: "Se termine bientôt" },
+    dietT: "Régime", diets: { bio: "Bio", veg: "Végétarien", vegan: "Vegan", gf: "Sans gluten", nomilk: "Sans lait", halal: "Halal", nonuts: "Sans noix" },
+    dietNote: "Choisi d’après le nom du produit : vérifiez toujours l’étiquette en cas d’allergie.",
+    dietAcc: "Mon régime et mes allergies", dietAccWhy: "S’applique aux promos, à votre liste et au menu de la semaine. Ce sont les mêmes boutons que dans les filtres.",
     kinds: { "1+1": "1+1 (2 pour 1)", "2+1": "2+1 (3 pour 2)", multi: "Achat groupé", "2nd_half": "2e à moitié prix", "2nd_pct": "2e en promo", percent: "% de remise", bundle: "Prix lot", price_drop: "Baisse de prix", other: "Autres" },
     tag: { free: n => `${n} offert`, "2nd_half": "2e à moitié prix", price_drop: "Baisse de prix", promo: "Promo" },
     cats: { fruit_veg: "Fruits & légumes", meat_fish: "Viande & poisson", dairy: "Produits laitiers", bread: "Pain", pantry: "Épicerie & plats", snacks: "Snacks & bonbons", drinks: "Boissons", household: "Maison", other: "Autres" },
@@ -99,6 +105,9 @@ const T = {
     secTitle: "This week's deals", searchTitle: q => `Results for “${q}”`,
     secSub: (n, pc, r) => `${n} deals${pc ? ` within ${r} km of ${pc}` : ""}`,
     sorts: { value: "Best price per kg/L", price: "Lowest price", discount: "Biggest discount", near: "Nearest", ending: "Ending soon" },
+    dietT: "Diet", diets: { bio: "Organic", veg: "Vegetarian", vegan: "Vegan", gf: "Gluten-free", nomilk: "No milk", halal: "Halal", nonuts: "No nuts" },
+    dietNote: "Picked from the product name: always check the label for allergies.",
+    dietAcc: "My diet and allergies", dietAccWhy: "Applies to the deals, your list and the week menu. These are the same buttons as in the filters.",
     kinds: { "1+1": "1+1 (2 for 1)", "2+1": "2+1 (3 for 2)", multi: "Buy more", "2nd_half": "2nd half price", "2nd_pct": "2nd discounted", percent: "% off", bundle: "Bundle price", price_drop: "Price drop", other: "Other" },
     tag: { free: n => `${n} free`, "2nd_half": "2nd half price", price_drop: "Price drop", promo: "Deal" },
     cats: { fruit_veg: "Fruit & veg", meat_fish: "Meat & fish", dairy: "Dairy & eggs", bread: "Bread", pantry: "Pantry & meals", snacks: "Snacks & sweets", drinks: "Drinks", household: "Household", other: "Other" },
@@ -126,6 +135,8 @@ Object.assign(T.nl, {
   menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
   menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
   menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
+  menuNoDiet: "Geen enkel recept past bij je dieet. Voeg je eigen recepten toe, dan kiezen we daaruit.",
+  homeAdults: "Volwassenen", homeKids: "Kinderen", homeFor: "Voor", forN: (n, r) => `voor ${n} pers.${r ? ` (recept: ${r})` : ""}`,
   wantsAdded: n => n ? `${n} op je lijst gezet` : "Staat al op je lijst",
   splitTip: (c, v, n) => `Haal ${n} ${n === 1 ? "product" : "producten"} bij ${c} en bespaar ${v} extra`,
   savedMonth: v => `${v} bespaard deze maand`, savedWeek: v => `${v} deze week`, savedTop: c => `meest bij ${c}`,
@@ -135,7 +146,7 @@ Object.assign(T.nl, {
   wantNone: "deze week geen promo in de buurt", wantAt: (c, p) => `${c} · ${p}`,
   cheapT: "Goedkoopste winkel voor je lijst", myShopT: "Jouw winkel", myShop: "Mijn winkel", myShopAny: "Geen voorkeur", myShopWhy: "Komt eerst op je lijst en in je dagelijkse melding. We zeggen het altijd als een andere winkel goedkoper is.", myShopSaved: s => s ? `${s} is nu je winkel` : "Geen voorkeurswinkel meer",
   covers: (a, b) => `${a} van ${b} in promo`, tipCheaper: (c, v, n) => `${c} is ${v} goedkoper voor dezelfde ${n}`,
-  tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`,
+  tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`, fromFav: (k, c) => `${k} van je ${c}`,
   otherShops: "Andere winkels", dealsT: "Bewaarde promo's",
   listSub2: "Typ wat je nodig hebt. Elke dag zoeken we de beste promo in de buurt.",
   checked: (n, here, time) => `<b>${n}</b> promo's${here ? ` bij ${here}` : ""} · gecontroleerd ${time}`, today: t => `vandaag om ${t}`,
@@ -172,6 +183,12 @@ Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n,
   nearNL: "in the Netherlands, no promos online yet", country: "Country", cc: { BE: "Belgium", NL: "Netherlands" },
   accPc: "Your postal code or address", accPcWhy: "So we show the promos near you straight away. You can change it any time.", accChange: "Change" });
 Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
+Object.assign(T.nl, { meT: "Mijn profiel", meName: "Je naam", meNamePh: "Bv. Mama of Jonas", avChange: "Kies een foto", avUpload: "Foto van je toestel", avErr: "Die foto lukte niet. Probeer een andere.",
+  famT: "Mijn huis", famNone: "Deel je lijst met je gezin of vrienden: iedereen ziet dezelfde lijst en vinkt af wat gekocht is.", famSome: n => `${n} mensen delen deze lijst`,
+  famInvite: "Nodig iemand uit", famShareText: "Kom bij ons huis op deal'ke, dan delen we één boodschappenlijst.", famCopied: "Link gekopieerd: stuur hem door", famLink: "Of stuur deze link (14 dagen geldig):",
+  famLeave: "Verlaat het huis", famRemove: "Verwijder", famYou: "jij", famJoined: h => `Welkom in ${h}! Jullie delen nu één lijst.`, famJoinErr: "Die uitnodiging is verlopen. Vraag een nieuwe link.",
+  famJoinSign: "Je bent uitgenodigd voor een gedeelde lijst. Log in om erbij te komen.", famLeft: "Je hebt het huis verlaten", famClear: "Wis wat gekocht is", famShared: n => `Gedeeld met ${n}`, homeName: "Thuis",
+  famOff: "Samen een lijst delen staat nog niet aan.", famBought: n => `afgevinkt door ${n}` });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
@@ -186,6 +203,8 @@ Object.assign(T.fr, {
   menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
   menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
   menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
+  menuNoDiet: "Aucune recette ne correspond à votre régime. Ajoutez vos recettes, on choisira parmi elles.",
+  homeAdults: "Adultes", homeKids: "Enfants", homeFor: "Pour", forN: (n, r) => `pour ${n} pers.${r ? ` (recette : ${r})` : ""}`,
   wantsAdded: n => n ? `${n} ajoutés à votre liste` : "Déjà dans votre liste",
   splitTip: (c, v, n) => `Prenez ${n} produit${n === 1 ? "" : "s"} chez ${c} et économisez ${v} de plus`,
   savedMonth: v => `${v} économisés ce mois-ci`, savedWeek: v => `${v} cette semaine`, savedTop: c => `surtout chez ${c}`,
@@ -195,7 +214,7 @@ Object.assign(T.fr, {
   wantNone: "pas de promo près de chez vous cette semaine", wantAt: (c, p) => `${c} · ${p}`,
   cheapT: "Magasin le moins cher pour votre liste", myShopT: "Votre magasin", myShop: "Mon magasin", myShopAny: "Pas de préférence", myShopWhy: "Il passe en premier dans votre liste et votre notification quotidienne. On vous dit toujours quand un autre magasin est moins cher.", myShopSaved: s => s ? `${s} est maintenant votre magasin` : "Plus de magasin préféré",
   covers: (a, b) => `${a} sur ${b} en promo`, tipCheaper: (c, v, n) => `${c} est ${v} moins cher pour les mêmes ${n}`,
-  tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`,
+  tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`, fromFav: (k, c) => `à ${k} de votre ${c}`,
   otherShops: "Autres magasins", dealsT: "Promos gardées",
   listSub2: "Tapez ce qu’il vous faut. Chaque jour, on cherche la meilleure promo près de chez vous.",
   checked: (n, here, time) => `<b>${n}</b> promos${here ? ` près de ${here}` : ""} · vérifiées ${time}`, today: t => `aujourd’hui à ${t}`,
@@ -223,6 +242,12 @@ Object.assign(T.fr, {
   freeBtn: "Voir les promos gratuites", soon: "Les comptes et le paiement arrivent bientôt. D’ici là, tout est gratuit.",
 });
 Object.assign(T.fr, { accSignIn: "Se connecter", accTitle: "Mon compte", accEmail: "E-mail", accSend: "Recevoir un lien de connexion", accWhy: "Pas de mot de passe : vous recevez un lien par e-mail. Votre liste et vos recettes vous suivent sur tous vos appareils.", accSent: e => `Regardez votre boîte mail (${e}) et cliquez sur le lien.`, accPlan: "Abonnement", accFree: "Gratuit", accTrial: d => `Plus, essai gratuit jusqu’au ${d}`, accActive: d => `Plus, renouvelé le ${d}`, accEnds: d => `Plus, se termine le ${d}`, accPastDue: "Plus, paiement échoué : mettez à jour votre moyen de paiement", accManage: "Gérer l’abonnement", accSubscribe: "Prendre Plus, 4,99 € par mois", accLogout: "Se déconnecter", accOut: "Vous êtes déconnecté", accErr: "Ça n’a pas marché. Réessayez dans un instant.", accRedirect: "Un instant, on ouvre la page de paiement…", accSynced: "Votre liste et vos recettes sont enregistrées dans votre compte.", accNeed: { plan: "Planifier la semaine fait partie de Plus. Essayez 14 jours gratuitement.", recipes: "Plus d’une recette perso fait partie de Plus. Essayez 14 jours gratuitement." } });
+Object.assign(T.fr, { meT: "Mon profil", meName: "Votre prénom", meNamePh: "P. ex. Maman ou Lucas", avChange: "Choisir une photo", avUpload: "Photo de l’appareil", avErr: "Cette photo n’a pas marché. Essayez-en une autre.",
+  famT: "Ma maison", famNone: "Partagez votre liste avec votre famille ou vos amis : tout le monde voit la même liste et coche ce qui est acheté.", famSome: n => `${n} personnes partagent cette liste`,
+  famInvite: "Inviter quelqu’un", famShareText: "Rejoins notre maison sur deal'ke pour partager une seule liste de courses.", famCopied: "Lien copié : envoyez-le", famLink: "Ou envoyez ce lien (valable 14 jours) :",
+  famLeave: "Quitter la maison", famRemove: "Retirer", famYou: "vous", famJoined: h => `Bienvenue dans ${h} ! Vous partagez maintenant une liste.`, famJoinErr: "Cette invitation a expiré. Demandez un nouveau lien.",
+  famJoinSign: "Vous êtes invité à une liste partagée. Connectez-vous pour la rejoindre.", famLeft: "Vous avez quitté la maison", famClear: "Effacer ce qui est acheté", famShared: n => `Partagée avec ${n}`, homeName: "Maison",
+  famOff: "Le partage de liste n’est pas encore activé.", famBought: n => `coché par ${n}` });
 T.fr.sorts.value = "Moins cher au kg / L";
 Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. haché, pâtes, oignon", rFree: q => `Ajouter « ${q} » comme ingrédient`,
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
@@ -237,6 +262,8 @@ Object.assign(T.en, {
   menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
   menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
   menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
+  menuNoDiet: "No recipe fits your diet. Add your own recipes and we'll pick from those.",
+  homeAdults: "Adults", homeKids: "Children", homeFor: "For", forN: (n, r) => `for ${n}${r ? ` (recipe: ${r})` : ""}`,
   wantsAdded: n => n ? `${n} added to your list` : "Already on your list",
   splitTip: (c, v, n) => `Get ${n} item${n === 1 ? "" : "s"} at ${c} and save ${v} more`,
   savedMonth: v => `${v} saved this month`, savedWeek: v => `${v} this week`, savedTop: c => `most at ${c}`,
@@ -246,7 +273,7 @@ Object.assign(T.en, {
   wantNone: "no deal nearby this week", wantAt: (c, p) => `${c} · ${p}`,
   cheapT: "Cheapest shop for your list", myShopT: "Your shop", myShop: "My shop", myShopAny: "No preference", myShopWhy: "Comes first on your list and in your daily notification. We always say when another shop is cheaper.", myShopSaved: s => s ? `${s} is now your shop` : "No favourite shop any more",
   covers: (a, b) => `${a} of ${b} on promo`, tipCheaper: (c, v, n) => `${c} is ${v} cheaper for the same ${n}`,
-  tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`,
+  tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`, fromFav: (k, c) => `${k} from your ${c}`,
   otherShops: "Other shops", dealsT: "Saved deals",
   listSub2: "Type what you need. Every day we find the best deal nearby.",
   checked: (n, here, time) => `<b>${n}</b> deals${here ? ` near ${here}` : ""} · checked ${time}`, today: t => `today at ${t}`,
@@ -274,6 +301,12 @@ Object.assign(T.en, {
   freeBtn: "See the free deals", soon: "Accounts and payment are coming soon. Until then everything is free.",
 });
 Object.assign(T.en, { accSignIn: "Sign in", accTitle: "My account", accEmail: "Email", accSend: "Email me a sign-in link", accWhy: "No password: we email you a link. Your list and recipes then follow you on every device.", accSent: e => `Check your inbox (${e}) and click the link.`, accPlan: "Plan", accFree: "Free", accTrial: d => `Plus, free trial until ${d}`, accActive: d => `Plus, renews on ${d}`, accEnds: d => `Plus, ends on ${d}`, accPastDue: "Plus, payment failed: please update your payment details", accManage: "Manage subscription", accSubscribe: "Get Plus, €4.99 a month", accLogout: "Sign out", accOut: "You're signed out", accErr: "That didn't work. Please try again in a moment.", accRedirect: "One moment, opening the payment page…", accSynced: "Your list and recipes are saved to your account.", accNeed: { plan: "Planning your week is part of Plus. Try it free for 14 days.", recipes: "More than one recipe of your own is part of Plus. Try it free for 14 days." } });
+Object.assign(T.en, { meT: "My profile", meName: "Your name", meNamePh: "E.g. Mum or Jonas", avChange: "Pick a picture", avUpload: "Photo from your device", avErr: "That photo didn't work. Try another one.",
+  famT: "My home", famNone: "Share your list with family or friends: everyone sees the same list and ticks off what's bought.", famSome: n => `${n} people share this list`,
+  famInvite: "Invite someone", famShareText: "Join our home on deal'ke so we share one shopping list.", famCopied: "Link copied: send it on", famLink: "Or send this link (valid 14 days):",
+  famLeave: "Leave this home", famRemove: "Remove", famYou: "you", famJoined: h => `Welcome to ${h}! You now share one list.`, famJoinErr: "That invite has expired. Ask for a new link.",
+  famJoinSign: "You've been invited to a shared list. Sign in to join.", famLeft: "You left the home", famClear: "Clear what's bought", famShared: n => `Shared with ${n}`, homeName: "Home",
+  famOff: "Sharing a list isn't switched on yet.", famBought: n => `ticked by ${n}` });
 T.en.sorts.value = "Cheapest per kg / L";
 Object.assign(T.nl, { sgRecent: "Recent gezocht", sgFav: "Jouw favorieten in promo", sgAll: q => `Alle promo's voor “${q}”`, sgDel: q => `“${q}” uit je zoekgeschiedenis halen`, qFuzzy: "Geen exacte treffers, dit lijkt er het meest op." });
 Object.assign(T.fr, { sgRecent: "Recherches récentes", sgFav: "Vos favoris en promo", sgAll: q => `Toutes les promos pour « ${q} »`, sgDel: q => `Retirer « ${q} » de l’historique`, qFuzzy: "Pas de résultat exact, voici les plus proches." });
@@ -304,7 +337,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home", "diet", "me"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -324,6 +357,8 @@ const S = {
   alerts: store.get("alerts", false), // also by email (sent by alerts/daily.py on GitHub Actions, once email is set up)
   pushOn: store.get("pushOn", null),  // this device's push subscription {endpoint, keys}, or null (not synced: it's per device)
   bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
+  me: store.get("me", { name: "", avatar: "" }),   // name and picture the people you share a list with see
+  diet: new Set(store.get("diet", [])), // profile: vegetarian, gluten-free, halal, ... (site/diet.js); the same as the filters
   shown: 48,
 };
 let DEALS = [], BRANCHES = [], PCS = {}, PCS_NL = {}, SAMPLE = false, UPDATED = null;
@@ -415,11 +450,15 @@ function inRadius(d) {
 }
 
 // ---------- filtering ----------
+const dietOn = () => S.diet.size > 0 && !!window.DKDiet;
+const dietOk = d => !dietOn() || DKDiet.fits(d, [...S.diet]);
+function setDiet(k) { S.diet.has(k) ? S.diet.delete(k) : S.diet.add(k); store.set("diet", [...S.diet]); matchCache.clear(); promoNote(); }
 function matches(d, skip) {
   if (!inRadius(d)) return false;
   if (skip !== "cat" && S.cat && d.cat !== S.cat) return false;
   if (skip !== "kind" && S.kinds.size && !S.kinds.has(d.group)) return false;
   if (skip !== "chain" && S.chains.size && !S.chains.has(d.store)) return false;
+  if (!dietOk(d)) return false;
   if (S.q && !DS.search(DEALS, S.q).hits.has(d.id)) return false;  // typo-tolerant, see search.js
   return true;
 }
@@ -452,6 +491,15 @@ function logo(chain, big) {
 }
 const km = d => d == null ? "" : `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`;
 const kmText = chain => km(dist(chain));
+// how far another shop is from your favourite one (its branch nearest to you), so you know what the detour costs
+function kmFromFav(chain) {
+  if (!S.shop || chain === S.shop) return null;
+  const fav = nearest["BE|" + S.shop]?.b || nearest["NL|" + S.shop]?.b; if (!fav) return null;
+  let best = null;
+  for (const b of BRANCHES) if (b.chain === chain) { const d = haversine(fav.lat, fav.lon, b.lat, b.lon); if (best == null || d < best) best = d; }
+  return best;
+}
+const favNote = chain => { const d = kmFromFav(chain); return d == null ? "" : ` (${t().fromFav(km(d), esc(S.shop))})`; };
 const kmDeal = d => km(distDeal(d));
 const ccTag = d => d.cc === "NL" ? `<span class="cc-tag" title="${esc(t().cc.NL)}"><i class="flag nl"></i>NL</span>` : "";
 const pct = d => { if (d.discount) return Math.round(d.discount * 100); const e = effDiscount(d); if (e) return Math.round(e * 100);
@@ -569,6 +617,8 @@ function render() {
     KIND_ORDER.filter(k => kindN.get(k) || S.kinds.has(k)).map(k => [k, L.kinds[k], kindN.get(k) || 0]),
     k => S.kinds.has(k), "data-kind").replace(/class="chip"/g, 'class="chip sm"');
 
+  $("#diets").innerHTML = (window.DKDiet ? DKDiet.KEYS : []).map(k => `<button type="button" class="chip sm diet" data-diet="${k}" aria-pressed="${S.diet.has(k)}">${esc(L.diets[k])}</button>`).join("");
+  $("#dietNote").hidden = !dietOn(); $("#dietNote").textContent = L.dietNote;
   const chains = [...new Set(DEALS.map(d => d.store))]
     .filter(c => chainN.get(c) || S.chains.has(c))
     .sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9) || a.localeCompare(b));
@@ -725,13 +775,22 @@ const today = () => DKBasket.dayOf(Date.now());
 const boughtOf = k => S.bought.find(b => b.k === k && (k.startsWith("d:") || b.day === today()));  // a need ticks again every day
 function toggleBought(k, d, label) {
   const hit = boughtOf(k);
+  if (FAM.hid && k.startsWith("w:")) {   // shared list: the tick is for everyone
+    const w = S.wants.find(x => "w:" + x.id === k);
+    if (w) { const on = !(hit || w.doneBy); w.doneBy = on ? ACC.user.id : null; famTick(w.id, on); if (!on && !hit) { renderList(); return; } }
+  }
   if (hit) S.bought = S.bought.filter(b => b !== hit);
-  else S.bought.push({ k, day: today(), name: (d?.name || label || "").slice(0, 80), store: d?.store || "", paid: d?.price || 0, save: DKBasket.saveOf(d) });
+  else {
+    S.bought.push({ k, day: today(), name: (d?.name || label || "").slice(0, 80), store: d?.store || "", paid: d?.price || 0, save: DKBasket.saveOf(d) });
+    // what you buy again and again rises to the top of the search suggestions (never added to the list by itself)
+    if (d) noteProduct(d, 3);
+    if (label && DS.bump(HIST, "q", DS.qwords(label).join(" "), 2, Date.now())) saveHist();
+  }
   S.bought = DKBasket.pruneBought(S.bought, Date.now()); store.set("bought", S.bought);
   if (!hit && DKBasket.saveOf(d) > 0) toast(t().savedMonth(money(DKBasket.savings(S.bought, Date.now()).month)));
   renderList(); renderHero();
 }
-const tickBtn = (k, d, label) => { const on = !!boughtOf(k), L = t();
+const tickBtn = (k, d, label, done) => { const on = done ?? !!boughtOf(k), L = t();
   return `<button type="button" class="tick" data-buy="${k}"${d ? ` data-deal="${d.id}"` : ""} data-label="${esc(label || "")}" aria-pressed="${on}" aria-label="${on ? L.bought : L.notBought}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`; };
 function savedHTML(L) {
   const s = DKBasket.savings(S.bought, Date.now());
@@ -743,7 +802,7 @@ function savedHTML(L) {
   return `<div class="savedbox"><b>${L.savedMonth(money(s.month))}</b>${bits.length ? `<small>${bits.join(" · ")}</small>` : ""}</div>`;
 }
 const listN = () => Object.keys(S.list).length + S.wants.length;
-const nearDeals = () => DEALS.filter(d => inRadius(d));
+const nearDeals = () => DEALS.filter(d => inRadius(d) && dietOk(d));
 // favourite shop: chosen in the account or on My list; the shops near you first, nearest on top
 const shopChoices = () => {
   const near = Object.entries(nearest).filter(([, n]) => n?.d != null && n.d <= S.radius).map(([k]) => k.split("|")[1]);
@@ -757,6 +816,7 @@ function addWants(text) {
     have.add(DS.fold(q)); n++; S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
   }
   store.set("wants", S.wants); $("#listCount").textContent = listN(); promoSeen();  // you are looking at it
+  if (FAM.hid && n) famAdd(S.wants.slice(-n).map(w => w.q));
   return n;
 }
 // "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
@@ -771,22 +831,24 @@ function wantsHTML(L) {
   const pickBox = p ? `<div class="starthere">${sicon(p.chain)}<div><small>${p.chain === S.shop ? L.myShopT : L.cheapT}</small><b>${esc(p.chain)}</b>
       <div class="sub">${L.covers(p.n, N)}${kmText(p.chain) ? ` · ${kmText(p.chain)}` : ""}</div></div>
       <div class="tot"><b>${money(p.total)}</b></div></div>` : "";
-  const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}</p>`
+  const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}${favNote(c.tip.chain)}</p>`
     : c.preferredMissing ? `<p class="tip">${L.prefMissing(esc(S.shop))}</p>` : "";
-  const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}</p>` : "";
+  const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}${favNote(c.split.chain)}</p>` : "";
   const others = c.shops.filter(s => s !== p).slice(0, 3);
   const rows = c.items.map(({ item, best, byShop }) => {
     const d = (c.split?.moved.includes(item.id) && byShop[c.split.chain]) || (p && byShop[p.chain]) || best;
-    const on = !!boughtOf("w:" + item.id);
-    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q)}<span><b class="wq">${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
+    const on = !!boughtOf("w:" + item.id) || !!item.doneBy;
+    const who = FAM.hid && FAM.members.length > 1 ? memberOf(item.doneBy || item.by) : null;
+    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q, on)}<span><b class="wq">${who ? `<span class="by" title="${esc(item.doneBy ? L.famBought(who.name || "?") : who.name || "")}">${av(who.avatar, 18, who.name || "")}</span>` : ""}${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
       ${d ? `<button type="button" class="p linkish" data-open="${d.id}">${money(d.price)}</button>` : `<span class="p"></span>`}
       <button type="button" data-unwant="${item.id}" aria-label="${L.remove}">${x}</button></li>`;
   }).join("");
   return `${savedHTML(L)}<form class="wantform" id="wantForm"><input id="wantIn" autocomplete="off" enterkeyhint="done" placeholder="${L.wantPh}" aria-label="${L.wantPh}">
       <button type="submit" class="btn">${L.wantAdd}</button></form>
     ${N ? `${pickBox}${tip}${split}${chains.length ? shopSel : ""}
-    ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b></span>`).join("")}</div>` : ""}
-    <section class="shop"><div class="shop-h">${L.wantsT}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul></section>` : ""}`;
+    ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b>${favNote(s.chain)}</span>`).join("")}</div>` : ""}
+    <section class="shop"><div class="shop-h">${L.wantsT}${FAM.hid && FAM.members.length > 1 ? `<span class="sharedwith">${FAM.members.map(m => av(m.avatar, 22, m.name || "")).join("")}${L.famShared(esc(FAM.name))}</span>` : ""}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul>
+      ${FAM.hid && S.wants.some(w => w.doneBy) ? `<button type="button" class="linkish" data-fam-clear>${L.famClear}</button>` : ""}</section>` : ""}`;
 }
 function listText() {
   const L = t(), by = groupList();
@@ -967,12 +1029,12 @@ function renderSuggest() {
     <span class="pn"><b>${esc(d.name)}</b><span class="st">${sicon(d.store)}${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}${kmText(d.store) ? ` · ${kmText(d.store)}` : ""}</span></span>
     <span class="pp">${money(d.price)}</span>`);
   if (!q) {
-    const rec = DS.recent(HIST, now, "", 5), fav = DS.favourites(DEALS, HIST, now, { filter: inRadius, n: 4 });
+    const rec = DS.recent(HIST, now, "", 5), fav = DS.favourites(DEALS, HIST, now, { filter: d => inRadius(d) && dietOk(d), n: 4 });
     if (rec.length) { head(L.sgRecent); rec.forEach(past); }
     if (fav.length) { head(L.sgFav); fav.forEach(deal); }
   } else {
     DS.recent(HIST, now, q, 2).forEach(past);
-    const s = DS.suggest(DEALS, q, HIST, now, { filter: inRadius, n: 6 });
+    const s = DS.suggest(DEALS, q, HIST, now, { filter: d => inRadius(d) && dietOk(d), n: 6 });
     s.deals.forEach(deal);
     if (s.total) opt({ all: q }, `<span class="th ic">${lens}</span><span class="pn"><b>${esc(L.sgAll(q))}</b></span><span class="pp n">${s.total}</span>`, "all");
   }
@@ -1041,6 +1103,7 @@ function bind() {
     if ("portal" in el.dataset) { openPortal(); return; }
     if ("logout" in el.dataset) { signOut(); return; }
     if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
+    if (el.dataset.diet) { setDiet(el.dataset.diet); S.shown = 48; render(); if (!$("#accDlg").hidden) openAccount(ACC.why); if (location.hash === "#recipes") renderRecipes(); return; }
     if (el.dataset.kind) { S.kinds.has(el.dataset.kind) ? S.kinds.delete(el.dataset.kind) : S.kinds.add(el.dataset.kind); S.shown = 48; render(); return; }
     if (el.dataset.chain === "*") { S.chains.clear(); S.shown = 48; render(); return; }
     if (el.dataset.chain) { S.chains.has(el.dataset.chain) ? S.chains.delete(el.dataset.chain) : S.chains.add(el.dataset.chain); S.shown = 48; render(); return; }
@@ -1076,7 +1139,8 @@ function bind() {
     const tb = e.target.closest("[data-buy]");
     if (tb) { const id = tb.dataset.deal; toggleBought(tb.dataset.buy, id ? (DEALS.find(x => x.id === id) || S.list[id]) : null, tb.dataset.label); return; }
     const uw = e.target.closest("[data-unwant]");
-    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); return; }
+    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); famRemove(uw.dataset.unwant); return; }
+    if (e.target.closest("[data-fam-clear]")) { famClear(); return; }
     if (e.target.closest("#clearList")) { S.list = {}; S.wants = []; store.set("list", S.list); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); render(); }
     if (e.target.closest("#shareList")) {
       const text = listText();
@@ -1109,6 +1173,19 @@ const R = {
   plan: new Set(store.get("plan", [])),     // recipe ids planned this week, in day order (the week menu)
   menuN: store.get("menuN", 5),             // how many evenings the week menu fills
 };
+// Household: a child eats about half a portion. Recipes are scaled to it, and so is what to buy.
+S.home = store.get("home", { adults: 2, kids: 0 });
+const portions = () => Math.max(1, (+S.home.adults || 0) + 0.5 * (+S.home.kids || 0));
+const scaleOf = r => portions() / (r.serves || 4);
+const packsOf = r => Math.max(1, Math.ceil(scaleOf(r) - 0.1));   // a recipe for 4 and 2 people: one pack; for 5: two
+function scaleAmt(a, f) {   // "1 kg" x1.5 -> "1,5 kg"; "3" x1.5 -> "5"; "2 × 33 cl" x2 -> "4 × 33 cl"
+  if (!a || Math.abs(f - 1) < 0.01) return a;
+  return String(a).replace(/^(\d+(?:[.,]\d+)?)(\s*)(\S*)/, (m, n, sp, unit) => {
+    const v = parseFloat(n.replace(",", ".")) * f, u = unit.toLowerCase();
+    const r = /^(g|gr|ml)$/.test(u) ? Math.max(10, Math.round(v / 10) * 10) : /^(kg|l|cl|dl)$/.test(u) ? Math.round(v * 10) / 10 : Math.max(1, Math.round(v));
+    return String(r).replace(".", S.lang === "en" ? "." : ",") + sp + unit;
+  });
+}
 const allRecipes = () => [...R.own, ...(window.DK_RECIPES || [])];
 const rTitle = r => r.t[S.lang] || r.t.nl || Object.values(r.t)[0];
 const iName = ing => ing.n[S.lang] || ing.n.nl || Object.values(ing.n)[0];
@@ -1119,10 +1196,10 @@ function wordStart(hay, k) {
 }
 const matchCache = new Map();
 function bestDeal(ing) {
-  const key = ing.k.join("|") + "#" + (ing.c || "") + "#" + S.pc + S.radius;
+  const key = ing.k.join("|") + "#" + (ing.c || "") + "#" + S.pc + S.radius + [...S.diet];
   if (matchCache.has(key)) return matchCache.get(key);
   const ks = ing.k.map(fold);
-  const d = DEALS.filter(x => inRadius(x) && (!ing.c || x.cat === ing.c) && ks.some(k => wordStart(x.hay, k)))
+  const d = DEALS.filter(x => inRadius(x) && dietOk(x) && (!ing.c || x.cat === ing.c) && ks.some(k => wordStart(x.hay, k)))
     .sort((a, b) => SORTS.value(a, b))[0] || null;
   matchCache.set(key, d);
   return d;
@@ -1133,9 +1210,9 @@ function recipeStats(r) {
   r.i.forEach((ing, i) => {
     const d = bestDeal(ing);
     if (d) promo++;
-    if (!hasIt(r, i)) { buy++; if (d) { cost += d.price; deals.push(d); } }
+    if (!hasIt(r, i)) { buy++; if (d) { cost += d.price * packsOf(r); deals.push(d); } }
   });
-  return { promo, buy, cost, deals };
+  return { promo, buy, cost, deals, packs: packsOf(r) };
 }
 function meter(r) {
   return `<div class="meter" aria-hidden="true">${r.i.map((ing, i) =>
@@ -1162,12 +1239,15 @@ function renderRecipes() {
   const byId = new Map(list.map(x => [x.r.id, x]));
   const planned = [...R.plan].map(id => byId.get(id)).filter(Boolean);
   const seg = [3, 5, 7].map(n => `<button type="button" data-menun="${n}" aria-pressed="${n === R.menuN}">${n}</button>`).join("");
+  const num = (k, lo, label) => `<label><span>${label}</span><select data-home="${k}">${Array.from({ length: 9 - lo }, (_, i) => i + lo).map(n => `<option${n === +S.home[k] ? " selected" : ""}>${n}</option>`).join("")}</select></label>`;
+  const home = `<div class="homesize" role="group" aria-label="${L.homeFor}">${num("adults", 1, L.homeAdults)}${num("kids", 0, L.homeKids)}</div>`;
   const est = planned.reduce((a, x) => a + x.st.cost, 0);
   const promo = new Set(planned.flatMap(x => x.st.deals.map(d => d.id))).size;
   $("#plan").innerHTML = `<div class="menu">
-    <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : L.menuSub}</p></div>
+    <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : dietOn() && !menuRank(new Set()).length ? L.menuNoDiet : L.menuSub}</p></div>
       <div class="menu-act"><span class="seg" role="group" aria-label="${L.menuN}">${seg}</span>
         <button type="button" class="btn${planned.length ? " ghost" : ""}" data-automenu>${planned.length ? L.menuRedo : L.menuMake}</button></div></div>
+    ${home}
     ${planned.length ? `<ol class="days">${planned.map((x, i) => `<li><span class="day">${L.menuDays[i % 7]}</span>
         <button type="button" class="dish" data-recipe="${esc(x.r.id)}"><b>${esc(rTitle(x.r))}</b><small>${[x.r.own ? L.mine : "", x.st.cost ? `≈ ${money(x.st.cost)}` : "", menuSave(x.st) ? L.menuSaves(money(menuSave(x.st))) : ""].filter(Boolean).join(" · ")}</small></button>
         <button type="button" class="swap" data-swap="${esc(x.r.id)}" aria-label="${L.menuSwap}" title="${L.menuSwap}"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3-3M20 15H7l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></li>`).join("")}</ol>
@@ -1176,9 +1256,11 @@ function renderRecipes() {
 }
 // Week menu: dinners ranked by what this week's deals save on the ingredients you still need to buy.
 // Your own recipes get a small head start, so the menu uses them when they're about as good.
-const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * 100) / 100;
+const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * (st.packs || 1) * 100) / 100;
+// a recipe fits your diet when no ingredient goes against it (stoofvlees is not vegetarian, bloem not gluten-free)
+const recipeFits = r => !dietOn() || r.i.every(ing => DKDiet.ingredientFits({ name: [ing.n?.nl || iName(ing), ...(ing.k || [])].join(" "), category: ing.c || "" }, [...S.diet]));
 function menuRank(skip) {
-  return allRecipes().filter(r => !skip.has(r.id)).map(r => { const st = recipeStats(r);
+  return allRecipes().filter(r => !skip.has(r.id) && recipeFits(r)).map(r => { const st = recipeStats(r);
     return { r, score: menuSave(st) + 3 * st.promo / r.i.length + (r.own ? 1 : 0) }; })
     .sort((a, b) => b.score - a.score).map(x => x.r.id);
 }
@@ -1211,14 +1293,14 @@ function openRecipe(id, keepFocus) {
   $("#sheet").innerHTML = `
     <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
     <div class="rsheet">
-      <p class="rtop"><span>${r.own ? L.mine : [r.serves && L.persons(r.serves), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span></p>
+      <p class="rtop"><span>${[r.own ? L.mine : "", L.forN(String(portions()).replace(".", S.lang === "en" ? "." : ","), Math.abs(scaleOf(r) - 1) > 0.01 ? r.serves || 4 : 0), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span></p>
       <h2 id="sheetTitle">${esc(rTitle(r))}</h2>
       <p class="rmeta">${L.onPromo(st.promo, r.i.length)}${st.cost ? ` · ${L.toBuy(st.buy)} ≈ <b>${money(st.cost)}</b>` : ""}</p>
       <ul class="ings">${r.i.map((ing, i) => {
         const have = hasIt(r, i), d = bestDeal(ing), inList = d && S.list[d.id];
         return `<li class="${have ? "had" : ""}">
           <label class="have"><input type="checkbox" data-have="${esc(r.id)}|${i}" ${have ? "checked" : ""}><span>${L.haveIt}</span></label>
-          <div class="iname"><b>${esc(iName(ing))}</b>${ing.a ? ` <span class="unit">${esc(ing.a)}</span>` : ""}</div>
+          <div class="iname"><b>${esc(iName(ing))}</b>${ing.a ? ` <span class="unit">${esc(scaleAmt(ing.a, scaleOf(r)))}</span>` : ""}</div>
           <div class="imatch">${have ? "" : d ? `<button type="button" class="dealpick" data-open="${d.id}">${logo(d.store)}<span class="dn">${esc(d.name)}</span><span class="tagmini">${esc(tagText(d))}</span><b>${money(d.price)}</b></button>
               <button type="button" class="add small" data-add="${d.id}" aria-pressed="${!!inList}" aria-label="${inList ? L.added : L.add}">${plus(!!inList)}</button>` : `<span class="unit">${L.noDeal}</span>`}</div>
         </li>`; }).join("")}</ul>
@@ -1339,6 +1421,10 @@ function showView() {
 }
 
 function bindRecipes() {
+  document.addEventListener("change", e => {
+    const k = e.target.dataset?.home; if (!k) return;
+    S.home = { ...S.home, [k]: +e.target.value }; store.set("home", S.home); matchCache.clear(); renderRecipes();
+  });
   window.addEventListener("hashchange", () => { showView(); window.scrollTo(0, 0); });
   document.addEventListener("click", e => {
     const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe],[data-automenu],[data-swap],[data-menun]"); if (!el) return;
@@ -1424,11 +1510,12 @@ async function initAccounts() {
   const { data } = await ACC.sb.auth.getSession();
   await setUser(data.session?.user || null);
   if (url.has("paid")) { await refreshProfile(); openAccount(); }  // back from Stripe checkout
+  if (!ACC.user && pendingJoin()) openAccount("join");               // opened an invite link: sign in first
 }
 async function setUser(user) {
   if ((user?.id || null) === (ACC.user?.id || null) && ACC.profile) return;
   ACC.user = user; ACC.profile = null;
-  if (user) { await refreshProfile(); await pull(); }
+  if (user) { await refreshProfile(); await pull(); await famLoad(); } else famReset();
   paintAccount();
 }
 async function refreshProfile() {
@@ -1454,7 +1541,10 @@ async function pull() {
   // list items and preferred shop live in prefs, so no database change is needed
   const known = new Set(S.wants.map(w => DS.fold(w.q)));
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
-  if (data.prefs?.shop) S.shop = data.prefs.shop;  // the shop saved in the account wins: it is a profile setting
+  if (data.prefs?.shop) S.shop = data.prefs.shop;
+  if (data.prefs?.me && (data.prefs.me.name || data.prefs.me.avatar) && !S.me.name && !S.me.avatar) { S.me = data.prefs.me; store.set("me", S.me); }
+  if (Array.isArray(data.prefs?.diet) && data.prefs.diet.length) { S.diet = new Set(data.prefs.diet); store.set("diet", [...S.diet]); }  // allergies: the account wins
+  if (data.prefs?.home?.adults && !localStorage.getItem("dk.home")) { S.home = data.prefs.home; store.set("home", S.home); }  // the shop saved in the account wins: it is a profile setting
   if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
   // devices that get the daily notification: the account's list is the truth (the morning job removes dead ones)
   ACC.push = (data.prefs?.push || []).filter(p => p?.endpoint);
@@ -1475,10 +1565,135 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList() }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home, diet: [...S.diet], me: S.me }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
+// ---------- sharing a list with family or friends (supabase/migrations/003_households.sql) ----------
+// A "home" has members and one shared list. When you're in one, "What you need" on My list IS that list:
+// everyone adds to it, and a tick means bought for everybody. Ticks arrive on the other phones straight away.
+const FAM = { hid: null, name: "", owner: null, members: [], ch: null, off: false };
+const JOIN_KEY = "dk.joinCode";
+if (url.get("join")) { try { localStorage.setItem(JOIN_KEY, url.get("join").slice(0, 40)); } catch { /* private mode */ } }
+const pendingJoin = () => { try { return localStorage.getItem(JOIN_KEY); } catch { return null; } };
+const isUuid = id => /^[0-9a-f-]{36}$/.test(id);
+const meName = () => S.me.name || (ACC.user?.email || "").split("@")[0];
+const memberOf = id => FAM.members.find(m => m.user_id === id);
+const av = (v, size, label) => window.DKAvatars ? DKAvatars.html(v, size, label) : "";
+function famReset() { if (FAM.ch) { try { ACC.sb.removeChannel(FAM.ch); } catch { /* gone */ } } Object.assign(FAM, { hid: null, name: "", owner: null, members: [], ch: null }); }
+async function famLoad() {
+  if (!ACC.user) return;
+  const code = pendingJoin();
+  if (code) {
+    try { localStorage.removeItem(JOIN_KEY); } catch { /* private mode */ }
+    history.replaceState(null, "", location.pathname + location.hash);
+    const { error } = await ACC.sb.rpc("join_household", { code, my_name: meName(), my_avatar: S.me.avatar || null });
+    if (error) toast(/expired/.test(error.message) ? t().famJoinErr : t().famOff);
+    else { await famLoad(); toast(t().famJoined(FAM.name)); return; }
+  }
+  const { data, error } = await ACC.sb.from("household_members").select("household_id, households(name, owner)").eq("user_id", ACC.user.id).maybeSingle();
+  if (error) { FAM.off = true; return; }       // migration 003 not run yet: sharing stays hidden
+  FAM.off = false;
+  if (!data) { famReset(); return; }
+  FAM.hid = data.household_id; FAM.name = data.households?.name || t().homeName; FAM.owner = data.households?.owner;
+  await famPull(true);
+  if (!FAM.ch && ACC.sb.channel) {
+    FAM.ch = ACC.sb.channel("hh-" + FAM.hid).on("postgres_changes", { event: "*", schema: "public", table: "household_items", filter: `household_id=eq.${FAM.hid}` }, () => famPull())
+      .on("postgres_changes", { event: "*", schema: "public", table: "household_members", filter: `household_id=eq.${FAM.hid}` }, () => famPull()).subscribe();
+  }
+}
+// members and the shared list; the first time on a device, what's already on your own list joins the shared one
+async function famPull(first) {
+  if (!FAM.hid) return;
+  const [m, it] = await Promise.all([
+    ACC.sb.from("household_members").select("user_id, name, avatar").eq("household_id", FAM.hid).order("joined_at"),
+    ACC.sb.from("household_items").select("id, q, added_by, done_by, done_at, created_at").eq("household_id", FAM.hid).order("created_at")]);
+  FAM.members = m.data || [];
+  let items = it.data || [];
+  const seeded = "dk.famSeeded." + FAM.hid;
+  if (first && !localStorage.getItem(seeded)) {
+    const have = new Set(items.map(x => DS.fold(x.q)));
+    const add = S.wants.filter(w => !have.has(DS.fold(w.q))).map(w => ({ household_id: FAM.hid, q: w.q, added_by: ACC.user.id }));
+    if (add.length) { const r = await ACC.sb.from("household_items").insert(add).select("id, q, added_by, done_by, done_at, created_at"); items = [...items, ...(r.data || [])]; }
+    try { localStorage.setItem(seeded, "1"); } catch { /* private mode */ }
+  }
+  S.wants = items.map(x => ({ id: x.id, q: x.q, by: x.added_by, doneBy: x.done_by || null }));
+  store.set("wants", S.wants);   // a copy in prefs too, so the daily notification knows it
+  $("#listCount").textContent = listN();
+  if (!$("#listBg").hidden) renderList();
+  if (!$("#accDlg").hidden) openAccount(ACC.why);
+  promoNote();
+}
+async function famAdd(qs) {
+  if (!FAM.hid || !qs.length) return;
+  await ACC.sb.from("household_items").insert(qs.map(q => ({ household_id: FAM.hid, q, added_by: ACC.user.id })));
+  famPull();
+}
+async function famRemove(id) { if (FAM.hid && isUuid(id)) { await ACC.sb.from("household_items").delete().eq("id", id); famPull(); } }
+async function famTick(id, on) {
+  if (!FAM.hid || !isUuid(id)) return;
+  await ACC.sb.from("household_items").update({ done_by: on ? ACC.user.id : null, done_at: on ? new Date().toISOString() : null }).eq("id", id);
+  famPull();
+}
+async function famClear() { if (FAM.hid) { await ACC.sb.from("household_items").delete().eq("household_id", FAM.hid).not("done_by", "is", null); famPull(); } }
+async function famInvite() {
+  const L = t();
+  if (!FAM.hid) {
+    const { error } = await ACC.sb.rpc("create_household", { hh_name: L.homeName, my_name: meName(), my_avatar: S.me.avatar || null });
+    if (error) { toast(L.famOff); return; }
+    await famLoad();
+  }
+  const { data: code, error } = await ACC.sb.rpc("invite_code");
+  if (error || !code) { toast(L.accErr); return; }
+  const link = location.origin + location.pathname + "?join=" + encodeURIComponent(code);
+  FAM.link = link; openAccount(ACC.why);
+  try { if (navigator.share) { await navigator.share({ title: "deal'ke", text: L.famShareText, url: link }); return; } } catch { /* closed the share sheet */ }
+  try { await navigator.clipboard.writeText(link); toast(L.famCopied); } catch { /* the link is shown in the account */ }
+}
+async function famLeave(uid) {
+  if (!FAM.hid) return;
+  await ACC.sb.from("household_members").delete().eq("household_id", FAM.hid).eq("user_id", uid);
+  if (uid === ACC.user.id) {
+    S.wants = S.wants.filter(w => !w.doneBy).map(w => ({ id: w.id, q: w.q })); store.set("wants", S.wants);  // keep a copy of what's still needed
+    famReset(); toast(t().famLeft); openAccount(ACC.why); $("#listCount").textContent = listN();
+  } else famPull();
+}
+function saveMe() {
+  store.set("me", S.me);
+  if (FAM.hid) ACC.sb.from("household_members").update({ name: meName(), avatar: S.me.avatar || null }).eq("household_id", FAM.hid).eq("user_id", ACC.user.id).then(() => famPull());
+}
+// the home on the account page: a house with everyone in it
+function houseHTML(L) {
+  const people = FAM.hid ? FAM.members : [{ user_id: ACC.user.id, name: meName(), avatar: S.me.avatar }];
+  const roof = `<svg class="house-bg" viewBox="0 0 320 210" preserveAspectRatio="none" aria-hidden="true"><path d="M160 8 12 92h22v110h252V92h22z" fill="var(--mustard-soft)" stroke="var(--mustard)" stroke-width="4" stroke-linejoin="round"/><rect x="226" y="30" width="22" height="38" fill="var(--mustard)" rx="3"/></svg>`;
+  const who = people.map(m => `<span class="person">${av(m.avatar, 46, m.name || "")}<small>${esc(m.user_id === ACC.user.id ? `${m.name || meName()} (${L.famYou})` : m.name || "?")}</small></span>`).join("");
+  const rows = FAM.hid && FAM.members.length > 1 ? `<ul class="members">${FAM.members.map(m => `<li>${av(m.avatar, 28, m.name || "")}<span>${esc(m.name || "?")}${m.user_id === ACC.user.id ? ` (${L.famYou})` : ""}</span>
+      ${m.user_id === ACC.user.id ? "" : FAM.owner === ACC.user.id ? `<button type="button" class="linkish" data-fam-remove="${esc(m.user_id)}">${L.famRemove}</button>` : ""}</li>`).join("")}</ul>` : "";
+  return `<section class="famcard"><h4>${esc(FAM.hid ? FAM.name : L.famT)}</h4>
+    <div class="house">${roof}<div class="people">${who}</div></div>
+    <p class="muted">${FAM.hid && FAM.members.length > 1 ? L.famSome(FAM.members.length) : L.famNone}</p>
+    <button type="button" class="btn block" data-fam-invite>${L.famInvite}</button>
+    ${FAM.link ? `<p class="muted small">${L.famLink}</p><input class="famlink" readonly value="${esc(FAM.link)}" aria-label="${L.famLink}">` : ""}
+    ${rows}${FAM.hid ? `<button type="button" class="linkish leave" data-fam-remove="${esc(ACC.user.id)}">${L.famLeave}</button>` : ""}</section>`;
+}
+function meHTML(L) {
+  const pick = window.DKAvatars ? `<div class="avpick" id="avPick" hidden>${DKAvatars.KEYS.map(k => `<button type="button" data-av="a:${k}" aria-pressed="${S.me.avatar === "a:" + k}" aria-label="${k}">${DKAvatars.svg(k)}</button>`).join("")}
+      <label class="btn ghost avup">${L.avUpload}<input type="file" id="avFile" accept="image/*" hidden></label></div>` : "";
+  return `<section class="mecard"><button type="button" class="mepic" data-av-open aria-expanded="false" aria-controls="avPick" aria-label="${L.avChange}">${av(S.me.avatar, 64, meName())}<span class="pen" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span></button>
+    <label class="field mename"><span>${L.meName}</span><input id="meName" maxlength="30" autocomplete="nickname" value="${esc(S.me.name)}" placeholder="${esc(L.meNamePh)}"></label></section>${pick}`;
+}
+function bindMe(box) {
+  const L = t();
+  box.querySelector("[data-av-open]")?.addEventListener("click", e => { const p = $("#avPick"); p.hidden = !p.hidden; e.currentTarget.setAttribute("aria-expanded", String(!p.hidden)); });
+  box.querySelectorAll("[data-av]").forEach(b => b.addEventListener("click", () => { S.me = { ...S.me, avatar: b.dataset.av }; saveMe(); openAccount(ACC.why); }));
+  box.querySelector("#avFile")?.addEventListener("change", async e => {
+    try { S.me = { ...S.me, avatar: await DKAvatars.fromFile(e.target.files[0]) }; saveMe(); openAccount(ACC.why); } catch { toast(L.avErr); }
+  });
+  box.querySelector("#meName")?.addEventListener("change", e => { S.me = { ...S.me, name: e.target.value.trim().slice(0, 30) }; saveMe(); });
+  box.querySelector("[data-fam-invite]")?.addEventListener("click", famInvite);
+  box.querySelectorAll("[data-fam-remove]").forEach(b => b.addEventListener("click", () => famLeave(b.dataset.famRemove)));
+}
+
 // ---------- daily notification (web push) ----------
 // The morning job (alerts/daily.py) sends it through the browser's own push service; sw.js shows it.
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -1566,7 +1781,7 @@ function planLine() {
 function openAccount(why) {
   const L = t(); ACC.why = why;
   const box = $("#accBox");
-  const upsell = why && why !== "trial" ? `<p class="upsell">${L.accNeed[why] || ""}</p>` : "";
+  const upsell = why === "join" ? `<p class="upsell">${L.famJoinSign}</p>` : why && why !== "trial" ? `<p class="upsell">${L.accNeed[why] || ""}</p>` : "";
   if (!ACC.user) {
     box.innerHTML = `<h3 id="accTitle">${L.accSignIn}</h3>${upsell}<p class="muted">${L.accWhy}</p>
       <form id="accForm" class="acc-form"><label class="field"><span>${L.accEmail}</span><input id="accEmail" type="email" required autocomplete="email" inputmode="email"></label>
@@ -1588,8 +1803,12 @@ function openAccount(why) {
     });
   } else {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
+      ${meHTML(L)}${FAM.off ? "" : houseHTML(L)}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
+      ${window.DKDiet ? `<div class="accdiet"><b>${L.dietAcc}</b><small class="muted">${L.dietAccWhy}</small>
+        <div class="chips">${DKDiet.KEYS.map(k => `<button type="button" class="chip sm diet" data-diet="${k}" aria-pressed="${S.diet.has(k)}">${esc(L.diets[k])}</button>`).join("")}</div>
+        <small class="muted">${L.dietNote}</small></div>` : ""}
       <label class="accshop"><span><b>${L.myShop}</b><small class="muted">${L.myShopWhy}</small></span>
         <select id="accShop"><option value="">${L.myShopAny}</option>${shopChoices().map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>
       ${CFG.vapidPublicKey ? `<label class="alerts"><input type="checkbox" id="accNotify"${S.pushOn ? " checked" : ""}><span><b>${L.accNotify}</b><small class="muted">${L.accNotifyWhy}</small></span></label>
@@ -1602,6 +1821,7 @@ function openAccount(why) {
       <p class="muted small">${L.accSynced}</p>`;
   }
   paintCc(guessCc(), "accPc");
+  if (ACC.user) bindMe(box);
   box.querySelector("#accAlerts")?.addEventListener("change", e => { S.alerts = e.target.checked; store.set("alerts", S.alerts); });
   box.querySelector("#accNotify")?.addEventListener("change", async e => {
     const box = e.target, msg = $("#pushMsg"), say = m => { if (msg) { msg.textContent = m; msg.hidden = !m; } };
