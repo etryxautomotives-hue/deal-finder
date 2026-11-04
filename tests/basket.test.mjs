@@ -82,3 +82,13 @@ test("money saved counts ticked items per week and month, and compares with last
   const s = B.savings(bought, now);
   assert.deepEqual([s.month, s.week, s.lastMonth, s.items, s.topShop], [3.5, 1.5, 4, 2, "Aldi"]);
 });
+
+test("a second shop is only suggested when it saves 30 euro or more", () => {
+  const few = [mk("a", "Koffie", "Lidl", 12), mk("b", "Koffie", "Aldi", 9), mk("c", "Wasmiddel", "Lidl", 20)];
+  assert.equal(B.compare(items(["koffie", "wasmiddel"]), few, "Lidl").split, null);   // only 3 euro
+  const big = [...few, mk("d", "Wasmiddel", "Aldi", 2), mk("e", "Luiers", "Lidl", 30), mk("f", "Luiers", "Aldi", 15)];
+  const s = B.compare(items(["koffie", "wasmiddel", "luiers"]), big, "Lidl").split;
+  assert.equal(s.chain, "Aldi");
+  assert.equal(s.save, 36);   // 3 + 18 + 15
+  assert.equal(s.moved.length, 3);
+});

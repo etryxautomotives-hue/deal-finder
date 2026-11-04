@@ -117,6 +117,7 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
+  splitTip: (c, v, n) => `Haal ${n} ${n === 1 ? "product" : "producten"} bij ${c} en bespaar ${v} extra`,
   savedMonth: v => `${v} bespaard deze maand`, savedWeek: v => `${v} deze week`, savedTop: c => `meest bij ${c}`,
   savedVs: v => `al ${v} meer dan heel vorige maand`, bought: "Gekocht", notBought: "Nog niet gekocht",
   tickHint: "Vink af wat je koopt: we tellen alleen wat je echt bespaart.", youSaved: v => `Jij bespaarde ${v} deze maand`,
@@ -166,6 +167,7 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
+  splitTip: (c, v, n) => `Prenez ${n} produit${n === 1 ? "" : "s"} chez ${c} et économisez ${v} de plus`,
   savedMonth: v => `${v} économisés ce mois-ci`, savedWeek: v => `${v} cette semaine`, savedTop: c => `surtout chez ${c}`,
   savedVs: v => `déjà ${v} de plus que tout le mois passé`, bought: "Acheté", notBought: "Pas encore acheté",
   tickHint: "Cochez ce que vous achetez : on ne compte que ce que vous économisez vraiment.", youSaved: v => `Vous avez économisé ${v} ce mois-ci`,
@@ -206,6 +208,7 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
+  splitTip: (c, v, n) => `Get ${n} item${n === 1 ? "" : "s"} at ${c} and save ${v} more`,
   savedMonth: v => `${v} saved this month`, savedWeek: v => `${v} this week`, savedTop: c => `most at ${c}`,
   savedVs: v => `already ${v} more than all of last month`, bought: "Bought", notBought: "Not bought yet",
   tickHint: "Tick what you buy: we only count what you really save.", youSaved: v => `You saved ${v} this month`,
@@ -730,9 +733,10 @@ function wantsHTML(L) {
       <div class="tot"><b>${money(p.total)}</b></div></div>` : "";
   const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}</p>`
     : c.preferredMissing ? `<p class="tip">${L.prefMissing(esc(S.shop))}</p>` : "";
+  const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}</p>` : "";
   const others = c.shops.filter(s => s !== p).slice(0, 3);
   const rows = c.items.map(({ item, best, byShop }) => {
-    const d = (p && byShop[p.chain]) || best;
+    const d = (c.split?.moved.includes(item.id) && byShop[c.split.chain]) || (p && byShop[p.chain]) || best;
     const on = !!boughtOf("w:" + item.id);
     return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q)}<span><b class="wq">${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
       ${d ? `<button type="button" class="p linkish" data-open="${d.id}">${money(d.price)}</button>` : `<span class="p"></span>`}
@@ -740,7 +744,7 @@ function wantsHTML(L) {
   }).join("");
   return `${savedHTML(L)}<form class="wantform" id="wantForm"><input id="wantIn" autocomplete="off" enterkeyhint="done" placeholder="${L.wantPh}" aria-label="${L.wantPh}">
       <button type="submit" class="btn">${L.wantAdd}</button></form>
-    ${N ? `${pickBox}${tip}${chains.length ? shopSel : ""}
+    ${N ? `${pickBox}${tip}${split}${chains.length ? shopSel : ""}
     ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b></span>`).join("")}</div>` : ""}
     <section class="shop"><div class="shop-h">${L.wantsT}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul></section>` : ""}`;
 }

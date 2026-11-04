@@ -36,6 +36,25 @@
     return out;
   }
 
+  // Going to a second shop costs time, so we only suggest it when it saves a lot (Miro: €30 or more).
+  const SPLIT_MIN = 30;
+  // Best second shop to add to `pick`: each item goes to whichever of the two is cheaper.
+  function splitFor(rows, pick, ranked) {
+    if (!pick) return null;
+    let best = null;
+    for (const s of ranked) {
+      if (s === pick) continue;
+      let save = 0; const moved = [];
+      for (const r of rows) {
+        const a = r.byShop[pick.chain], b = r.byShop[s.chain];
+        if (a && b && b.price < a.price) { save += a.price - b.price; moved.push(r.item.id); }
+      }
+      save = Math.round(save * 100) / 100;
+      if (save >= SPLIT_MIN && (!best || save > best.save)) best = { chain: s.chain, save, moved };
+    }
+    return best;
+  }
+
   /* items: [{ id, q }]; deals: this week's deals near you; preferred: chain name or "".
      Returns { items: [{ item, best, byShop: {chain: deal} }], shops: [{ chain, deals: {itemId: deal}, n, total }],
                pick: the shop to show first, tip: { chain, cheaper, more } or null } */
@@ -67,7 +86,7 @@
       }
     }
     if (preferred && !mine) tip = null;
-    return { items: rows, shops: ranked, pick, tip, preferredMissing: !!preferred && !mine };
+    return { items: rows, shops: ranked, pick, tip, split: splitFor(rows, pick, ranked), preferredMissing: !!preferred && !mine };
   }
 
   // ---------- money saved ----------
@@ -102,6 +121,6 @@
   // keep a year, at most 500 ticks, so the account row stays small
   const pruneBought = (bought, now) => (bought || []).filter(b => b.day >= dayOf(now - 366 * 864e5)).slice(-500);
 
-  const api = { compare, matchesFor, fit, saveOf, savings, pruneBought, dayOf };
+  const api = { SPLIT_MIN, compare, matchesFor, fit, saveOf, savings, pruneBought, dayOf };
   if (typeof module === "object" && module.exports) module.exports = api; else root.DKBasket = api;
 })(typeof window !== "undefined" ? window : globalThis);
