@@ -381,6 +381,26 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .page .sechead{padding-top:var(--s7)}
 .page .sechead h2{font-size:var(--t-3xl)}
 .rtools{display:flex;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s5)}
+/* week menu */
+.menu{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--s4) var(--s5);margin-bottom:var(--s5);display:grid;gap:var(--s3)}
+.menu-h{display:flex;gap:var(--s3) var(--s4);align-items:center;justify-content:space-between;flex-wrap:wrap}
+.menu-h h3{font-family:var(--serif);font-size:var(--t-lg);margin:0}
+.menu-h p{margin:2px 0 0;font-size:var(--t-sm);color:var(--muted);max-width:60ch}
+.menu-act{display:flex;gap:var(--s2);align-items:center}
+.menu .seg{display:inline-flex;background:var(--soft);border-radius:var(--pill);padding:3px}
+.menu .seg button{min-width:40px;min-height:38px;border:0;border-radius:var(--pill);background:transparent;font-weight:700;font-size:var(--t-sm)}
+.menu .seg button[aria-pressed="true"]{background:var(--lime)}
+.days{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.days li{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:var(--s2);border-top:1px solid var(--line);padding-top:var(--s2)}
+.days li:first-child{border-top:0;padding-top:0}
+.days .day{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.days .dish{border:0;background:none;text-align:left;padding:var(--s1) 0;min-height:var(--tap);color:inherit;cursor:pointer;min-width:0}
+.days .dish b{display:block;font-size:var(--t-sm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.days .dish small{display:block;font-size:12.5px;color:var(--muted)}
+.days .dish:hover b{text-decoration:underline;text-decoration-color:var(--lime-d)}
+.days .swap{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--muted);display:grid;place-items:center}
+.days .swap:hover{background:var(--soft);color:var(--ink)}
+.menu>.btn{justify-self:start}
 .plan-in{display:flex;gap:var(--s4);align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--lime);border-radius:var(--r);padding:var(--s4) var(--s5);margin-bottom:var(--s4)}
 .plan-in h3{font-family:var(--serif);font-size:var(--t-lg);margin:0}
 .plan-in p{margin:2px 0 var(--s2);font-size:var(--t-sm);font-weight:500}

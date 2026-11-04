@@ -117,6 +117,10 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
+  menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
+  menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
+  menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
+  wantsAdded: n => n ? `${n} op je lijst gezet` : "Staat al op je lijst",
   splitTip: (c, v, n) => `Haal ${n} ${n === 1 ? "product" : "producten"} bij ${c} en bespaar ${v} extra`,
   savedMonth: v => `${v} bespaard deze maand`, savedWeek: v => `${v} deze week`, savedTop: c => `meest bij ${c}`,
   savedVs: v => `al ${v} meer dan heel vorige maand`, bought: "Gekocht", notBought: "Nog niet gekocht",
@@ -167,6 +171,10 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
+  menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
+  menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
+  menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
+  wantsAdded: n => n ? `${n} ajoutés à votre liste` : "Déjà dans votre liste",
   splitTip: (c, v, n) => `Prenez ${n} produit${n === 1 ? "" : "s"} chez ${c} et économisez ${v} de plus`,
   savedMonth: v => `${v} économisés ce mois-ci`, savedWeek: v => `${v} cette semaine`, savedTop: c => `surtout chez ${c}`,
   savedVs: v => `déjà ${v} de plus que tout le mois passé`, bought: "Acheté", notBought: "Pas encore acheté",
@@ -208,6 +216,10 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
+  menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
+  menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
+  menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
+  wantsAdded: n => n ? `${n} added to your list` : "Already on your list",
   splitTip: (c, v, n) => `Get ${n} item${n === 1 ? "" : "s"} at ${c} and save ${v} more`,
   savedMonth: v => `${v} saved this month`, savedWeek: v => `${v} this week`, savedTop: c => `most at ${c}`,
   savedVs: v => `already ${v} more than all of last month`, bought: "Bought", notBought: "Not bought yet",
@@ -712,12 +724,13 @@ function savedHTML(L) {
 const listN = () => Object.keys(S.list).length + S.wants.length;
 const nearDeals = () => DEALS.filter(d => inRadius(d));
 function addWants(text) {
-  const have = new Set(S.wants.map(w => DS.fold(w.q)));
-  for (const q of String(text).split(/[,;\n]+/).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30)) {
+  const have = new Set(S.wants.map(w => DS.fold(w.q))); let n = 0;
+  for (const q of (Array.isArray(text) ? text : String(text).split(/[,;\n]+/)).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30)) {
     if (have.has(DS.fold(q))) continue;
-    have.add(DS.fold(q)); S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
+    have.add(DS.fold(q)); n++; S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
   }
   store.set("wants", S.wants); $("#listCount").textContent = listN();
+  return n;
 }
 // "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
 function wantsHTML(L) {
@@ -1065,7 +1078,8 @@ function trap(e, root) {
 const R = {
   own: store.get("recipes", []),            // recipes the user added
   have: store.get("have", {}),              // recipe id -> {ingredient index: true/false}
-  plan: new Set(store.get("plan", [])),     // recipe ids planned this week
+  plan: new Set(store.get("plan", [])),     // recipe ids planned this week, in day order (the week menu)
+  menuN: store.get("menuN", 5),             // how many evenings the week menu fills
 };
 const allRecipes = () => [...R.own, ...(window.DK_RECIPES || [])];
 const rTitle = r => r.t[S.lang] || r.t.nl || Object.values(r.t)[0];
@@ -1117,15 +1131,48 @@ function renderRecipes() {
       ${meter(r)}
     </article>`;
   }).join("");
-  const planned = list.filter(x => R.plan.has(x.r.id));
-  if (!planned.length) { $("#plan").innerHTML = ""; return; }
-  const deals = new Map();
-  for (const { st } of planned) for (const d of st.deals) deals.set(d.id, d);
-  const est = [...deals.values()].reduce((a, d) => a + d.price, 0);
-  $("#plan").innerHTML = `<div class="plan-in">
-    <div><h3>${L.planTitle}</h3><p>${L.planSum(planned.length, deals.size, money(est))}</p>
-      <div class="plan-chips">${planned.map(({ r }) => `<button type="button" class="chip" data-recipe="${esc(r.id)}">${esc(rTitle(r))}</button>`).join("")}</div></div>
-    <button type="button" class="btn" data-planadd ${deals.size ? "" : "disabled"}>${L.planAdd}</button></div>`;
+  const byId = new Map(list.map(x => [x.r.id, x]));
+  const planned = [...R.plan].map(id => byId.get(id)).filter(Boolean);
+  const seg = [3, 5, 7].map(n => `<button type="button" data-menun="${n}" aria-pressed="${n === R.menuN}">${n}</button>`).join("");
+  const est = planned.reduce((a, x) => a + x.st.cost, 0);
+  const promo = new Set(planned.flatMap(x => x.st.deals.map(d => d.id))).size;
+  $("#plan").innerHTML = `<div class="menu">
+    <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : L.menuSub}</p></div>
+      <div class="menu-act"><span class="seg" role="group" aria-label="${L.menuN}">${seg}</span>
+        <button type="button" class="btn${planned.length ? " ghost" : ""}" data-automenu>${planned.length ? L.menuRedo : L.menuMake}</button></div></div>
+    ${planned.length ? `<ol class="days">${planned.map((x, i) => `<li><span class="day">${L.menuDays[i % 7]}</span>
+        <button type="button" class="dish" data-recipe="${esc(x.r.id)}"><b>${esc(rTitle(x.r))}</b><small>${[x.r.own ? L.mine : "", x.st.cost ? `≈ ${money(x.st.cost)}` : "", menuSave(x.st) ? L.menuSaves(money(menuSave(x.st))) : ""].filter(Boolean).join(" · ")}</small></button>
+        <button type="button" class="swap" data-swap="${esc(x.r.id)}" aria-label="${L.menuSwap}" title="${L.menuSwap}"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3-3M20 15H7l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></li>`).join("")}</ol>
+      <button type="button" class="btn" data-planadd>${L.menuToList}</button>` : ""}
+  </div>`;
+}
+// Week menu: dinners ranked by what this week's deals save on the ingredients you still need to buy.
+// Your own recipes get a small head start, so the menu uses them when they're about as good.
+const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * 100) / 100;
+function menuRank(skip) {
+  return allRecipes().filter(r => !skip.has(r.id)).map(r => { const st = recipeStats(r);
+    return { r, score: menuSave(st) + 3 * st.promo / r.i.length + (r.own ? 1 : 0) }; })
+    .sort((a, b) => b.score - a.score).map(x => x.r.id);
+}
+const swappedOut = new Set();  // recipes you swapped away, so "other recipe" keeps offering new ones
+function autoMenu() { matchCache.clear(); swappedOut.clear(); R.plan = new Set(menuRank(new Set()).slice(0, R.menuN)); store.set("plan", [...R.plan]); }
+function resizeMenu(n) {  // keep the dinners you have, drop from the end or add the next best
+  const keep = [...R.plan].slice(0, n);
+  R.plan = new Set([...keep, ...menuRank(new Set([...keep, ...swappedOut])).slice(0, Math.max(0, n - keep.length))]); store.set("plan", [...R.plan]);
+}
+function swapMenu(id) {
+  swappedOut.add(id);
+  let next = menuRank(new Set([...R.plan, ...swappedOut]))[0];
+  if (!next) { swappedOut.clear(); swappedOut.add(id); next = menuRank(new Set([...R.plan, id]))[0]; }  // seen them all: start over
+  if (!next) return;
+  R.plan = new Set([...R.plan].map(x => x === id ? next : x)); store.set("plan", [...R.plan]);
+}
+// an ingredient as a shopping-list word: "Aardappelen of frieten" -> "Aardappelen"
+const wantWord = ing => iName(ing).split(/\s+(?:of|ou|or)\s+/i)[0].replace(/\(.*?\)/g, "").trim();
+function missingWants(rs) {
+  const out = [];
+  for (const r of rs) r.i.forEach((ing, i) => { if (!hasIt(r, i)) out.push(wantWord(ing)); });
+  return out;
 }
 
 function openRecipe(id, keepFocus) {
@@ -1265,7 +1312,10 @@ function showView() {
 function bindRecipes() {
   window.addEventListener("hashchange", () => { showView(); window.scrollTo(0, 0); });
   document.addEventListener("click", e => {
-    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe]"); if (!el) return;
+    const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe],[data-automenu],[data-swap],[data-menun]"); if (!el) return;
+    if ("automenu" in el.dataset) { if (!allowed("plan")) return; autoMenu(); renderRecipes(); return; }
+    if (el.dataset.swap) { swapMenu(el.dataset.swap); renderRecipes(); return; }
+    if (el.dataset.menun) { R.menuN = +el.dataset.menun; store.set("menuN", R.menuN); if (R.plan.size) resizeMenu(R.menuN); renderRecipes(); return; }
     if (el.dataset.plan) {
       e.stopPropagation();
       if (!R.plan.has(el.dataset.plan) && !allowed("plan")) return;
@@ -1275,7 +1325,7 @@ function bindRecipes() {
     } else if (el.dataset.addmissing) {
       const r = allRecipes().find(x => x.id === el.dataset.addmissing); addDeals(recipeStats(r).deals); openRecipe(r.id); renderRecipes();
     } else if ("planadd" in el.dataset) {
-      addDeals(allRecipes().filter(r => R.plan.has(r.id)).flatMap(r => recipeStats(r).deals)); renderRecipes();
+      toast(t().wantsAdded(addWants(missingWants(allRecipes().filter(r => R.plan.has(r.id)))))); renderRecipes();
     } else if (el.dataset.editrecipe) {
       const r = R.own.find(x => x.id === el.dataset.editrecipe); closeDialogs(); if (r) openMaker(r);
     } else if (el.dataset.delrecipe) {
