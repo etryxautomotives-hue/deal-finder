@@ -61,7 +61,7 @@ The design rules it follows, and the research behind them, are in `site/DESIGN-R
 
 Off until `site/config.js` has the Supabase keys. Step-by-step setup (Supabase login, Stripe €4,99/month with 14-day trial, webhook): [docs/SETUP-PAYMENTS.md](docs/SETUP-PAYMENTS.md).
 
-Daily email (one summary a day of list items newly on promo nearby, sent by `alerts/daily.py` on GitHub Actions): off until the secrets in [docs/SETUP-ALERTS.md](docs/SETUP-ALERTS.md) exist.
+Daily notification (one summary a day of list items newly on promo nearby, on the phone or computer through web push, sent by `alerts/daily.py` on GitHub Actions; email optional): off until the secrets in [docs/SETUP-ALERTS.md](docs/SETUP-ALERTS.md) exist. Without any setup the site itself shows "N things from your list on promo" when you open it.
 
 ## Search engines
 

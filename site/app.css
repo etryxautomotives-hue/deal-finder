@@ -610,3 +610,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .alerts input{width:22px;height:22px;margin-top:2px;accent-color:var(--lime-d);flex:none}
 .alerts b{display:block;font-size:var(--t-sm)}
 .alerts small{display:block;font-size:12.5px}
+.pushmsg{margin:calc(-1 * var(--s2)) 0 var(--s4) 34px;padding:var(--s2) var(--s3);border-radius:var(--r-sm);background:var(--soft);font-size:13px;line-height:1.45}
+/* "on promo now" note: what's new from your list since you last looked */
+.promonote{display:flex;align-items:center;gap:var(--s3);margin:var(--s3) 0 0;padding:var(--s3) var(--s3) var(--s3) var(--s4);border-radius:var(--r);background:var(--lime-soft);border:1px solid var(--lime-d);color:var(--ink)}
+.promonote[hidden]{display:none}
+.promonote .bell{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--lime);flex:none}
+.promonote .txt{flex:1;min-width:0}
+.promonote b{display:block;font-size:var(--t-sm)}
+.promonote small{display:block;font-size:12.5px;color:var(--lime-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){ .promonote .bell{display:none} .promonote{gap:var(--s2)} }
+.promonote .btn{flex:none;min-height:38px;padding:0 var(--s4)}
+.promonote .x{position:static;flex:none;width:var(--tap);height:var(--tap);margin:calc(-1 * var(--s2)) calc(-1 * var(--s2)) calc(-1 * var(--s2)) 0;display:grid;place-items:center;background:none;border:0;border-radius:var(--r-sm);color:var(--ink);cursor:pointer}

@@ -1,3 +1,5 @@
+import json
+
 from alerts.daily import email, fits, key, matches_for, near_deals, where
 
 
@@ -45,3 +47,40 @@ def test_email_puts_new_first_and_is_in_the_users_language():
     assert subject == "2 van je producten in promo vandaag"
     assert text.index("koffie") < text.index("melk") and "tot 10/11" in text and "€ 4,50" in text
     assert "https://x.be/#account" in body
+
+
+def test_main_sends_notifications_and_forgets_dead_devices(tmp_path, monkeypatch):
+    import httpx
+    from alerts import daily, webpush
+    from tests.test_webpush import browser, decrypt
+
+    ua, p256dh, auth = browser()
+    live = {"endpoint": "https://push.example/live", "keys": {"p256dh": p256dh, "auth": auth}}
+    dead = {"endpoint": "https://push.example/dead", "keys": {"p256dh": p256dh, "auth": auth}}
+    user = {"user_id": "u1", "list": {}, "prefs": {"wants": [{"q": "melk"}], "push": [live, dead], "lang": "nl"}}
+    seen = {"push": [], "patch": None}
+
+    def handler(req: httpx.Request):
+        if req.url.path == "/rest/v1/user_data" and req.method == "GET":
+            return httpx.Response(200, json=[user, {"user_id": "u2", "prefs": {"wants": [{"q": "melk"}]}}])
+        if req.method == "PATCH":
+            seen["patch"] = json.loads(req.content)
+            return httpx.Response(204)
+        if req.url.host == "push.example":
+            seen["push"].append(json.loads(decrypt(req.content, ua, auth)))
+            assert req.headers["authorization"].startswith("vapid t=")
+            return httpx.Response(410 if req.url.path == "/dead" else 201)
+        raise AssertionError(req.url)
+
+    real = httpx.Client
+    monkeypatch.setattr(daily.httpx, "Client", lambda **kw: real(transport=httpx.MockTransport(handler)))
+    prev = tmp_path / "prev.json"; prev.write_text("[]")
+    priv, _ = webpush.new_keys()
+    for k, v in {"SUPABASE_URL": "https://sb.example", "SUPABASE_SERVICE_KEY": "x", "VAPID_PRIVATE_KEY": priv}.items():
+        monkeypatch.setenv(k, v)
+    monkeypatch.delenv("RESEND_API_KEY", raising=False)
+    monkeypatch.setattr(daily, "near_deals", lambda deals, *a: [d("Halfvolle melk", "Lidl", 0.99)] if deals else [])
+    assert daily.main(["--prev", str(prev)]) == 0
+    assert len(seen["push"]) == 2 and seen["push"][0]["title"] == "1 van je lijst in promo"
+    assert seen["patch"]["prefs"]["push"] == [live]          # the dead device is forgotten, the rest kept
+    assert seen["patch"]["prefs"]["wants"] == [{"q": "melk"}]
