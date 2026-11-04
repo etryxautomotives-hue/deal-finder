@@ -95,7 +95,8 @@ def matches_for(user: dict, deals: list[dict]) -> list[dict]:
     """One line per thing the user wants: the cheapest fitting deal (their own shop first if it has one)."""
     prefs = user.get("prefs") or {}
     shop = prefs.get("shop") or ""
-    wanted = [w.get("q", "") for w in prefs.get("wants") or [] if w.get("q")]
+    wanted = [w.get("q", "") for w in prefs.get("wants") or [] if isinstance(w, dict) and w.get("q")]
+    wanted += [q for q in prefs.get("famQ") or [] if isinstance(q, str) and q]   # open items on the family list
     wanted += [d.get("name", "") for d in (user.get("list") or {}).values() if isinstance(d, dict) and d.get("name")]
     seen, out = set(), []
     for q in wanted:
