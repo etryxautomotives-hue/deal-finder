@@ -126,6 +126,7 @@ Object.assign(T.nl, {
   menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
   menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
   menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
+  homeAdults: "Volwassenen", homeKids: "Kinderen", homeFor: "Voor", forN: (n, r) => `voor ${n} pers.${r ? ` (recept: ${r})` : ""}`,
   wantsAdded: n => n ? `${n} op je lijst gezet` : "Staat al op je lijst",
   splitTip: (c, v, n) => `Haal ${n} ${n === 1 ? "product" : "producten"} bij ${c} en bespaar ${v} extra`,
   savedMonth: v => `${v} bespaard deze maand`, savedWeek: v => `${v} deze week`, savedTop: c => `meest bij ${c}`,
@@ -135,7 +136,7 @@ Object.assign(T.nl, {
   wantNone: "deze week geen promo in de buurt", wantAt: (c, p) => `${c} · ${p}`,
   cheapT: "Goedkoopste winkel voor je lijst", myShopT: "Jouw winkel", myShop: "Mijn winkel", myShopAny: "Geen voorkeur", myShopWhy: "Komt eerst op je lijst en in je dagelijkse melding. We zeggen het altijd als een andere winkel goedkoper is.", myShopSaved: s => s ? `${s} is nu je winkel` : "Geen voorkeurswinkel meer",
   covers: (a, b) => `${a} van ${b} in promo`, tipCheaper: (c, v, n) => `${c} is ${v} goedkoper voor dezelfde ${n}`,
-  tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`,
+  tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`, fromFav: (k, c) => `${k} van je ${c}`,
   otherShops: "Andere winkels", dealsT: "Bewaarde promo's",
   listSub2: "Typ wat je nodig hebt. Elke dag zoeken we de beste promo in de buurt.",
   checked: (n, here, time) => `<b>${n}</b> promo's${here ? ` bij ${here}` : ""} · gecontroleerd ${time}`, today: t => `vandaag om ${t}`,
@@ -186,6 +187,7 @@ Object.assign(T.fr, {
   menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
   menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
   menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
+  homeAdults: "Adultes", homeKids: "Enfants", homeFor: "Pour", forN: (n, r) => `pour ${n} pers.${r ? ` (recette : ${r})` : ""}`,
   wantsAdded: n => n ? `${n} ajoutés à votre liste` : "Déjà dans votre liste",
   splitTip: (c, v, n) => `Prenez ${n} produit${n === 1 ? "" : "s"} chez ${c} et économisez ${v} de plus`,
   savedMonth: v => `${v} économisés ce mois-ci`, savedWeek: v => `${v} cette semaine`, savedTop: c => `surtout chez ${c}`,
@@ -195,7 +197,7 @@ Object.assign(T.fr, {
   wantNone: "pas de promo près de chez vous cette semaine", wantAt: (c, p) => `${c} · ${p}`,
   cheapT: "Magasin le moins cher pour votre liste", myShopT: "Votre magasin", myShop: "Mon magasin", myShopAny: "Pas de préférence", myShopWhy: "Il passe en premier dans votre liste et votre notification quotidienne. On vous dit toujours quand un autre magasin est moins cher.", myShopSaved: s => s ? `${s} est maintenant votre magasin` : "Plus de magasin préféré",
   covers: (a, b) => `${a} sur ${b} en promo`, tipCheaper: (c, v, n) => `${c} est ${v} moins cher pour les mêmes ${n}`,
-  tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`,
+  tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`, fromFav: (k, c) => `à ${k} de votre ${c}`,
   otherShops: "Autres magasins", dealsT: "Promos gardées",
   listSub2: "Tapez ce qu’il vous faut. Chaque jour, on cherche la meilleure promo près de chez vous.",
   checked: (n, here, time) => `<b>${n}</b> promos${here ? ` près de ${here}` : ""} · vérifiées ${time}`, today: t => `aujourd’hui à ${t}`,
@@ -237,6 +239,7 @@ Object.assign(T.en, {
   menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
   menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
   menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
+  homeAdults: "Adults", homeKids: "Children", homeFor: "For", forN: (n, r) => `for ${n}${r ? ` (recipe: ${r})` : ""}`,
   wantsAdded: n => n ? `${n} added to your list` : "Already on your list",
   splitTip: (c, v, n) => `Get ${n} item${n === 1 ? "" : "s"} at ${c} and save ${v} more`,
   savedMonth: v => `${v} saved this month`, savedWeek: v => `${v} this week`, savedTop: c => `most at ${c}`,
@@ -246,7 +249,7 @@ Object.assign(T.en, {
   wantNone: "no deal nearby this week", wantAt: (c, p) => `${c} · ${p}`,
   cheapT: "Cheapest shop for your list", myShopT: "Your shop", myShop: "My shop", myShopAny: "No preference", myShopWhy: "Comes first on your list and in your daily notification. We always say when another shop is cheaper.", myShopSaved: s => s ? `${s} is now your shop` : "No favourite shop any more",
   covers: (a, b) => `${a} of ${b} on promo`, tipCheaper: (c, v, n) => `${c} is ${v} cheaper for the same ${n}`,
-  tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`,
+  tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`, fromFav: (k, c) => `${k} from your ${c}`,
   otherShops: "Other shops", dealsT: "Saved deals",
   listSub2: "Type what you need. Every day we find the best deal nearby.",
   checked: (n, here, time) => `<b>${n}</b> deals${here ? ` near ${here}` : ""} · checked ${time}`, today: t => `today at ${t}`,
@@ -304,7 +307,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -452,6 +455,15 @@ function logo(chain, big) {
 }
 const km = d => d == null ? "" : `${d < 10 ? d.toFixed(1).replace(".", S.lang === "en" ? "." : ",") : Math.round(d)} km`;
 const kmText = chain => km(dist(chain));
+// how far another shop is from your favourite one (its branch nearest to you), so you know what the detour costs
+function kmFromFav(chain) {
+  if (!S.shop || chain === S.shop) return null;
+  const fav = nearest["BE|" + S.shop]?.b || nearest["NL|" + S.shop]?.b; if (!fav) return null;
+  let best = null;
+  for (const b of BRANCHES) if (b.chain === chain) { const d = haversine(fav.lat, fav.lon, b.lat, b.lon); if (best == null || d < best) best = d; }
+  return best;
+}
+const favNote = chain => { const d = kmFromFav(chain); return d == null ? "" : ` (${t().fromFav(km(d), esc(S.shop))})`; };
 const kmDeal = d => km(distDeal(d));
 const ccTag = d => d.cc === "NL" ? `<span class="cc-tag" title="${esc(t().cc.NL)}"><i class="flag nl"></i>NL</span>` : "";
 const pct = d => { if (d.discount) return Math.round(d.discount * 100); const e = effDiscount(d); if (e) return Math.round(e * 100);
@@ -726,7 +738,12 @@ const boughtOf = k => S.bought.find(b => b.k === k && (k.startsWith("d:") || b.d
 function toggleBought(k, d, label) {
   const hit = boughtOf(k);
   if (hit) S.bought = S.bought.filter(b => b !== hit);
-  else S.bought.push({ k, day: today(), name: (d?.name || label || "").slice(0, 80), store: d?.store || "", paid: d?.price || 0, save: DKBasket.saveOf(d) });
+  else {
+    S.bought.push({ k, day: today(), name: (d?.name || label || "").slice(0, 80), store: d?.store || "", paid: d?.price || 0, save: DKBasket.saveOf(d) });
+    // what you buy again and again rises to the top of the search suggestions (never added to the list by itself)
+    if (d) noteProduct(d, 3);
+    if (label && DS.bump(HIST, "q", DS.qwords(label).join(" "), 2, Date.now())) saveHist();
+  }
   S.bought = DKBasket.pruneBought(S.bought, Date.now()); store.set("bought", S.bought);
   if (!hit && DKBasket.saveOf(d) > 0) toast(t().savedMonth(money(DKBasket.savings(S.bought, Date.now()).month)));
   renderList(); renderHero();
@@ -771,9 +788,9 @@ function wantsHTML(L) {
   const pickBox = p ? `<div class="starthere">${sicon(p.chain)}<div><small>${p.chain === S.shop ? L.myShopT : L.cheapT}</small><b>${esc(p.chain)}</b>
       <div class="sub">${L.covers(p.n, N)}${kmText(p.chain) ? ` · ${kmText(p.chain)}` : ""}</div></div>
       <div class="tot"><b>${money(p.total)}</b></div></div>` : "";
-  const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}</p>`
+  const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}${favNote(c.tip.chain)}</p>`
     : c.preferredMissing ? `<p class="tip">${L.prefMissing(esc(S.shop))}</p>` : "";
-  const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}</p>` : "";
+  const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}${favNote(c.split.chain)}</p>` : "";
   const others = c.shops.filter(s => s !== p).slice(0, 3);
   const rows = c.items.map(({ item, best, byShop }) => {
     const d = (c.split?.moved.includes(item.id) && byShop[c.split.chain]) || (p && byShop[p.chain]) || best;
@@ -785,7 +802,7 @@ function wantsHTML(L) {
   return `${savedHTML(L)}<form class="wantform" id="wantForm"><input id="wantIn" autocomplete="off" enterkeyhint="done" placeholder="${L.wantPh}" aria-label="${L.wantPh}">
       <button type="submit" class="btn">${L.wantAdd}</button></form>
     ${N ? `${pickBox}${tip}${split}${chains.length ? shopSel : ""}
-    ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b></span>`).join("")}</div>` : ""}
+    ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b>${favNote(s.chain)}</span>`).join("")}</div>` : ""}
     <section class="shop"><div class="shop-h">${L.wantsT}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul></section>` : ""}`;
 }
 function listText() {
@@ -1109,6 +1126,19 @@ const R = {
   plan: new Set(store.get("plan", [])),     // recipe ids planned this week, in day order (the week menu)
   menuN: store.get("menuN", 5),             // how many evenings the week menu fills
 };
+// Household: a child eats about half a portion. Recipes are scaled to it, and so is what to buy.
+S.home = store.get("home", { adults: 2, kids: 0 });
+const portions = () => Math.max(1, (+S.home.adults || 0) + 0.5 * (+S.home.kids || 0));
+const scaleOf = r => portions() / (r.serves || 4);
+const packsOf = r => Math.max(1, Math.ceil(scaleOf(r) - 0.1));   // a recipe for 4 and 2 people: one pack; for 5: two
+function scaleAmt(a, f) {   // "1 kg" x1.5 -> "1,5 kg"; "3" x1.5 -> "5"; "2 × 33 cl" x2 -> "4 × 33 cl"
+  if (!a || Math.abs(f - 1) < 0.01) return a;
+  return String(a).replace(/^(\d+(?:[.,]\d+)?)(\s*)(\S*)/, (m, n, sp, unit) => {
+    const v = parseFloat(n.replace(",", ".")) * f, u = unit.toLowerCase();
+    const r = /^(g|gr|ml)$/.test(u) ? Math.max(10, Math.round(v / 10) * 10) : /^(kg|l|cl|dl)$/.test(u) ? Math.round(v * 10) / 10 : Math.max(1, Math.round(v));
+    return String(r).replace(".", S.lang === "en" ? "." : ",") + sp + unit;
+  });
+}
 const allRecipes = () => [...R.own, ...(window.DK_RECIPES || [])];
 const rTitle = r => r.t[S.lang] || r.t.nl || Object.values(r.t)[0];
 const iName = ing => ing.n[S.lang] || ing.n.nl || Object.values(ing.n)[0];
@@ -1133,9 +1163,9 @@ function recipeStats(r) {
   r.i.forEach((ing, i) => {
     const d = bestDeal(ing);
     if (d) promo++;
-    if (!hasIt(r, i)) { buy++; if (d) { cost += d.price; deals.push(d); } }
+    if (!hasIt(r, i)) { buy++; if (d) { cost += d.price * packsOf(r); deals.push(d); } }
   });
-  return { promo, buy, cost, deals };
+  return { promo, buy, cost, deals, packs: packsOf(r) };
 }
 function meter(r) {
   return `<div class="meter" aria-hidden="true">${r.i.map((ing, i) =>
@@ -1162,12 +1192,15 @@ function renderRecipes() {
   const byId = new Map(list.map(x => [x.r.id, x]));
   const planned = [...R.plan].map(id => byId.get(id)).filter(Boolean);
   const seg = [3, 5, 7].map(n => `<button type="button" data-menun="${n}" aria-pressed="${n === R.menuN}">${n}</button>`).join("");
+  const num = (k, lo, label) => `<label><span>${label}</span><select data-home="${k}">${Array.from({ length: 9 - lo }, (_, i) => i + lo).map(n => `<option${n === +S.home[k] ? " selected" : ""}>${n}</option>`).join("")}</select></label>`;
+  const home = `<div class="homesize" role="group" aria-label="${L.homeFor}">${num("adults", 1, L.homeAdults)}${num("kids", 0, L.homeKids)}</div>`;
   const est = planned.reduce((a, x) => a + x.st.cost, 0);
   const promo = new Set(planned.flatMap(x => x.st.deals.map(d => d.id))).size;
   $("#plan").innerHTML = `<div class="menu">
     <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : L.menuSub}</p></div>
       <div class="menu-act"><span class="seg" role="group" aria-label="${L.menuN}">${seg}</span>
         <button type="button" class="btn${planned.length ? " ghost" : ""}" data-automenu>${planned.length ? L.menuRedo : L.menuMake}</button></div></div>
+    ${home}
     ${planned.length ? `<ol class="days">${planned.map((x, i) => `<li><span class="day">${L.menuDays[i % 7]}</span>
         <button type="button" class="dish" data-recipe="${esc(x.r.id)}"><b>${esc(rTitle(x.r))}</b><small>${[x.r.own ? L.mine : "", x.st.cost ? `≈ ${money(x.st.cost)}` : "", menuSave(x.st) ? L.menuSaves(money(menuSave(x.st))) : ""].filter(Boolean).join(" · ")}</small></button>
         <button type="button" class="swap" data-swap="${esc(x.r.id)}" aria-label="${L.menuSwap}" title="${L.menuSwap}"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3-3M20 15H7l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></li>`).join("")}</ol>
@@ -1176,7 +1209,7 @@ function renderRecipes() {
 }
 // Week menu: dinners ranked by what this week's deals save on the ingredients you still need to buy.
 // Your own recipes get a small head start, so the menu uses them when they're about as good.
-const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * 100) / 100;
+const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * (st.packs || 1) * 100) / 100;
 function menuRank(skip) {
   return allRecipes().filter(r => !skip.has(r.id)).map(r => { const st = recipeStats(r);
     return { r, score: menuSave(st) + 3 * st.promo / r.i.length + (r.own ? 1 : 0) }; })
@@ -1211,14 +1244,14 @@ function openRecipe(id, keepFocus) {
   $("#sheet").innerHTML = `
     <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
     <div class="rsheet">
-      <p class="rtop"><span>${r.own ? L.mine : [r.serves && L.persons(r.serves), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span></p>
+      <p class="rtop"><span>${[r.own ? L.mine : "", L.forN(String(portions()).replace(".", S.lang === "en" ? "." : ","), Math.abs(scaleOf(r) - 1) > 0.01 ? r.serves || 4 : 0), r.min && L.minutes(r.min)].filter(Boolean).join(" · ")}</span></p>
       <h2 id="sheetTitle">${esc(rTitle(r))}</h2>
       <p class="rmeta">${L.onPromo(st.promo, r.i.length)}${st.cost ? ` · ${L.toBuy(st.buy)} ≈ <b>${money(st.cost)}</b>` : ""}</p>
       <ul class="ings">${r.i.map((ing, i) => {
         const have = hasIt(r, i), d = bestDeal(ing), inList = d && S.list[d.id];
         return `<li class="${have ? "had" : ""}">
           <label class="have"><input type="checkbox" data-have="${esc(r.id)}|${i}" ${have ? "checked" : ""}><span>${L.haveIt}</span></label>
-          <div class="iname"><b>${esc(iName(ing))}</b>${ing.a ? ` <span class="unit">${esc(ing.a)}</span>` : ""}</div>
+          <div class="iname"><b>${esc(iName(ing))}</b>${ing.a ? ` <span class="unit">${esc(scaleAmt(ing.a, scaleOf(r)))}</span>` : ""}</div>
           <div class="imatch">${have ? "" : d ? `<button type="button" class="dealpick" data-open="${d.id}">${logo(d.store)}<span class="dn">${esc(d.name)}</span><span class="tagmini">${esc(tagText(d))}</span><b>${money(d.price)}</b></button>
               <button type="button" class="add small" data-add="${d.id}" aria-pressed="${!!inList}" aria-label="${inList ? L.added : L.add}">${plus(!!inList)}</button>` : `<span class="unit">${L.noDeal}</span>`}</div>
         </li>`; }).join("")}</ul>
@@ -1339,6 +1372,10 @@ function showView() {
 }
 
 function bindRecipes() {
+  document.addEventListener("change", e => {
+    const k = e.target.dataset?.home; if (!k) return;
+    S.home = { ...S.home, [k]: +e.target.value }; store.set("home", S.home); matchCache.clear(); renderRecipes();
+  });
   window.addEventListener("hashchange", () => { showView(); window.scrollTo(0, 0); });
   document.addEventListener("click", e => {
     const el = e.target.closest("[data-recipe],[data-plan],[data-addmissing],[data-planadd],[data-delrecipe],[data-editrecipe],[data-automenu],[data-swap],[data-menun]"); if (!el) return;
@@ -1454,7 +1491,8 @@ async function pull() {
   // list items and preferred shop live in prefs, so no database change is needed
   const known = new Set(S.wants.map(w => DS.fold(w.q)));
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
-  if (data.prefs?.shop) S.shop = data.prefs.shop;  // the shop saved in the account wins: it is a profile setting
+  if (data.prefs?.shop) S.shop = data.prefs.shop;
+  if (data.prefs?.home?.adults && !localStorage.getItem("dk.home")) { S.home = data.prefs.home; store.set("home", S.home); }  // the shop saved in the account wins: it is a profile setting
   if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
   // devices that get the daily notification: the account's list is the truth (the morning job removes dead ones)
   ACC.push = (data.prefs?.push || []).filter(p => p?.endpoint);
@@ -1475,7 +1513,7 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList() }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
