@@ -70,6 +70,8 @@ jobs:
           mkdir -p _site
           cp -r site/. _site/
           cp data/*.json _site/data/ 2>/dev/null || true
+          # a new version number on our scripts and styles each deploy, so phones don't keep an old copy
+          sed -i -E "s#(src|href)=\"([a-z-]+\.(js|css))\"#\1=\"\2?v=${GITHUB_SHA::8}\"#g" _site/index.html
       - name: Add search-engine pages (landing pages, sitemap, robots.txt)
         # The site's public address. To move to your own domain, set a repository variable
         # SITE_URL (Settings > Secrets and variables > Actions > Variables), e.g. https://dealke.be
