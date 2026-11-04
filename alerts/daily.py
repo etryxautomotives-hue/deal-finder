@@ -193,7 +193,9 @@ def main(argv=None) -> int:
     stores = json.loads((data / "stores.json").read_text()) if (data / "stores.json").exists() else []
     pcs = json.loads((ROOT / "site/data/postcodes.json").read_text())
     pcs_nl = json.loads((data / "postcodes-nl.json").read_text()) if (data / "postcodes-nl.json").exists() else {}
-    h = {"apikey": sk, "Authorization": f"Bearer {sk}"}
+    # New Supabase secret keys (sb_secret_...) go in the apikey header only; the older service_role key is a JWT
+    # and also goes in Authorization.
+    h = {"apikey": sk, **({"Authorization": f"Bearer {sk}"} if sk.startswith("eyJ") else {})}
     with httpx.Client(timeout=30) as http:
         rows = http.get(f"{url}/rest/v1/user_data", headers=h, params={"select": "user_id,list,prefs"}).json()
         users = [u for u in rows if (u.get("prefs") or {}).get("alerts") or (u.get("prefs") or {}).get("push")]
