@@ -1,5 +1,7 @@
 # Turning on accounts and payments
 
+> Premium (Single and Family) replaced the single "Plus" plan: follow [SETUP-PREMIUM.md](SETUP-PREMIUM.md) for Stripe. Section 1 (Supabase login) below still applies.
+
 The site works without any of this: every feature is free and nothing is saved online.
 Once the steps below are done, people can sign in with an email link, their list and recipes
 are saved to their account, and **Plus** (unlimited own recipes, weekly plan) costs €4,99 a

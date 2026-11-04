@@ -27,6 +27,12 @@ def test_saved_deals_count_as_liked_products():
     assert len(matches_for(user, [d("Halfvolle melk", "Aldi", 1)])) == 1
 
 
+def test_family_list_items_count_too():
+    user = {"prefs": {"wants": [{"q": "koffie"}], "famQ": ["melk", 3, None]}}
+    got = matches_for(user, [d("Halfvolle melk", "Aldi", 1), d("Oploskoffie", "Lidl", 3)])
+    assert len(got) == 2
+
+
 def test_near_deals_uses_radius_per_chain_and_country():
     stores = [{"chain": "Lidl", "lat": 51.05, "lon": 3.72, "cc": "BE"}, {"chain": "Aldi", "lat": 50.85, "lon": 4.35, "cc": "BE"}]
     deals = [d("a", "Lidl", 1), d("b", "Aldi", 1), d("c", "Colruyt", 1), d("e", "Aldi", 1, cc="NL")]

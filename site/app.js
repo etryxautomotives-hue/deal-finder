@@ -316,6 +316,151 @@ Object.assign(T.en, { rPick: "Ingredients", rPickPh: "Search a product, e.g. min
   stepsTitle: "How to make it", rHint: "Pick from every store's products. Each week we find the best deal for each ingredient.", rSaved: "Recipe saved" });
 const LOCALE = { nl: "nl-BE", fr: "fr-BE", en: "en-GB" };
 const KIND_ORDER = ["1+1", "2+1", "multi", "2nd_half", "2nd_pct", "percent", "bundle", "price_drop", "other"];
+// ---------- Premium: Single and Family (strings) ----------
+Object.assign(T.nl, {
+  prTitle: "Kies je plan", single: "Single", family: "Family", bestValue: "Beste waarde", perMonth: "per maand",
+  singleSub: "Voor jou alleen. Eén account, niet te delen.", familySub: "Tot 5 accounts met één gedeelde lijst. Alleen de eigenaar betaalt.",
+  singleList: ["Alles uit Gratis", "Eigen recepten, onbeperkt", "Je week plannen: alle recepten in één keer op je lijst", "Je lijst en recepten op al je toestellen", "Maandelijks opzegbaar"],
+  familyList: ["Alles uit Single, voor iedereen", "Jij en tot 4 anderen", "Eén gedeelde boodschappenlijst, live op elke gsm", "Samen deals bewaren en zien wat je samen bespaart", "Je eigen lijst blijft van jou", "Maandelijks opzegbaar"],
+  famSave: (v, pp) => `${v} per maand goedkoper dan 5 × Single: ${pp} per persoon.`,
+  buySingle: "Neem Single", buyFamily: "Neem Family", yourPlan: "Dit is je plan", switchToFam: "Overstappen naar Family", switchToSingle: "Overstappen naar Single",
+  prFine: "Per maand betaald, geen jaarabonnement. Opzeggen kan altijd: je houdt Premium tot het einde van de betaalde maand.",
+  seePremium: "Bekijk Premium", accManage: "Betaalgegevens, facturen of opzeggen", manageWhy: "Dat regel je veilig op de pagina van Stripe, onze betaalpartner.",
+  planRenews: d => `Verlengt op ${d}.`, planEnds: d => `Stopt op ${d}; tot dan werkt alles.`, planActive: "Actief.", planStopped: "Gestopt.",
+  planVia: o => `betaald door ${o}`, planPaused: "Gepauzeerd: het abonnement van je gezin loopt niet.",
+  payFailed: d => `Je betaling is mislukt. Werk je betaalgegevens bij vóór ${d}, anders stopt Premium.`,
+  payFailedFam: d => `Je betaling is mislukt. Werk je betaalgegevens bij vóór ${d}, anders stopt Premium voor het hele gezin.`,
+  payStopped: "Je betaling is mislukt en Premium is gestopt. Werk je betaalgegevens bij om verder te gaan.",
+  switchFamQ: "Je Single wordt Family, op hetzelfde abonnement. Je betaalt nu alleen het verschil voor de rest van deze maand, daarna € 12,99 per maand. Je lijst en recepten blijven. Doorgaan?",
+  switchSingleQ: "Je Family wordt Single. Je gezin wordt gepauzeerd (er wordt niets gewist) en wat je te veel betaald hebt, gaat af van je volgende factuur. Doorgaan?",
+  paidWait: "Even geduld: we wachten op de bevestiging van je betaling…", paidOk: "Premium staat aan.", paidSlow: "Je betaling wordt nog verwerkt. Kijk zo dadelijk opnieuw.",
+  buyErrs: { member: "Je zit in een gezin. Verlaat het eerst als je zelf wil betalen.", single: "Je hebt al Single.", family: "Je hebt al Family.", others: "Er zitten nog mensen in je gezin. Verwijder ze eerst, dan kan je naar Single." },
+  accNeed: { plan: "Je week plannen zit in Premium.", recipes: "Meer dan één eigen recept zit in Premium.", buy: "Log in om Premium te nemen." },
+  famT: "Je gezin", famDefault: "Ons gezin", famPromo: "Met Family deel je één boodschappenlijst met tot 4 anderen. Iedereen vinkt af wat gekocht is.", seeFamily: "Bekijk Family",
+  famOwner: "eigenaar", famFreeSpot: "vrij", famPlaces: (n, m) => `${n} van ${m} plaatsen`, famFree: n => n === 1 ? "1 vrij" : `${n} vrij`,
+  famLocked: "Je gezin is gepauzeerd: het abonnement loopt niet. Er is niets gewist; alles komt terug zodra er weer betaald wordt.",
+  famLockedOwner: "Je gezin is gepauzeerd omdat het abonnement niet loopt. Er is niets gewist: neem Family opnieuw en alles is terug.",
+  famSavedMonth: v => `Samen bespaard deze maand: ${v}`,
+  famNameLbl: "Naam van je gezin", famEmailPh: "E-mailadres van wie je uitnodigt", famInviteBtn: "Uitnodigen",
+  famInviteWhy: "De link werkt 48 uur, één keer, en alleen voor dat e-mailadres.",
+  famInviteMade: e => `Uitnodiging klaar voor ${e}. Stuur de link door:`, famLinkLbl: "Uitnodigingslink",
+  famMail: "Mail de link", famShareBtn: "Deel", famCopy: "Kopieer", famCopied: "Link gekopieerd",
+  famMailSubj: "Kom bij ons gezin op deal'ke", famMailBody: (o, l) => `${o} nodigt je uit om samen één boodschappenlijst te delen op deal'ke.\n\nOpen deze link binnen 48 uur en log in met dit e-mailadres:\n${l}`,
+  famPending: d => `uitgenodigd, tot ${d}`, famCancel: "Annuleer", famRemove: "Verwijder",
+  famRemoveQ: n => `${n} uit je gezin verwijderen? De gedeelde lijst is dan meteen weg voor hen. Hun eigen lijst blijft van hen.`,
+  famLeave: "Gezin verlaten", famLeaveQ: "Het gezin verlaten? Je ziet de gedeelde lijst dan niet meer. Je eigen lijst blijft.",
+  famLeaveOwnerQ: "Je gezin sluiten? Er wordt niets gewist, maar niemand ziet de gedeelde lijst nog.", famLeft: "Je hebt het gezin verlaten",
+  famGone: "Je bent niet meer in het gezin.", famJoined: h => `Welkom in ${h}! Jullie delen nu één lijst.`,
+  famJoinSign: "Je bent uitgenodigd voor een gezin op deal'ke. Log in met het e-mailadres waarop je de uitnodiging kreeg.",
+  famErrs: { full: "Je gezin is vol: 5 personen, uitnodigingen meegeteld.", owner: "Alleen de eigenaar van het gezin kan dat.", notpaid: "Het abonnement van dit gezin loopt niet.",
+    self: "Dat is je eigen e-mailadres.", member: "Die persoon zit al in je gezin.", email: "Dat e-mailadres klopt niet.",
+    others: "Verwijder eerst de anderen uit je gezin.", cancel: "Zeg eerst je abonnement op.", other_email: h => `Deze uitnodiging is voor een ander e-mailadres${h ? ` (${h})` : ""}. Log in met dat adres.`,
+    expired: "Deze uitnodiging is verlopen. Vraag een nieuwe.", revoked: "Deze uitnodiging is geannuleerd.", accepted: "Deze uitnodiging is al gebruikt.",
+    unknown: "Deze uitnodigingslink klopt niet.", single: "Je betaalt nog voor Single. Zeg dat eerst op (het loopt tot het einde van de maand), dan kan je meedoen.",
+    leave: "Je zit al in een ander gezin. Verlaat dat eerst." },
+  invT: "Uitnodiging", invText: (o, f) => `${o || "Iemand"} nodigt je uit voor ${f}. Jullie delen dan één boodschappenlijst; je eigen lijst blijft van jou.`,
+  invAccept: "Doe mee", invNo: "Nee, bedankt",
+  famListT: n => `Gezinslijst · ${n}`, famTickHint: "Vink af wat je koopt: de anderen zien het meteen.", myListT: "Alleen voor mij",
+  myListHint: "Dit ziet alleen jij. Tik op Naar gezin om iets te delen.", toFam: "Naar gezin", movedFam: "Op de gezinslijst gezet",
+  wantForLbl: "Waar zet je het op?", forFam: "Op de gezinslijst", forMe: "Alleen voor mij", qtyLess: "Minder", qtyMore: "Meer",
+  famDealsT: "Gedeelde deals", famDealGone: "niet meer in promo", shareDeal: "Deel met je gezin", unshare: "Niet meer delen", dealShared: "Gedeeld met je gezin",
+});
+Object.assign(T.fr, {
+  prTitle: "Choisissez votre formule", single: "Single", family: "Family", bestValue: "Meilleur prix", perMonth: "par mois",
+  singleSub: "Pour vous seul. Un compte, non partageable.", familySub: "Jusqu’à 5 comptes et une liste partagée. Seul le titulaire paie.",
+  singleList: ["Tout ce qui est gratuit", "Recettes perso illimitées", "Planifier la semaine : toutes les recettes d’un coup sur ma liste", "Liste et recettes sur tous vos appareils", "Résiliable chaque mois"],
+  familyList: ["Tout Single, pour tout le monde", "Vous et jusqu’à 4 autres", "Une liste de courses partagée, à jour sur chaque téléphone", "Garder des promos ensemble et voir ce que vous économisez ensemble", "Votre propre liste reste à vous", "Résiliable chaque mois"],
+  famSave: (v, pp) => `${v} par mois de moins que 5 × Single : ${pp} par personne.`,
+  buySingle: "Prendre Single", buyFamily: "Prendre Family", yourPlan: "Votre formule", switchToFam: "Passer à Family", switchToSingle: "Passer à Single",
+  prFine: "Payé au mois, pas d’abonnement annuel. Résiliable à tout moment : Premium reste actif jusqu’à la fin du mois payé.",
+  seePremium: "Voir Premium", accManage: "Paiement, factures ou résiliation", manageWhy: "Cela se fait en toute sécurité sur la page de Stripe, notre partenaire de paiement.",
+  planRenews: d => `Renouvelé le ${d}.`, planEnds: d => `Se termine le ${d} ; jusque-là tout fonctionne.`, planActive: "Actif.", planStopped: "Arrêté.",
+  planVia: o => `payé par ${o}`, planPaused: "En pause : l’abonnement de votre famille ne court plus.",
+  payFailed: d => `Votre paiement a échoué. Mettez à jour votre moyen de paiement avant le ${d}, sinon Premium s’arrête.`,
+  payFailedFam: d => `Votre paiement a échoué. Mettez à jour votre moyen de paiement avant le ${d}, sinon Premium s’arrête pour toute la famille.`,
+  payStopped: "Votre paiement a échoué et Premium s’est arrêté. Mettez à jour votre moyen de paiement pour continuer.",
+  switchFamQ: "Votre Single devient Family, sur le même abonnement. Vous payez maintenant seulement la différence pour le reste du mois, puis 12,99 € par mois. Votre liste et vos recettes restent. Continuer ?",
+  switchSingleQ: "Votre Family devient Single. Votre famille est mise en pause (rien n’est effacé) et le trop-payé est déduit de votre prochaine facture. Continuer ?",
+  paidWait: "Un instant : nous attendons la confirmation de votre paiement…", paidOk: "Premium est activé.", paidSlow: "Votre paiement est encore en cours. Revenez dans un instant.",
+  buyErrs: { member: "Vous faites partie d’une famille. Quittez-la d’abord si vous voulez payer vous-même.", single: "Vous avez déjà Single.", family: "Vous avez déjà Family.", others: "Il reste des personnes dans votre famille. Retirez-les d’abord pour passer à Single." },
+  accNeed: { plan: "Planifier la semaine fait partie de Premium.", recipes: "Plus d’une recette perso fait partie de Premium.", buy: "Connectez-vous pour prendre Premium." },
+  famT: "Votre famille", famDefault: "Notre famille", famPromo: "Avec Family, vous partagez une liste de courses avec jusqu’à 4 autres. Chacun coche ce qui est acheté.", seeFamily: "Voir Family",
+  famOwner: "titulaire", famFreeSpot: "libre", famPlaces: (n, m) => `${n} places sur ${m}`, famFree: n => n === 1 ? "1 libre" : `${n} libres`,
+  famLocked: "Votre famille est en pause : l’abonnement ne court pas. Rien n’est effacé ; tout revient dès que c’est payé.",
+  famLockedOwner: "Votre famille est en pause car l’abonnement ne court pas. Rien n’est effacé : reprenez Family et tout revient.",
+  famSavedMonth: v => `Économisé ensemble ce mois-ci : ${v}`,
+  famNameLbl: "Nom de votre famille", famEmailPh: "E-mail de la personne invitée", famInviteBtn: "Inviter",
+  famInviteWhy: "Le lien marche 48 heures, une seule fois, et seulement pour cet e-mail.",
+  famInviteMade: e => `Invitation prête pour ${e}. Envoyez le lien :`, famLinkLbl: "Lien d’invitation",
+  famMail: "Envoyer par e-mail", famShareBtn: "Partager", famCopy: "Copier", famCopied: "Lien copié",
+  famMailSubj: "Rejoins notre famille sur deal'ke", famMailBody: (o, l) => `${o} t’invite à partager une liste de courses sur deal'ke.\n\nOuvre ce lien dans les 48 heures et connecte-toi avec cet e-mail :\n${l}`,
+  famPending: d => `invité, jusqu’au ${d}`, famCancel: "Annuler", famRemove: "Retirer",
+  famRemoveQ: n => `Retirer ${n} de votre famille ? La liste partagée disparaît aussitôt pour cette personne. Sa propre liste reste à elle.`,
+  famLeave: "Quitter la famille", famLeaveQ: "Quitter la famille ? Vous ne verrez plus la liste partagée. Votre propre liste reste.",
+  famLeaveOwnerQ: "Fermer votre famille ? Rien n’est effacé, mais plus personne ne voit la liste partagée.", famLeft: "Vous avez quitté la famille",
+  famGone: "Vous ne faites plus partie de la famille.", famJoined: h => `Bienvenue dans ${h} ! Vous partagez maintenant une liste.`,
+  famJoinSign: "Vous êtes invité dans une famille sur deal'ke. Connectez-vous avec l’e-mail qui a reçu l’invitation.",
+  famErrs: { full: "Votre famille est complète : 5 personnes, invitations comprises.", owner: "Seul le titulaire de la famille peut faire cela.", notpaid: "L’abonnement de cette famille ne court pas.",
+    self: "C’est votre propre e-mail.", member: "Cette personne fait déjà partie de votre famille.", email: "Cet e-mail n’est pas valable.",
+    others: "Retirez d’abord les autres de votre famille.", cancel: "Résiliez d’abord votre abonnement.", other_email: h => `Cette invitation est pour un autre e-mail${h ? ` (${h})` : ""}. Connectez-vous avec cette adresse.`,
+    expired: "Cette invitation a expiré. Demandez-en une nouvelle.", revoked: "Cette invitation a été annulée.", accepted: "Cette invitation a déjà été utilisée.",
+    unknown: "Ce lien d’invitation n’est pas valable.", single: "Vous payez encore Single. Résiliez-le d’abord (il court jusqu’à la fin du mois), puis rejoignez.",
+    leave: "Vous êtes déjà dans une autre famille. Quittez-la d’abord." },
+  invT: "Invitation", invText: (o, f) => `${o || "Quelqu’un"} vous invite dans ${f}. Vous partagerez une liste de courses ; votre propre liste reste à vous.`,
+  invAccept: "Rejoindre", invNo: "Non merci",
+  famListT: n => `Liste de famille · ${n}`, famTickHint: "Cochez ce que vous achetez : les autres le voient aussitôt.", myListT: "Rien que pour moi",
+  myListHint: "Vous seul le voyez. Touchez Vers la famille pour partager.", toFam: "Vers la famille", movedFam: "Mis sur la liste de famille",
+  wantForLbl: "Où l’ajouter ?", forFam: "Liste de famille", forMe: "Rien que pour moi", qtyLess: "Moins", qtyMore: "Plus",
+  famDealsT: "Promos partagées", famDealGone: "plus en promo", shareDeal: "Partager avec la famille", unshare: "Ne plus partager", dealShared: "Partagé avec votre famille",
+});
+Object.assign(T.en, {
+  prTitle: "Choose your plan", single: "Single", family: "Family", bestValue: "Best value", perMonth: "a month",
+  singleSub: "Just for you. One account, not shareable.", familySub: "Up to 5 accounts with one shared list. Only the owner pays.",
+  singleList: ["Everything in Free", "Unlimited recipes of your own", "Plan your week: every recipe on your list at once", "Your list and recipes on all your devices", "Cancel any month"],
+  familyList: ["Everything in Single, for everyone", "You and up to 4 others", "One shared shopping list, live on every phone", "Save deals together and see what you save together", "Your own list stays yours", "Cancel any month"],
+  famSave: (v, pp) => `${v} a month less than 5 × Single: ${pp} per person.`,
+  buySingle: "Get Single", buyFamily: "Get Family", yourPlan: "Your plan", switchToFam: "Switch to Family", switchToSingle: "Switch to Single",
+  prFine: "Paid monthly, no yearly plan. Cancel any time: you keep Premium until the end of the month you paid for.",
+  seePremium: "See Premium", accManage: "Payment details, invoices or cancel", manageWhy: "You do that safely on the page of Stripe, our payment partner.",
+  planRenews: d => `Renews on ${d}.`, planEnds: d => `Ends on ${d}; everything works until then.`, planActive: "Active.", planStopped: "Stopped.",
+  planVia: o => `paid by ${o}`, planPaused: "Paused: your family's subscription isn't running.",
+  payFailed: d => `Your payment failed. Update your payment details before ${d}, or Premium stops.`,
+  payFailedFam: d => `Your payment failed. Update your payment details before ${d}, or Premium stops for the whole family.`,
+  payStopped: "Your payment failed and Premium has stopped. Update your payment details to carry on.",
+  switchFamQ: "Your Single becomes Family, on the same subscription. You pay only the difference for the rest of this month now, then €12.99 a month. Your list and recipes stay. Go ahead?",
+  switchSingleQ: "Your Family becomes Single. Your family is paused (nothing is deleted) and what you overpaid comes off your next invoice. Go ahead?",
+  paidWait: "One moment: waiting for your payment to be confirmed…", paidOk: "Premium is on.", paidSlow: "Your payment is still being processed. Check again in a moment.",
+  buyErrs: { member: "You're in a family. Leave it first if you want to pay yourself.", single: "You already have Single.", family: "You already have Family.", others: "There are still people in your family. Remove them first, then you can switch to Single." },
+  accNeed: { plan: "Planning your week is part of Premium.", recipes: "More than one recipe of your own is part of Premium.", buy: "Sign in to get Premium." },
+  famT: "Your family", famDefault: "Our family", famPromo: "With Family you share one shopping list with up to 4 others. Everyone ticks off what's bought.", seeFamily: "See Family",
+  famOwner: "owner", famFreeSpot: "free", famPlaces: (n, m) => `${n} of ${m} places`, famFree: n => `${n} free`,
+  famLocked: "Your family is paused: the subscription isn't running. Nothing is deleted; it all comes back once it's paid again.",
+  famLockedOwner: "Your family is paused because the subscription isn't running. Nothing is deleted: get Family again and it's all back.",
+  famSavedMonth: v => `Saved together this month: ${v}`,
+  famNameLbl: "Your family's name", famEmailPh: "Email of the person you invite", famInviteBtn: "Invite",
+  famInviteWhy: "The link works for 48 hours, once, and only for that email address.",
+  famInviteMade: e => `Invitation ready for ${e}. Send them the link:`, famLinkLbl: "Invitation link",
+  famMail: "Email the link", famShareBtn: "Share", famCopy: "Copy", famCopied: "Link copied",
+  famMailSubj: "Join our family on deal'ke", famMailBody: (o, l) => `${o} invites you to share one shopping list on deal'ke.\n\nOpen this link within 48 hours and sign in with this email address:\n${l}`,
+  famPending: d => `invited, until ${d}`, famCancel: "Cancel", famRemove: "Remove",
+  famRemoveQ: n => `Remove ${n} from your family? The shared list is gone for them straight away. Their own list stays theirs.`,
+  famLeave: "Leave the family", famLeaveQ: "Leave the family? You won't see the shared list any more. Your own list stays.",
+  famLeaveOwnerQ: "Close your family? Nothing is deleted, but nobody sees the shared list any more.", famLeft: "You left the family",
+  famGone: "You're no longer in the family.", famJoined: h => `Welcome to ${h}! You now share one list.`,
+  famJoinSign: "You've been invited to a family on deal'ke. Sign in with the email address the invitation was sent to.",
+  famErrs: { full: "Your family is full: 5 people, invitations included.", owner: "Only the family's owner can do that.", notpaid: "This family's subscription isn't running.",
+    self: "That's your own email address.", member: "That person is already in your family.", email: "That email address isn't valid.",
+    others: "Remove the others from your family first.", cancel: "Cancel your subscription first.", other_email: h => `This invitation is for another email address${h ? ` (${h})` : ""}. Sign in with that address.`,
+    expired: "This invitation has expired. Ask for a new one.", revoked: "This invitation was cancelled.", accepted: "This invitation has already been used.",
+    unknown: "This invitation link isn't valid.", single: "You're still paying for Single. Cancel it first (it runs to the end of the month), then you can join.",
+    leave: "You're already in another family. Leave that one first." },
+  invT: "Invitation", invText: (o, f) => `${o || "Someone"} invites you to ${f}. You'll share one shopping list; your own list stays yours.`,
+  invAccept: "Join", invNo: "No thanks",
+  famListT: n => `Family list · ${n}`, famTickHint: "Tick what you buy: the others see it straight away.", myListT: "Just for me",
+  myListHint: "Only you see this. Tap To family to share something.", toFam: "To family", movedFam: "Put on the family list",
+  wantForLbl: "Where does it go?", forFam: "Family list", forMe: "Just for me", qtyLess: "Fewer", qtyMore: "More",
+  famDealsT: "Shared deals", famDealGone: "no longer on promo", shareDeal: "Share with your family", unshare: "Stop sharing", dealShared: "Shared with your family",
+});
 const CAT_ORDER = ["fruit_veg", "meat_fish", "dairy", "bread", "pantry", "snacks", "drinks", "household", "other"];
 const RADII = [2, 5, 10, 15, 25];
 // Logo stand-ins in each chain's own colours (swap for official logo files when allowed)
@@ -337,7 +482,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home", "diet", "me"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home", "diet", "me", "famQ"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -357,7 +502,10 @@ const S = {
   alerts: store.get("alerts", false), // also by email (sent by alerts/daily.py on GitHub Actions, once email is set up)
   pushOn: store.get("pushOn", null),  // this device's push subscription {endpoint, keys}, or null (not synced: it's per device)
   bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
-  me: store.get("me", { name: "", avatar: "" }),   // name and picture the people you share a list with see
+  me: store.get("me", { name: "", avatar: "" }),
+  famQ: store.get("famQ", []),   // the family list's open items, copied to prefs for the morning notification
+  wantFor: store.get("wantFor", "fam"),   // where a new item goes when you're in a family: "fam" or "me"
+   // name and picture the people you share a list with see
   diet: new Set(store.get("diet", [])), // profile: vegetarian, gluten-free, halal, ... (site/diet.js); the same as the filters
   shown: 48,
 };
@@ -775,9 +923,10 @@ const today = () => DKBasket.dayOf(Date.now());
 const boughtOf = k => S.bought.find(b => b.k === k && (k.startsWith("d:") || b.day === today()));  // a need ticks again every day
 function toggleBought(k, d, label) {
   const hit = boughtOf(k);
-  if (FAM.hid && k.startsWith("w:")) {   // shared list: the tick is for everyone
-    const w = S.wants.find(x => "w:" + x.id === k);
-    if (w) { const on = !(hit || w.doneBy); w.doneBy = on ? ACC.user.id : null; famTick(w.id, on); if (!on && !hit) { renderList(); return; } }
+  const fw = k.startsWith("w:") && FAM.items.find(x => "w:" + x.id === k);
+  if (fw) {   // family list: the tick is for everyone (and what it saved counts for the family)
+    const on = !(hit || fw.doneBy); fw.doneBy = on ? ACC.user.id : null; famTick(fw.id, on, DKBasket.saveOf(d));
+    if (!on && !hit) { renderList(); return; }
   }
   if (hit) S.bought = S.bought.filter(b => b !== hit);
   else {
@@ -801,7 +950,7 @@ function savedHTML(L) {
     diff ? L.savedVs(money(diff)) : ""].filter(Boolean);
   return `<div class="savedbox"><b>${L.savedMonth(money(s.month))}</b>${bits.length ? `<small>${bits.join(" · ")}</small>` : ""}</div>`;
 }
-const listN = () => Object.keys(S.list).length + S.wants.length;
+const listN = () => Object.keys(S.list).length + needs().length;
 const nearDeals = () => DEALS.filter(d => inRadius(d) && dietOk(d));
 // favourite shop: chosen in the account or on My list; the shops near you first, nearest on top
 const shopChoices = () => {
@@ -809,20 +958,23 @@ const shopChoices = () => {
   return [...new Set([S.shop, ...[...new Set([...near, ...nearDeals().map(d => d.store)])].sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9))].filter(Boolean))];
 };
 function setShop(chain) { S.shop = chain || ""; store.set("shop", S.shop); promoNote(); }
-function addWants(text) {
+function addWants(text, forMe) {
+  if (FAM.live && !forMe && S.wantFor !== "me") {   // you chose "For the family": it goes on the shared list
+    const qs = (Array.isArray(text) ? text : String(text).split(/[,;\n]+/)).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30);
+    famAddItems(qs); promoSeen(); return qs.length;
+  }
   const have = new Set(S.wants.map(w => DS.fold(w.q))); let n = 0;
   for (const q of (Array.isArray(text) ? text : String(text).split(/[,;\n]+/)).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30)) {
     if (have.has(DS.fold(q))) continue;
     have.add(DS.fold(q)); n++; S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
   }
   store.set("wants", S.wants); $("#listCount").textContent = listN(); promoSeen();  // you are looking at it
-  if (FAM.hid && n) famAdd(S.wants.slice(-n).map(w => w.q));
   return n;
 }
 // "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
 function wantsHTML(L) {
-  const N = S.wants.length;
-  const c = DKBasket.compare(S.wants, nearDeals(), S.shop);
+  const all = needs(), N = all.length;
+  const c = DKBasket.compare(all, nearDeals(), S.shop);
   const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
   const chains = [...new Set(nearDeals().map(d => d.store))].sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9));
   const shopSel = `<label class="myshop"><span>${L.myShop}</span><select id="myShop"><option value="">${L.myShopAny}</option>
@@ -835,24 +987,29 @@ function wantsHTML(L) {
     : c.preferredMissing ? `<p class="tip">${L.prefMissing(esc(S.shop))}</p>` : "";
   const split = c.split ? `<p class="tip split">${L.splitTip(esc(c.split.chain), money(c.split.save), c.split.moved.length)}${favNote(c.split.chain)}</p>` : "";
   const others = c.shops.filter(s => s !== p).slice(0, 3);
-  const rows = c.items.map(({ item, best, byShop }) => {
+  const row = ({ item, best, byShop }) => {
     const d = (c.split?.moved.includes(item.id) && byShop[c.split.chain]) || (p && byShop[p.chain]) || best;
     const on = !!boughtOf("w:" + item.id) || !!item.doneBy;
-    const who = FAM.hid && FAM.members.length > 1 ? memberOf(item.doneBy || item.by) : null;
-    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q, on)}<span><b class="wq">${who ? `<span class="by" title="${esc(item.doneBy ? L.famBought(who.name || "?") : who.name || "")}">${av(who.avatar, 18, who.name || "")}</span>` : ""}${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
+    const who = item.fam && FAM.members.length > 1 ? memberOf(item.doneBy || item.by) : null;
+    const qty = item.fam ? `<span class="qty"><button type="button" data-qty="${item.id}|-1" aria-label="${L.qtyLess}"${item.qty <= 1 ? " disabled" : ""}>−</button><b>${item.qty}</b><button type="button" data-qty="${item.id}|1" aria-label="${L.qtyMore}">+</button></span>` : "";
+    const move = !item.fam && FAM.live ? `<button type="button" class="linkish tofam" data-fam-move="${item.id}">${L.toFam}</button>` : "";
+    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q, on)}<span><b class="wq">${who ? `<span class="by" title="${esc(item.doneBy ? L.famBought(who.name || "?") : who.name || "")}">${av(who.avatar, 18, who.name || "")}</span>` : ""}${esc(item.q)}${item.fam && item.qty > 1 ? ` <small>× ${item.qty}</small>` : ""}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span>${qty}${move}</span>
       ${d ? `<button type="button" class="p linkish" data-open="${d.id}">${money(d.price)}</button>` : `<span class="p"></span>`}
       <button type="button" data-unwant="${item.id}" aria-label="${L.remove}">${x}</button></li>`;
-  }).join("");
+  };
+  const famRows = c.items.filter(r => r.item.fam).map(row).join(""), myRows = c.items.filter(r => !r.item.fam).map(row).join("");
+  const forSeg = FAM.live ? `<span class="wantfor" role="group" aria-label="${L.wantForLbl}">${["fam", "me"].map(k => `<button type="button" data-want-for="${k}" aria-pressed="${(S.wantFor === "me" ? "me" : "fam") === k}">${k === "fam" ? L.forFam : L.forMe}</button>`).join("")}</span>` : "";
   return `${savedHTML(L)}<form class="wantform" id="wantForm"><input id="wantIn" autocomplete="off" enterkeyhint="done" placeholder="${L.wantPh}" aria-label="${L.wantPh}">
-      <button type="submit" class="btn">${L.wantAdd}</button></form>
+      <button type="submit" class="btn">${L.wantAdd}</button></form>${forSeg}
     ${N ? `${pickBox}${tip}${split}${chains.length ? shopSel : ""}
     ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b>${favNote(s.chain)}</span>`).join("")}</div>` : ""}
-    <section class="shop"><div class="shop-h">${L.wantsT}${FAM.hid && FAM.members.length > 1 ? `<span class="sharedwith">${FAM.members.map(m => av(m.avatar, 22, m.name || "")).join("")}${L.famShared(esc(FAM.name))}</span>` : ""}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul>
-      ${FAM.hid && S.wants.some(w => w.doneBy) ? `<button type="button" class="linkish" data-fam-clear>${L.famClear}</button>` : ""}</section>` : ""}`;
+    ${famRows ? `<section class="shop fam"><div class="shop-h">${esc(L.famListT(FAM.name))}<span class="sharedwith">${FAM.members.map(m => av(m.avatar, 22, m.name || "")).join("")}</span></div><p class="hint">${L.famTickHint}</p><ul>${famRows}</ul>
+      ${famItems().some(w => w.doneBy) ? `<button type="button" class="linkish" data-fam-clear>${L.famClear}</button>` : ""}</section>` : ""}
+    ${myRows ? `<section class="shop"><div class="shop-h">${FAM.live ? L.myListT : L.wantsT}</div><p class="hint">${FAM.live ? L.myListHint : L.tickHint}</p><ul>${myRows}</ul></section>` : ""}` : ""}`;
 }
 function listText() {
   const L = t(), by = groupList();
-  const c = S.wants.length ? DKBasket.compare(S.wants, nearDeals(), S.shop) : null;
+  const c = needs().length ? DKBasket.compare(needs(), nearDeals(), S.shop) : null;
   const need = c ? `${L.wantsT}${c.pick ? ` (${c.pick.chain})` : ""}\n` + c.items.map(({ item, best, byShop }) => {
     const d = (c.pick && byShop[c.pick.chain]) || best;
     return `- ${item.q}${d ? `: ${d.name}, ${d.store}, ${money(d.price)}` : ""}`; }).join("\n") + "\n\n" : "";
@@ -882,7 +1039,7 @@ function renderList() {
     <div class="drawer-head"><div><h3 id="listTitle">${L.listTitle}</h3><p>${L.listSub2}</p></div>
       <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
     <div class="drawer-body">${wantsHTML(L)}${n ? `
-      ${S.wants.length ? `<h4 class="dealsT">${L.dealsT}</h4>` : ""}
+      ${needs().length ? `<h4 class="dealsT">${L.dealsT}</h4>` : ""}
       ${shops.length > 1 || best ? `<div class="starthere">${sicon(best.c)}<div><small>${L.startHere}</small><b>${esc(best.c)}</b>
         <div class="sub">${L.ofItems(best.items.length, n)}${kmText(best.c) ? ` · ${kmText(best.c)}` : ""}</div></div>
         <div class="tot"><b>${money(best.sum)}</b>${best.save ? L.totalSave(money(best.save)) : ""}</div></div>` : ""}
@@ -891,14 +1048,24 @@ function renderList() {
           ${s === best && shops.length > 1 ? `<span class="pill lime">${L.bestStore}</span>` : ""}<span class="sum">${money(s.sum)}</span></div>
         <ul>${s.items.map(d => `<li class="tickrow${boughtOf("d:" + d.id) ? " done" : ""}">${tickBtn("d:" + d.id, d, d.name)}<span>${esc(d.name)}${d.promo_text || d.pack_size ? `<span class="unit">${esc([d.pack_size, d.promo_text].filter(Boolean).join(" · "))}</span>` : ""}</span>
           <span class="p">${money(d.price)}</span>
+          ${FAM.live && !FAM.deals.some(f => f.id === d.id) ? `<button type="button" class="sharedeal" data-share-deal="${esc(d.id)}" aria-label="${L.shareDeal}" title="${L.shareDeal}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M6 9.5V20h12V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11v6M9 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>` : ""}
           <button type="button" data-add="${d.id}" aria-label="${L.remove}">${x}</button></li>`).join("")}</ul></section>`).join("")}`
-      : S.wants.length ? "" : `<p class="drawer-empty">${L.listEmpty}</p>`}</div>
-    ${n || S.wants.length ? `<div class="drawer-foot">
+      : needs().length || FAM.deals.length ? "" : `<p class="drawer-empty">${L.listEmpty}</p>`}${famDealsHTML(L)}</div>
+    ${n || needs().length ? `<div class="drawer-foot">
       ${n ? `<div class="total"><span>${L.total}</span><b>${money(total)}</b></div>` : ""}
       ${saved > 0 ? `<div class="total"><span>${L.saved}</span><span class="good">${money(saved)}</span></div>` : ""}
       <button type="button" class="btn block" id="shareList">${L.share}</button>
       <button type="button" class="btn ghost" id="clearList">${L.clearList}</button></div>` : ""}`;
   if (focusWant) $("#wantIn")?.focus();
+}
+
+// deals someone saved for the whole family
+function famDealsHTML(L) {
+  if (!FAM.live || !FAM.deals.length) return "";
+  const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  return `<section class="shop fam"><div class="shop-h">${L.famDealsT}</div><ul>${FAM.deals.map(d => { const who = memberOf(d.by), live = DEALS.find(y => y.id === d.id);
+    return `<li><span class="by">${who ? av(who.avatar, 22, who.name || "") : ""}</span><span>${live ? `<button type="button" class="linkish" data-open="${esc(d.id)}">${esc(d.name || "")}</button>` : esc(d.name || "")}<span class="unit">${esc([d.store, d.promo_text].filter(Boolean).join(" · "))}${live ? "" : ` · ${L.famDealGone}`}</span></span>
+      <span class="p">${money(d.price)}</span><button type="button" data-unshare="${esc(d.rowId)}" aria-label="${L.unshare}">${x}</button></li>`; }).join("")}</ul></section>`;
 }
 
 let toastTimer;
@@ -1098,8 +1265,14 @@ function bind() {
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
     if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); paintAccount(); return; }
-    if ("soon" in el.dataset) { if (PAY()) startTrial(); else toast(t().soon); return; }
-    if ("account" in el.dataset) { openAccount(); return; }
+    if ("soon" in el.dataset) { closeDialogs(); startTrial(); return; }
+    if (el.dataset.buy) { buy(el.dataset.buy); return; }
+    if (el.dataset.famMove) { famMove(el.dataset.famMove); return; }
+    if (el.dataset.shareDeal) { famShareDeal(el.dataset.shareDeal); return; }
+    if (el.dataset.unshare) { famUnshare(el.dataset.unshare); return; }
+    if (el.dataset.qty) { const [id, dq] = el.dataset.qty.split("|"), it = FAM.items.find(i => i.id === id); if (it) famQty(id, it.qty + +dq); return; }
+    if (el.dataset.wantFor) { S.wantFor = el.dataset.wantFor; store.set("wantFor", S.wantFor); renderList(); $("#wantIn")?.focus(); return; }
+    if ("account" in el.dataset) { openAccountFresh(); return; }
     if ("portal" in el.dataset) { openPortal(); return; }
     if ("logout" in el.dataset) { signOut(); return; }
     if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
@@ -1139,7 +1312,8 @@ function bind() {
     const tb = e.target.closest("[data-buy]");
     if (tb) { const id = tb.dataset.deal; toggleBought(tb.dataset.buy, id ? (DEALS.find(x => x.id === id) || S.list[id]) : null, tb.dataset.label); return; }
     const uw = e.target.closest("[data-unwant]");
-    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); famRemove(uw.dataset.unwant); return; }
+    if (uw) { const id = uw.dataset.unwant; if (FAM.items.some(i => i.id === id)) { famRemove(id); return; }
+      S.wants = S.wants.filter(w => w.id !== id); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); return; }
     if (e.target.closest("[data-fam-clear]")) { famClear(); return; }
     if (e.target.closest("#clearList")) { S.list = {}; S.wants = []; store.set("list", S.list); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); render(); }
     if (e.target.closest("#shareList")) {
@@ -1396,20 +1570,27 @@ function saveMaker() {
   return r;
 }
 
+// Free, Single and Family side by side; Family is the best value (5 people for less than 3 Singles)
 function renderPricing() {
-  const L = t(), c = new Set(DEALS.map(d => d.store)).size;
+  const L = t(), c = new Set(DEALS.map(d => d.store)).size, p = ACC.plan || {};
   const li = a => `<ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  const mine = k => p.plan === k && p.live || (k === "family" && p.plan === "family_member" && p.live);
+  const btn = k => mine(k) ? `<button type="button" class="btn ghost block" disabled>${L.yourPlan}</button>`
+    : `<button type="button" class="btn block${k === "single" ? " ghost" : ""}" data-buy="${k}">${(p.plan === "single" || p.plan === "family") && p.live ? (k === "family" ? L.switchToFam : L.switchToSingle) : k === "family" ? L.buyFamily : L.buySingle}</button>`;
+  const fiveSingles = 5 * PRICE.single, saving = Math.round((fiveSingles - PRICE.family) * 100) / 100;
   $("#pricing").innerHTML = `<h2>${L.prTitle}</h2><p>${L.prSub(c, S.radius)}</p>
-    <div class="plans">
+    <div class="plans three">
       <div class="plancard"><h3>${L.free}</h3><p>${L.freeSub}</p><div class="amount">${money(0).replace(/[.,]00/, "")}</div>${li(L.freeList(c))}
         <a class="btn ghost block" href="#deals">${L.freeBtn}</a></div>
-      <div class="plancard plus"><span class="pill">${L.trialBadge}</span><h3>${L.plus}</h3><p>${L.plusSub}</p>
-        <div class="amount">${money(4.99)} <small>${L.perMonth}</small></div>${li(L.plusList(c))}
-        <button type="button" class="btn block" data-soon>${L.trial}</button><p class="fine">${L.trialNote}</p></div>
-    </div>`;
+      <div class="plancard"><h3>${L.single}</h3><p>${L.singleSub}</p>
+        <div class="amount">${money(PRICE.single)} <small>${L.perMonth}</small></div>${li(L.singleList)}${btn("single")}</div>
+      <div class="plancard plus"><span class="pill">${L.bestValue}</span><h3>${L.family}</h3><p>${L.familySub}</p>
+        <div class="amount">${money(PRICE.family)} <small>${L.perMonth}</small></div>
+        <p class="famsave">${L.famSave(money(saving), money(Math.round(PRICE.family / 5 * 100) / 100))}</p>${li(L.familyList)}${btn("family")}</div>
+    </div><p class="fine prfine">${L.prFine}</p>`;
 }
 function showView() {
-  if (location.hash === "#account") { history.replaceState(null, "", location.pathname + location.search); openAccount(); }
+  if (location.hash === "#account") { history.replaceState(null, "", location.pathname + location.search); openAccountFresh(); }
   if (location.hash === "#list") { history.replaceState(null, "", location.pathname + location.search); if (DEALS.length) openList(); }  // tapped the daily notification
   const v = location.hash === "#recipes" ? "recipes" : location.hash === "#pricing" ? "pricing" : "deals";
   $("#viewDeals").hidden = v !== "deals";
@@ -1487,10 +1668,11 @@ function bindRecipes() {
 
 // ---------- accounts and payments (on only when config.js has the Supabase keys) ----------
 const CFG = window.DK_CONFIG || {};
-const ACC = { on: !!(CFG.supabaseUrl && CFG.supabaseAnonKey), sb: null, user: null, profile: null, pulling: false, push: [] };
-const PAY = () => ACC.on && CFG.payments === true;  // Plus is only sold (and locked) once Stripe is connected
-const isPlus = () => ["trialing", "active"].includes(ACC.profile?.subscription_status);
-// Free: every deal, my list, one own recipe. Plus: unlimited recipes and the weekly plan.
+const ACC = { on: !!(CFG.supabaseUrl && CFG.supabaseAnonKey), sb: null, user: null, profile: null, plan: null, invite: null, pulling: false, push: [] };
+const PAY = () => ACC.on && CFG.payments === true;  // Premium is only sold (and locked) once Stripe is connected
+// Premium (Single or a place in a paid Family) as the DATABASE says (my_plan): never a flag the browser sets.
+const isPlus = () => !!ACC.plan?.premium;
+// Free: every deal, my list, one own recipe. Premium: unlimited recipes and the weekly plan; Family: the shared list.
 function allowed(feature) {
   if (!PAY() || isPlus()) return true;
   openAccount(feature);
@@ -1509,14 +1691,35 @@ async function initAccounts() {
   ACC.sb.auth.onAuthStateChange((_e, session) => { setUser(session?.user || null); });
   const { data } = await ACC.sb.auth.getSession();
   await setUser(data.session?.user || null);
-  if (url.has("paid")) { await refreshProfile(); openAccount(); }  // back from Stripe checkout
-  if (!ACC.user && pendingJoin()) openAccount("join");               // opened an invite link: sign in first
+  if (url.has("paid")) { history.replaceState(null, "", location.pathname + location.hash); waitForPremium(); }  // back from Stripe checkout
+  if (!ACC.user && pendingInvite()) openAccount("join");             // opened an invitation link: sign in first
 }
 async function setUser(user) {
   if ((user?.id || null) === (ACC.user?.id || null) && ACC.profile) return;
   ACC.user = user; ACC.profile = null;
-  if (user) { await refreshProfile(); await pull(); await famLoad(); } else famReset();
+  if (user) { await refreshProfile(); await refreshPlan(); await pull(); await famLoad(); await inviteCheck(); }
+  else { ACC.plan = null; ACC.invite = null; famReset(); }
   paintAccount();
+}
+// what the database says about your plan: Single, Family (owner or member), or free
+async function refreshPlan() {
+  if (!ACC.user) { ACC.plan = null; return; }
+  const { data, error } = await ACC.sb.rpc("my_plan");
+  ACC.plan = error || !data ? { plan: "free", premium: false, off: true } : data;
+  FAM.live = !!ACC.plan.family?.live;
+}
+// Back from Stripe: Premium switches on only when Stripe has told the webhook it is paid, so wait for that.
+async function waitForPremium(want) {
+  const L = t(); toast(L.paidWait);
+  for (let i = 0; i < 15; i++) {
+    await new Promise(r => setTimeout(r, 2000));
+    if (!ACC.user) continue;
+    await refreshPlan();
+    if (want ? ACC.plan?.plan === want || (want === "family" && ACC.plan?.family?.role === "owner" && ACC.plan.family.live) : ACC.plan?.premium) {
+      await famLoad(); toast(L.paidOk); openAccount(); render(); return;
+    }
+  }
+  toast(L.paidSlow); openAccount();
 }
 async function refreshProfile() {
   if (!ACC.user) return;
@@ -1565,122 +1768,226 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home, diet: [...S.diet], me: S.me }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home, diet: [...S.diet], me: S.me, famQ: S.famQ }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
-// ---------- sharing a list with family or friends (supabase/migrations/003_households.sql) ----------
-// A "home" has members and one shared list. When you're in one, "What you need" on My list IS that list:
-// everyone adds to it, and a tick means bought for everybody. Ticks arrive on the other phones straight away.
-const FAM = { hid: null, name: "", owner: null, members: [], ch: null, off: false };
-const JOIN_KEY = "dk.joinCode";
-if (url.get("join")) { try { localStorage.setItem(JOIN_KEY, url.get("join").slice(0, 40)); } catch { /* private mode */ } }
-const pendingJoin = () => { try { return localStorage.getItem(JOIN_KEY); } catch { return null; } };
+// ---------- Family Premium: up to 5 people, one shared list (supabase/migrations/004_premium_families.sql) ----------
+// The browser only SHOWS this: who may see the family list, invite, remove or pay is checked again by the database
+// every time. Your own list ("Only me") stays private: something goes to the family only when you add it there or
+// press "To family".
+const FAM = { hid: null, name: "", role: null, live: false, max: 5, members: [], items: [], deals: [], invites: [], ch: null, off: false, link: null, linkFor: "" };
+const INV_KEY = "dk.invite";
+{ const tok = url.get("invite"); if (tok && /^[0-9a-f]{64}$/.test(tok)) { try { localStorage.setItem(INV_KEY, tok); } catch { /* private mode */ } } }
+if (url.has("invite") || url.has("join")) history.replaceState(null, "", location.pathname + location.hash);
+const pendingInvite = () => { try { return localStorage.getItem(INV_KEY) || (/^[0-9a-f]{64}$/.test(url.get("invite") || "") ? url.get("invite") : null); } catch { return null; } };
+const dropInvite = () => { try { localStorage.removeItem(INV_KEY); } catch { /* private mode */ } url.delete("invite"); };
 const isUuid = id => /^[0-9a-f-]{36}$/.test(id);
 const meName = () => S.me.name || (ACC.user?.email || "").split("@")[0];
 const memberOf = id => FAM.members.find(m => m.user_id === id);
 const av = (v, size, label) => window.DKAvatars ? DKAvatars.html(v, size, label) : "";
-function famReset() { if (FAM.ch) { try { ACC.sb.removeChannel(FAM.ch); } catch { /* gone */ } } Object.assign(FAM, { hid: null, name: "", owner: null, members: [], ch: null }); }
-async function famLoad() {
-  if (!ACC.user) return;
-  const code = pendingJoin();
-  if (code) {
-    try { localStorage.removeItem(JOIN_KEY); } catch { /* private mode */ }
-    history.replaceState(null, "", location.pathname + location.hash);
-    const { error } = await ACC.sb.rpc("join_household", { code, my_name: meName(), my_avatar: S.me.avatar || null });
-    if (error) toast(/expired/.test(error.message) ? t().famJoinErr : t().famOff);
-    else { await famLoad(); toast(t().famJoined(FAM.name)); return; }
-  }
-  const { data, error } = await ACC.sb.from("household_members").select("household_id, households(name, owner)").eq("user_id", ACC.user.id).maybeSingle();
-  if (error) { FAM.off = true; return; }       // migration 003 not run yet: sharing stays hidden
-  FAM.off = false;
-  if (!data) { famReset(); return; }
-  FAM.hid = data.household_id; FAM.name = data.households?.name || t().homeName; FAM.owner = data.households?.owner;
-  await famPull(true);
-  if (!FAM.ch && ACC.sb.channel) {
-    FAM.ch = ACC.sb.channel("hh-" + FAM.hid).on("postgres_changes", { event: "*", schema: "public", table: "household_items", filter: `household_id=eq.${FAM.hid}` }, () => famPull())
-      .on("postgres_changes", { event: "*", schema: "public", table: "household_members", filter: `household_id=eq.${FAM.hid}` }, () => famPull()).subscribe();
-  }
-}
-// members and the shared list; the first time on a device, what's already on your own list joins the shared one
-async function famPull(first) {
-  if (!FAM.hid) return;
-  const [m, it] = await Promise.all([
-    ACC.sb.from("household_members").select("user_id, name, avatar").eq("household_id", FAM.hid).order("joined_at"),
-    ACC.sb.from("household_items").select("id, q, added_by, done_by, done_at, created_at").eq("household_id", FAM.hid).order("created_at")]);
-  FAM.members = m.data || [];
-  let items = it.data || [];
-  const seeded = "dk.famSeeded." + FAM.hid;
-  if (first && !localStorage.getItem(seeded)) {
-    const have = new Set(items.map(x => DS.fold(x.q)));
-    const add = S.wants.filter(w => !have.has(DS.fold(w.q))).map(w => ({ household_id: FAM.hid, q: w.q, added_by: ACC.user.id }));
-    if (add.length) { const r = await ACC.sb.from("household_items").insert(add).select("id, q, added_by, done_by, done_at, created_at"); items = [...items, ...(r.data || [])]; }
-    try { localStorage.setItem(seeded, "1"); } catch { /* private mode */ }
-  }
-  S.wants = items.map(x => ({ id: x.id, q: x.q, by: x.added_by, doneBy: x.done_by || null }));
-  store.set("wants", S.wants);   // a copy in prefs too, so the daily notification knows it
+const isOwner = () => FAM.role === "owner";
+const famItems = () => FAM.live ? FAM.items.filter(i => !i.cleared) : [];
+const needs = () => [...famItems(), ...S.wants];   // what you need: the family's list and your own
+const dbErr = e => String(e?.message || e || "");
+function famRepaint() {
   $("#listCount").textContent = listN();
   if (!$("#listBg").hidden) renderList();
   if (!$("#accDlg").hidden) openAccount(ACC.why);
   promoNote();
 }
-async function famAdd(qs) {
-  if (!FAM.hid || !qs.length) return;
-  await ACC.sb.from("household_items").insert(qs.map(q => ({ household_id: FAM.hid, q, added_by: ACC.user.id })));
-  famPull();
+function famReset() {
+  if (FAM.ch) { try { ACC.sb.removeChannel(FAM.ch); } catch { /* gone */ } }
+  Object.assign(FAM, { hid: null, name: "", role: null, live: false, members: [], items: [], deals: [], invites: [], ch: null, link: null, linkFor: "" });
 }
-async function famRemove(id) { if (FAM.hid && isUuid(id)) { await ACC.sb.from("household_items").delete().eq("id", id); famPull(); } }
-async function famTick(id, on) {
-  if (!FAM.hid || !isUuid(id)) return;
-  await ACC.sb.from("household_items").update({ done_by: on ? ACC.user.id : null, done_at: on ? new Date().toISOString() : null }).eq("id", id);
-  famPull();
-}
-async function famClear() { if (FAM.hid) { await ACC.sb.from("household_items").delete().eq("household_id", FAM.hid).not("done_by", "is", null); famPull(); } }
-async function famInvite() {
-  const L = t();
-  if (!FAM.hid) {
-    const { error } = await ACC.sb.rpc("create_household", { hh_name: L.homeName, my_name: meName(), my_avatar: S.me.avatar || null });
-    if (error) { toast(L.famOff); return; }
-    await famLoad();
+async function famLoad() {
+  if (!ACC.user) return;
+  const { data, error } = await ACC.sb.from("household_members").select("household_id, role, households(name, max_members)")
+    .eq("user_id", ACC.user.id).eq("status", "active").maybeSingle();
+  if (error || ACC.plan?.off) { FAM.off = true; return; }       // migration 004 not run yet: families stay hidden
+  FAM.off = false;
+  if (!data) { famReset(); famRepaint(); return; }
+  if (FAM.hid && FAM.hid !== data.household_id) famReset();
+  Object.assign(FAM, { hid: data.household_id, role: data.role, name: data.households?.name || t().famDefault,
+    max: data.households?.max_members || 5, live: !!ACC.plan?.family?.live });
+  await famPull();
+  if (!FAM.ch && ACC.sb.channel) {
+    const f = `household_id=eq.${FAM.hid}`, pull = () => famPull();
+    FAM.ch = ACC.sb.channel("fam-" + FAM.hid)
+      .on("postgres_changes", { event: "*", schema: "public", table: "household_items", filter: f }, pull)
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "household_items" }, pull)   // deletes can't be filtered
+      .on("postgres_changes", { event: "*", schema: "public", table: "household_members", filter: f }, pull)
+      .on("postgres_changes", { event: "*", schema: "public", table: "family_deals", filter: f }, pull)
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "family_deals" }, pull).subscribe();
   }
-  const { data: code, error } = await ACC.sb.rpc("invite_code");
-  if (error || !code) { toast(L.accErr); return; }
-  const link = location.origin + location.pathname + "?join=" + encodeURIComponent(code);
-  FAM.link = link; openAccount(ACC.why);
-  try { if (navigator.share) { await navigator.share({ title: "deal'ke", text: L.famShareText, url: link }); return; } } catch { /* closed the share sheet */ }
-  try { await navigator.clipboard.writeText(link); toast(L.famCopied); } catch { /* the link is shown in the account */ }
 }
-async function famLeave(uid) {
+let famPulling = null;
+function famPull() { famPulling ||= famPullNow().finally(() => { famPulling = null; }); return famPulling; }
+async function famPullNow() {
   if (!FAM.hid) return;
-  await ACC.sb.from("household_members").delete().eq("household_id", FAM.hid).eq("user_id", uid);
-  if (uid === ACC.user.id) {
-    S.wants = S.wants.filter(w => !w.doneBy).map(w => ({ id: w.id, q: w.q })); store.set("wants", S.wants);  // keep a copy of what's still needed
-    famReset(); toast(t().famLeft); openAccount(ACC.why); $("#listCount").textContent = listN();
-  } else famPull();
+  const q = [ACC.sb.from("household_members").select("user_id, name, avatar, role").eq("household_id", FAM.hid).eq("status", "active").order("joined_at")];
+  if (FAM.live) q.push(
+    ACC.sb.from("household_items").select("id, q, qty, added_by, done_by, done_at, saved, cleared_at").eq("household_id", FAM.hid).order("created_at"),
+    ACC.sb.from("family_deals").select("id, deal_id, data, added_by").eq("household_id", FAM.hid).order("created_at", { ascending: false }));
+  if (isOwner()) q.push(ACC.sb.from("family_invitations").select("id, invited_email, expires_at").eq("family_id", FAM.hid).eq("status", "pending").gt("expires_at", new Date().toISOString()).order("created_at"));
+  const [m, it, dl, inv] = await Promise.all(q);
+  FAM.members = m.data || [];
+  if (!FAM.members.some(x => x.user_id === ACC.user?.id)) {   // removed by the owner (or left on another phone)
+    famReset(); await refreshPlan(); toast(t().famGone); famRepaint(); return;
+  }
+  if (FAM.live) {
+    FAM.items = (it?.data || []).map(x => ({ id: x.id, q: x.q, qty: x.qty || 1, by: x.added_by, doneBy: x.done_by || null, saved: +x.saved || 0, doneAt: x.done_at, cleared: !!x.cleared_at, fam: true }));
+    FAM.deals = (dl?.data || []).map(x => ({ ...(x.data || {}), id: x.deal_id, rowId: x.id, by: x.added_by }));
+  } else { FAM.items = []; FAM.deals = []; }
+  FAM.invites = inv?.data || [];
+  // a copy of the family's open items in your prefs, so the morning notification knows them too
+  const famQ = famItems().filter(i => !i.doneBy).map(i => i.q);
+  if (JSON.stringify(famQ) !== JSON.stringify(S.famQ)) { S.famQ = famQ; store.set("famQ", famQ); }
+  famRepaint();
 }
-function saveMe() {
-  store.set("me", S.me);
-  if (FAM.hid) ACC.sb.from("household_members").update({ name: meName(), avatar: S.me.avatar || null }).eq("household_id", FAM.hid).eq("user_id", ACC.user.id).then(() => famPull());
+async function famAddItems(qs) {
+  if (!FAM.live || !qs.length) return 0;
+  const have = new Set(famItems().filter(i => !i.doneBy).map(i => DS.fold(i.q)));
+  const add = [...new Set(qs.map(q => q.trim().slice(0, 60)).filter(q => q.length >= 2 && !have.has(DS.fold(q))))];
+  if (!add.length) return 0;
+  // show it straight away; the database fills in who added it
+  FAM.items.push(...add.map(q => ({ id: "tmp" + Math.random().toString(36).slice(2), q, qty: 1, by: ACC.user.id, fam: true })));
+  famRepaint();
+  const { error } = await ACC.sb.from("household_items").insert(add.map(q => ({ household_id: FAM.hid, q, qty: 1 })));
+  if (error) toast(t().accErr);
+  await famPull();
+  return add.length;
 }
-// the home on the account page: a house with everyone in it
+// only the changed fields are sent, so two people changing different things never undo each other
+async function famUpdate(id, fields) {
+  if (!FAM.live || !isUuid(id)) return;
+  const it = FAM.items.find(i => i.id === id); if (it) Object.assign(it, fields.qty ? { qty: fields.qty } : {});
+  const { error } = await ACC.sb.from("household_items").update(fields).eq("id", id);
+  if (error) toast(t().accErr);
+  famPull();
+}
+const famTick = (id, on, saved) => famUpdate(id, on ? { done_by: ACC.user.id, saved: Math.max(0, Math.min(500, Math.round((saved || 0) * 100) / 100)) } : { done_by: null });
+const famQty = (id, qty) => famUpdate(id, { qty: Math.max(1, Math.min(99, qty)) });
+async function famRemove(id) {
+  if (!FAM.live || !isUuid(id)) return;
+  FAM.items = FAM.items.filter(i => i.id !== id); famRepaint();
+  await ACC.sb.from("household_items").delete().eq("id", id); famPull();
+}
+async function famClear() {   // bought things leave the list but still count for "saved together"
+  if (!FAM.live) return;
+  await ACC.sb.from("household_items").update({ cleared_at: new Date().toISOString() }).eq("household_id", FAM.hid).not("done_by", "is", null).is("cleared_at", null);
+  famPull();
+}
+async function famMove(id) {   // one of your own items, on purpose, to the family list
+  const w = S.wants.find(x => x.id === id); if (!w) return;
+  S.wants = S.wants.filter(x => x !== w); store.set("wants", S.wants);
+  await famAddItems([w.q]); toast(t().movedFam);
+}
+async function famShareDeal(id) {
+  const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d || !FAM.live) return;
+  const data = Object.fromEntries(["name", "store", "price", "old_price", "promo_text", "pack_size", "brand", "cat", "valid_to", "cc"].filter(k => d[k] != null).map(k => [k, d[k]]));
+  const { error } = await ACC.sb.from("family_deals").insert({ household_id: FAM.hid, deal_id: String(d.id).slice(0, 200), data });
+  toast(error && !/duplicate/i.test(dbErr(error)) ? t().accErr : t().dealShared); famPull();
+}
+async function famUnshare(rowId) { if (isUuid(rowId)) { await ACC.sb.from("family_deals").delete().eq("id", rowId); famPull(); } }
+function famSavedMonth() {
+  const m = new Date().toISOString().slice(0, 7);
+  return FAM.items.filter(i => i.doneBy && (i.doneAt || "").startsWith(m)).reduce((a, i) => a + i.saved, 0);
+}
+async function famInvite(email) {
+  const L = t();
+  const { data: tok, error } = await ACC.sb.rpc("create_invitation", { email });
+  if (error || !tok) { toast(famErr(error, L)); return; }
+  FAM.link = location.origin + location.pathname + "?invite=" + tok; FAM.linkFor = email.trim().toLowerCase();
+  await famPull();
+}
+async function famRevoke(id) { const { error } = await ACC.sb.rpc("revoke_invitation", { invite: id }); if (error) toast(t().accErr); famPull(); }
+async function famRemoveMember(uid) {
+  const L = t(), m = memberOf(uid);
+  if (!confirm(L.famRemoveQ(m?.name || "?"))) return;
+  const { error } = await ACC.sb.rpc("remove_member", { member: uid });
+  if (error) toast(famErr(error, L)); famPull();
+}
+async function famLeave() {
+  const L = t();
+  if (!confirm(isOwner() ? L.famLeaveOwnerQ : L.famLeaveQ)) return;
+  const { error } = await ACC.sb.rpc("leave_family");
+  if (error) { toast(famErr(error, L)); return; }
+  famReset(); await refreshPlan(); toast(L.famLeft); famRepaint();
+}
+async function famRename(name) {
+  const { error } = await ACC.sb.rpc("rename_family", { new_name: name });
+  if (error) toast(famErr(error, t())); else { FAM.name = name.trim().slice(0, 40) || FAM.name; famRepaint(); }
+}
+// the database's reasons, in words people understand
+function famErr(e, L) {
+  const m = dbErr(e);
+  for (const [re, k] of [[/family full/, "full"], [/only the owner/, "owner"], [/not paid/, "notpaid"], [/that is you/, "self"], [/already a member/, "member"],
+    [/bad email/, "email"], [/remove the others/, "others"], [/cancel the subscription/, "cancel"], [/another email/, "other_email"], [/expired/, "expired"],
+    [/revoked/, "revoked"], [/accepted/, "accepted"], [/unknown/, "unknown"], [/cancel single/, "single"], [/leave your family/, "leave"]])
+    if (re.test(m)) return typeof L.famErrs[k] === "function" ? L.famErrs[k]("") : L.famErrs[k];
+  return L.accErr;
+}
+// an invitation link was opened: who invites, and accept it here (only with the invited email address)
+async function inviteCheck() {
+  const tok = pendingInvite(); if (!tok || !ACC.user) return;
+  const { data, error } = await ACC.sb.rpc("invitation_info", { token: tok });
+  if (error) return;
+  ACC.invite = { tok, ...data };
+  if (!data.ok && data.reason !== "other_email") dropInvite();
+  openAccount("invite");
+}
+async function inviteAccept() {
+  const L = t(), tok = ACC.invite?.tok; if (!tok) return;
+  const { error } = await ACC.sb.rpc("accept_invitation", { token: tok, my_name: meName(), my_avatar: S.me.avatar || null });
+  if (error) { ACC.invite = { tok, ok: false, err: famErr(error, L) }; if (!/single|leave/.test(dbErr(error))) dropInvite(); openAccount("invite"); return; }
+  dropInvite(); ACC.invite = null;
+  await refreshPlan(); await famLoad(); toast(L.famJoined(FAM.name)); openAccount();
+}
+function inviteHTML(L) {
+  const i = ACC.invite; if (!i) return "";
+  const msg = i.ok ? L.invText(esc(i.owner || ""), esc(i.family || "")) : esc(i.err || (i.reason === "other_email" ? L.famErrs.other_email(i.email_hint || "") : L.famErrs[i.reason] || L.accErr));
+  return `<section class="invcard"><h4>${L.invT}</h4><p>${msg}</p>${i.ok ? `<div class="pop-actions"><button type="button" class="btn" data-inv-accept>${L.invAccept}</button><button type="button" class="btn ghost" data-inv-no>${L.invNo}</button></div>`
+    : `<button type="button" class="linkish" data-inv-no>${L.close}</button>`}</section>`;
+}
+// the home on the account page: a house with everyone in it, and (for the owner) the family management
 function houseHTML(L) {
   const people = FAM.hid ? FAM.members : [{ user_id: ACC.user.id, name: meName(), avatar: S.me.avatar }];
   const roof = `<svg class="house-bg" viewBox="0 0 320 210" preserveAspectRatio="none" aria-hidden="true"><path d="M160 8 12 92h22v110h252V92h22z" fill="var(--mustard-soft)" stroke="var(--mustard)" stroke-width="4" stroke-linejoin="round"/><rect x="226" y="30" width="22" height="38" fill="var(--mustard)" rx="3"/></svg>`;
-  const who = people.map(m => `<span class="person">${av(m.avatar, 46, m.name || "")}<small>${esc(m.user_id === ACC.user.id ? `${m.name || meName()} (${L.famYou})` : m.name || "?")}</small></span>`).join("");
-  const rows = FAM.hid && FAM.members.length > 1 ? `<ul class="members">${FAM.members.map(m => `<li>${av(m.avatar, 28, m.name || "")}<span>${esc(m.name || "?")}${m.user_id === ACC.user.id ? ` (${L.famYou})` : ""}</span>
-      ${m.user_id === ACC.user.id ? "" : FAM.owner === ACC.user.id ? `<button type="button" class="linkish" data-fam-remove="${esc(m.user_id)}">${L.famRemove}</button>` : ""}</li>`).join("")}</ul>` : "";
-  return `<section class="famcard"><h4>${esc(FAM.hid ? FAM.name : L.famT)}</h4>
+  const free = Math.max(0, FAM.max - FAM.members.length - FAM.invites.length);
+  const empty = FAM.hid && isOwner() ? Array.from({ length: Math.min(free, 4) }, () => `<span class="person freespot"><span class="av" style="width:46px;height:46px" aria-hidden="true"></span><small>${L.famFreeSpot}</small></span>`).join("") : "";
+  const who = people.map(m => `<span class="person">${av(m.avatar, 46, m.name || "")}<small>${esc(m.user_id === ACC.user.id ? `${m.name || meName()} (${L.famYou})` : m.name || "?")}</small></span>`).join("") + empty;
+  if (!FAM.hid) return `<section class="famcard"><h4>${L.famT}</h4><div class="house">${roof}<div class="people">${who}</div></div>
+    <p class="muted">${L.famPromo}</p><a class="btn block" href="#pricing" data-close>${L.seeFamily}</a></section>`;
+  const locked = !FAM.live ? `<p class="warn">${isOwner() ? L.famLockedOwner : L.famLocked}</p>` : "";
+  const saved = FAM.live && famSavedMonth() > 0 ? `<p class="savedtogether">${L.famSavedMonth(money(famSavedMonth()))}</p>` : "";
+  const rows = `<ul class="members">${FAM.members.map(m => `<li>${av(m.avatar, 28, m.name || "")}<span>${esc(m.name || "?")}${m.user_id === ACC.user.id ? ` (${L.famYou})` : ""}${m.role === "owner" ? ` <small class="muted">· ${L.famOwner}</small>` : ""}</span>
+      ${isOwner() && m.user_id !== ACC.user.id ? `<button type="button" class="linkish" data-fam-remove="${esc(m.user_id)}">${L.famRemove}</button>` : ""}</li>`).join("")}
+    ${isOwner() ? FAM.invites.map(i => `<li class="pending"><span class="av" style="width:28px;height:28px" aria-hidden="true"></span><span>${esc(i.invited_email)} <small class="muted">· ${L.famPending(dayMonth(i.expires_at))}</small></span>
+      <button type="button" class="linkish" data-fam-revoke="${esc(i.id)}">${L.famCancel}</button></li>`).join("") : ""}</ul>`;
+  const link = FAM.link ? `<div class="invlink" role="status"><p class="small">${L.famInviteMade(esc(FAM.linkFor))}</p>
+      <input class="famlink" readonly value="${esc(FAM.link)}" aria-label="${L.famLinkLbl}">
+      <div class="pop-actions"><a class="btn" href="mailto:${encodeURIComponent(FAM.linkFor)}?subject=${encodeURIComponent(L.famMailSubj)}&body=${encodeURIComponent(L.famMailBody(meName(), FAM.link))}">${L.famMail}</a>
+        ${navigator.share ? `<button type="button" class="btn ghost" data-fam-share>${L.famShareBtn}</button>` : ""}<button type="button" class="btn ghost" data-fam-copy>${L.famCopy}</button></div></div>` : "";
+  const manage = isOwner() ? `<div class="fammanage">
+      <label class="field"><span>${L.famNameLbl}</span><input id="famName" maxlength="40" value="${esc(FAM.name)}"></label>
+      ${FAM.live ? free > 0 ? `<form id="famInviteForm" class="wantform" autocomplete="off"><input id="famEmail" type="email" required inputmode="email" placeholder="${esc(L.famEmailPh)}" aria-label="${esc(L.famEmailPh)}"><button type="submit" class="btn">${L.famInviteBtn}</button></form>
+        <small class="muted">${L.famInviteWhy}</small>` : `<p class="muted small">${L.famErrs.full}</p>` : ""}${link}</div>` : "";
+  return `<section class="famcard"><h4>${esc(FAM.name)}</h4>
     <div class="house">${roof}<div class="people">${who}</div></div>
-    <p class="muted">${FAM.hid && FAM.members.length > 1 ? L.famSome(FAM.members.length) : L.famNone}</p>
-    <button type="button" class="btn block" data-fam-invite>${L.famInvite}</button>
-    ${FAM.link ? `<p class="muted small">${L.famLink}</p><input class="famlink" readonly value="${esc(FAM.link)}" aria-label="${L.famLink}">` : ""}
-    ${rows}${FAM.hid ? `<button type="button" class="linkish leave" data-fam-remove="${esc(ACC.user.id)}">${L.famLeave}</button>` : ""}</section>`;
+    <p class="muted">${L.famPlaces(FAM.members.length, FAM.max)}${isOwner() ? ` · ${L.famFree(free)}` : ""}</p>${locked}${saved}
+    ${rows}${manage}
+    <button type="button" class="linkish leave" data-fam-leave>${L.famLeave}</button></section>`;
 }
 function meHTML(L) {
   const pick = window.DKAvatars ? `<div class="avpick" id="avPick" hidden>${DKAvatars.KEYS.map(k => `<button type="button" data-av="a:${k}" aria-pressed="${S.me.avatar === "a:" + k}" aria-label="${k}">${DKAvatars.svg(k)}</button>`).join("")}
       <label class="btn ghost avup">${L.avUpload}<input type="file" id="avFile" accept="image/*" hidden></label></div>` : "";
   return `<section class="mecard"><button type="button" class="mepic" data-av-open aria-expanded="false" aria-controls="avPick" aria-label="${L.avChange}">${av(S.me.avatar, 64, meName())}<span class="pen" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span></button>
     <label class="field mename"><span>${L.meName}</span><input id="meName" maxlength="30" autocomplete="nickname" value="${esc(S.me.name)}" placeholder="${esc(L.meNamePh)}"></label></section>${pick}`;
+}
+function saveMe() {
+  store.set("me", S.me);
+  if (FAM.hid) ACC.sb.from("household_members").update({ name: meName(), avatar: S.me.avatar || null }).eq("household_id", FAM.hid).eq("user_id", ACC.user.id).then(() => famPull());
 }
 function bindMe(box) {
   const L = t();
@@ -1690,8 +1997,15 @@ function bindMe(box) {
     try { S.me = { ...S.me, avatar: await DKAvatars.fromFile(e.target.files[0]) }; saveMe(); openAccount(ACC.why); } catch { toast(L.avErr); }
   });
   box.querySelector("#meName")?.addEventListener("change", e => { S.me = { ...S.me, name: e.target.value.trim().slice(0, 30) }; saveMe(); });
-  box.querySelector("[data-fam-invite]")?.addEventListener("click", famInvite);
-  box.querySelectorAll("[data-fam-remove]").forEach(b => b.addEventListener("click", () => famLeave(b.dataset.famRemove)));
+  box.querySelector("#famName")?.addEventListener("change", e => famRename(e.target.value));
+  box.querySelector("#famInviteForm")?.addEventListener("submit", e => { e.preventDefault(); famInvite($("#famEmail").value); });
+  box.querySelectorAll("[data-fam-remove]").forEach(b => b.addEventListener("click", () => famRemoveMember(b.dataset.famRemove)));
+  box.querySelectorAll("[data-fam-revoke]").forEach(b => b.addEventListener("click", () => famRevoke(b.dataset.famRevoke)));
+  box.querySelector("[data-fam-leave]")?.addEventListener("click", famLeave);
+  box.querySelector("[data-fam-copy]")?.addEventListener("click", async () => { try { await navigator.clipboard.writeText(FAM.link); toast(L.famCopied); } catch { box.querySelector(".famlink")?.select(); } });
+  box.querySelector("[data-fam-share]")?.addEventListener("click", async () => { try { await navigator.share({ title: "deal'ke", text: L.famMailBody(meName(), ""), url: FAM.link }); } catch { /* closed */ } });
+  box.querySelector("[data-inv-accept]")?.addEventListener("click", inviteAccept);
+  box.querySelector("[data-inv-no]")?.addEventListener("click", () => { dropInvite(); ACC.invite = null; openAccount(); });
 }
 
 // ---------- daily notification (web push) ----------
@@ -1733,8 +2047,8 @@ async function pushCheck() {
 // Works without an account or notifications: what's new on promo from your list since you last looked.
 const promoKey = (item, d) => `${DS.fold(item.q)}|${d.store}|${d.price}`;
 function promoNow() {
-  if (!S.wants.length || !window.DKBasket) return [];
-  const c = DKBasket.compare(S.wants, nearDeals(), S.shop);
+  if (!needs().length || !window.DKBasket) return [];
+  const c = DKBasket.compare(needs().filter(i => !i.doneBy), nearDeals(), S.shop);
   return c.items.map(({ item, best, byShop }) => ({ item, d: (c.pick && byShop[c.pick.chain]) || best })).filter(x => x.d);
 }
 function promoNote() {
@@ -1756,13 +2070,28 @@ function promoSeen() {
 }
 function openList() { promoSeen(); renderList(); openDialog($("#listBg"), $("#drawer .x")); }
 
-async function callFn(name) {
-  const { data, error } = await ACC.sb.functions.invoke(name, { body: {} });
-  if (error || !data?.url) { toast(t().accErr); return; }
-  location.href = data.url;
+async function callFn(name, body = {}) {
+  const { data, error } = await ACC.sb.functions.invoke(name, { body });
+  if (data?.url) { location.href = data.url; return data; }
+  let why = ""; try { why = (await error?.context?.json?.())?.error || ""; } catch { /* no body */ }
+  return { ...(data || {}), why };
 }
-function startTrial() { if (!ACC.user) { openAccount("trial"); return; } toast(t().accRedirect); callFn("create-checkout"); }
-function openPortal() { toast(t().accRedirect); callFn("customer-portal"); }
+// Buy or switch a plan. The server decides what is allowed (one paid plan per person, members leave first, ...).
+async function buy(plan) {
+  const L = t();
+  if (!PAY()) { toast(L.soon); return; }
+  if (!ACC.user) { openAccount("buy"); return; }
+  const cur = ACC.plan?.plan;
+  if (cur === "family_member") { toast(L.buyErrs.member); return; }
+  if ((cur === "single" && plan === "family") || (cur === "family" && plan === "single")) { if (!confirm(plan === "family" ? L.switchFamQ : L.switchSingleQ)) return; }
+  toast(L.accRedirect);
+  const r = await callFn("create-checkout", { plan });
+  if (!r) return;
+  if (r.switched) { waitForPremium(plan); return; }
+  toast(L.buyErrs[{ "already single": "single", "already family": "family", "member: leave the family first": "member", "owner: remove members first": "others" }[r.why]] || L.accErr);
+}
+function startTrial() { location.hash = "#pricing"; }
+async function openPortal() { toast(t().accRedirect); const r = await callFn("customer-portal"); if (r) toast(t().accErr); }
 async function signOut() { await ACC.sb.auth.signOut(); closeDialogs(); toast(t().accOut); }
 function paintAccount() {
   const b = $("#accBtn"); if (!b) return;
@@ -1771,17 +2100,40 @@ function paintAccount() {
   b.setAttribute("aria-label", ACC.user ? t().accTitle : t().accSignIn);
   if (!$("#accDlg").hidden) openAccount(ACC.why);
 }
+const dayMonth = x => x ? new Date(x).toLocaleDateString(LOCALE[S.lang], { day: "numeric", month: "long" }) : "";
+const PRICE = { single: 4.99, family: 12.99 };
+// The plan as the account page shows it. Members see the family's state, never payment details.
 function planLine() {
-  const L = t(), p = ACC.profile || {}, d = x => x ? new Date(x).toLocaleDateString(LOCALE[S.lang], { day: "numeric", month: "long" }) : "";
-  if (p.subscription_status === "trialing") return L.accTrial(d(p.trial_end));
-  if (p.subscription_status === "active") return p.cancel_at_period_end ? L.accEnds(d(p.current_period_end)) : L.accActive(d(p.current_period_end));
-  if (p.subscription_status === "past_due") return L.accPastDue;
+  const L = t(), p = ACC.plan || {};
+  if (p.plan === "single" || p.plan === "family") {
+    const what = `${p.plan === "single" ? L.single : L.family} · ${money(PRICE[p.plan])} ${L.perMonth}`;
+    const when = !p.live ? L.planStopped : p.cancel_at_period_end ? L.planEnds(dayMonth(p.period_end)) : p.period_end ? L.planRenews(dayMonth(p.period_end)) : L.planActive;
+    return `${what}. ${when}`;
+  }
+  if (p.plan === "family_member") return `${L.family} · ${L.planVia(p.family?.owner_name || "?")}. ${p.live ? L.planActive : L.planPaused}`;
   return L.accFree;
+}
+function subHTML(L) {
+  const p = ACC.plan || {};
+  if (!PAY() && !(p.plan && p.plan !== "free")) return "";
+  const warn = p.payment === "failed" && (p.plan === "single" || p.plan === "family") && p.status !== "active"
+    ? `<p class="warn" role="alert">${p.live ? (p.plan === "family" ? L.payFailedFam : L.payFailed)(dayMonth(p.grace_until)) : L.payStopped}</p>` : "";
+  const btns = [];
+  if (p.plan === "single" || p.plan === "family") btns.push(`<button type="button" class="btn" data-portal>${L.accManage}</button>`);
+  if (p.plan === "single" && p.live) btns.push(`<button type="button" class="btn ghost" data-buy="family">${L.switchToFam}</button>`);
+  if (p.plan === "family" && p.live && FAM.members.length <= 1) btns.push(`<button type="button" class="btn ghost" data-buy="single">${L.switchToSingle}</button>`);
+  if (!p.plan || p.plan === "free" || (!p.live && p.plan !== "family_member")) btns.push(`<a class="btn${btns.length ? " ghost" : ""}" href="#pricing" data-close>${L.seePremium}</a>`);
+  return `${warn}${btns.length ? `<div class="cta subcta">${btns.join("")}</div>` : ""}${p.plan === "single" || p.plan === "family" ? `<p class="muted small">${L.manageWhy}</p>` : ""}`;
+}
+// open the account and check the plan again (it may have changed: a payment, a removal, a cancellation)
+function openAccountFresh() {
+  openAccount();
+  if (ACC.user && ACC.sb) refreshPlan().then(famLoad).then(() => { if (!$("#accDlg").hidden) openAccount(ACC.why); });
 }
 function openAccount(why) {
   const L = t(); ACC.why = why;
   const box = $("#accBox");
-  const upsell = why === "join" ? `<p class="upsell">${L.famJoinSign}</p>` : why && why !== "trial" ? `<p class="upsell">${L.accNeed[why] || ""}</p>` : "";
+  const upsell = why === "join" ? `<p class="upsell">${L.famJoinSign}</p>` : why && why !== "trial" && L.accNeed[why] ? `<p class="upsell">${L.accNeed[why]}</p>` : "";
   if (!ACC.user) {
     box.innerHTML = `<h3 id="accTitle">${L.accSignIn}</h3>${upsell}<p class="muted">${L.accWhy}</p>
       <form id="accForm" class="acc-form"><label class="field"><span>${L.accEmail}</span><input id="accEmail" type="email" required autocomplete="email" inputmode="email"></label>
@@ -1798,26 +2150,24 @@ function openAccount(why) {
       const email = $("#accEmail").value.trim();
       if ($("#accPc").value.trim() && !await setPc($("#accPc").value, $("#accPcErr"), "accPc")) return; // optional, but must be valid
       renderStatic(); render();
-      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { data: S.pc ? { pc: S.pc, radius: S.radius } : {}, emailRedirectTo: location.origin + location.pathname + (why === "trial" ? "#pricing" : "") } });
+      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { data: S.pc ? { pc: S.pc, radius: S.radius } : {}, emailRedirectTo: location.origin + location.pathname + (pendingInvite() ? "?invite=" + pendingInvite() : "") + (why === "trial" || why === "buy" ? "#pricing" : "") } });
       const sent = $("#accSent"); if (sent) { sent.textContent = error ? L.accErr : L.accSent(email); sent.hidden = false; }
     });
   } else {
-    box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
-      ${meHTML(L)}${FAM.off ? "" : houseHTML(L)}
+    box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}${inviteHTML(L)}
+      ${meHTML(L)}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
       ${window.DKDiet ? `<div class="accdiet"><b>${L.dietAcc}</b><small class="muted">${L.dietAccWhy}</small>
         <div class="chips">${DKDiet.KEYS.map(k => `<button type="button" class="chip sm diet" data-diet="${k}" aria-pressed="${S.diet.has(k)}">${esc(L.diets[k])}</button>`).join("")}</div>
         <small class="muted">${L.dietNote}</small></div>` : ""}
+      ${subHTML(L)}${FAM.off ? "" : houseHTML(L)}
       <label class="accshop"><span><b>${L.myShop}</b><small class="muted">${L.myShopWhy}</small></span>
         <select id="accShop"><option value="">${L.myShopAny}</option>${shopChoices().map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>
       ${CFG.vapidPublicKey ? `<label class="alerts"><input type="checkbox" id="accNotify"${S.pushOn ? " checked" : ""}><span><b>${L.accNotify}</b><small class="muted">${L.accNotifyWhy}</small></span></label>
       <p class="pushmsg" id="pushMsg" role="status"${isIOS && !isApp() && !S.pushOn ? "" : " hidden"}>${isIOS && !isApp() ? L.pushIos : ""}</p>` : ""}
       ${CFG.emailAlerts ? `<label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>` : ""}
-      <div class="cta">${!PAY() ? "" : isPlus() || ACC.profile?.subscription_status === "past_due"
-        ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
-        : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
-        <button type="button" class="btn ghost" data-logout>${L.accLogout}</button></div>
+      <div class="cta"><button type="button" class="btn ghost" data-logout>${L.accLogout}</button></div>
       <p class="muted small">${L.accSynced}</p>`;
   }
   paintCc(guessCc(), "accPc");
