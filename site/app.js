@@ -133,7 +133,7 @@ Object.assign(T.nl, {
   tickHint: "Vink af wat je koopt: we tellen alleen wat je echt bespaart.", youSaved: v => `Jij bespaarde ${v} deze maand`,
   wantPh: "Voeg toe: koffie, melk, kipfilet…", wantAdd: "Voeg toe", wantsT: "Wat je nodig hebt",
   wantNone: "deze week geen promo in de buurt", wantAt: (c, p) => `${c} · ${p}`,
-  cheapT: "Goedkoopste winkel voor je lijst", myShopT: "Jouw winkel", myShop: "Mijn winkel", myShopAny: "Geen voorkeur",
+  cheapT: "Goedkoopste winkel voor je lijst", myShopT: "Jouw winkel", myShop: "Mijn winkel", myShopAny: "Geen voorkeur", myShopWhy: "Komt eerst op je lijst en in je dagelijkse melding. We zeggen het altijd als een andere winkel goedkoper is.", myShopSaved: s => s ? `${s} is nu je winkel` : "Geen voorkeurswinkel meer",
   covers: (a, b) => `${a} van ${b} in promo`, tipCheaper: (c, v, n) => `${c} is ${v} goedkoper voor dezelfde ${n}`,
   tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`,
   otherShops: "Andere winkels", dealsT: "Bewaarde promo's",
@@ -193,7 +193,7 @@ Object.assign(T.fr, {
   tickHint: "Cochez ce que vous achetez : on ne compte que ce que vous économisez vraiment.", youSaved: v => `Vous avez économisé ${v} ce mois-ci`,
   wantPh: "Ajoutez : café, lait, filet de poulet…", wantAdd: "Ajouter", wantsT: "Ce qu’il vous faut",
   wantNone: "pas de promo près de chez vous cette semaine", wantAt: (c, p) => `${c} · ${p}`,
-  cheapT: "Magasin le moins cher pour votre liste", myShopT: "Votre magasin", myShop: "Mon magasin", myShopAny: "Pas de préférence",
+  cheapT: "Magasin le moins cher pour votre liste", myShopT: "Votre magasin", myShop: "Mon magasin", myShopAny: "Pas de préférence", myShopWhy: "Il passe en premier dans votre liste et votre notification quotidienne. On vous dit toujours quand un autre magasin est moins cher.", myShopSaved: s => s ? `${s} est maintenant votre magasin` : "Plus de magasin préféré",
   covers: (a, b) => `${a} sur ${b} en promo`, tipCheaper: (c, v, n) => `${c} est ${v} moins cher pour les mêmes ${n}`,
   tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`,
   otherShops: "Autres magasins", dealsT: "Promos gardées",
@@ -244,7 +244,7 @@ Object.assign(T.en, {
   tickHint: "Tick what you buy: we only count what you really save.", youSaved: v => `You saved ${v} this month`,
   wantPh: "Add: coffee, milk, chicken…", wantAdd: "Add", wantsT: "What you need",
   wantNone: "no deal nearby this week", wantAt: (c, p) => `${c} · ${p}`,
-  cheapT: "Cheapest shop for your list", myShopT: "Your shop", myShop: "My shop", myShopAny: "No preference",
+  cheapT: "Cheapest shop for your list", myShopT: "Your shop", myShop: "My shop", myShopAny: "No preference", myShopWhy: "Comes first on your list and in your daily notification. We always say when another shop is cheaper.", myShopSaved: s => s ? `${s} is now your shop` : "No favourite shop any more",
   covers: (a, b) => `${a} of ${b} on promo`, tipCheaper: (c, v, n) => `${c} is ${v} cheaper for the same ${n}`,
   tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`,
   otherShops: "Other shops", dealsT: "Saved deals",
@@ -744,6 +744,12 @@ function savedHTML(L) {
 }
 const listN = () => Object.keys(S.list).length + S.wants.length;
 const nearDeals = () => DEALS.filter(d => inRadius(d));
+// favourite shop: chosen in the account or on My list; the shops near you first, nearest on top
+const shopChoices = () => {
+  const near = Object.entries(nearest).filter(([, n]) => n?.d != null && n.d <= S.radius).map(([k]) => k.split("|")[1]);
+  return [...new Set([S.shop, ...[...new Set([...near, ...nearDeals().map(d => d.store)])].sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9))].filter(Boolean))];
+};
+function setShop(chain) { S.shop = chain || ""; store.set("shop", S.shop); promoNote(); }
 function addWants(text) {
   const have = new Set(S.wants.map(w => DS.fold(w.q))); let n = 0;
   for (const q of (Array.isArray(text) ? text : String(text).split(/[,;\n]+/)).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30)) {
@@ -760,7 +766,7 @@ function wantsHTML(L) {
   const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
   const chains = [...new Set(nearDeals().map(d => d.store))].sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9));
   const shopSel = `<label class="myshop"><span>${L.myShop}</span><select id="myShop"><option value="">${L.myShopAny}</option>
-    ${[...new Set([S.shop, ...chains].filter(Boolean))].map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>`;
+    ${shopChoices().map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>`;
   const p = c.pick;
   const pickBox = p ? `<div class="starthere">${sicon(p.chain)}<div><small>${p.chain === S.shop ? L.myShopT : L.cheapT}</small><b>${esc(p.chain)}</b>
       <div class="sub">${L.covers(p.n, N)}${kmText(p.chain) ? ` · ${kmText(p.chain)}` : ""}</div></div>
@@ -1084,7 +1090,7 @@ function bind() {
   });
   $("#drawer").addEventListener("change", e => {
     if (e.target.id !== "myShop") return;
-    S.shop = e.target.value; store.set("shop", S.shop); renderList();
+    setShop(e.target.value); renderList();
   });
   $("#heroPc").addEventListener("input", () => { if (!S.pc) $("#heroGo").textContent = t().heroGo($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""); });
 }
@@ -1448,7 +1454,7 @@ async function pull() {
   // list items and preferred shop live in prefs, so no database change is needed
   const known = new Set(S.wants.map(w => DS.fold(w.q)));
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
-  if (!S.shop && data.prefs?.shop) S.shop = data.prefs.shop;
+  if (data.prefs?.shop) S.shop = data.prefs.shop;  // the shop saved in the account wins: it is a profile setting
   if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
   // devices that get the daily notification: the account's list is the truth (the morning job removes dead ones)
   ACC.push = (data.prefs?.push || []).filter(p => p?.endpoint);
@@ -1584,6 +1590,8 @@ function openAccount(why) {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
+      <label class="accshop"><span><b>${L.myShop}</b><small class="muted">${L.myShopWhy}</small></span>
+        <select id="accShop"><option value="">${L.myShopAny}</option>${shopChoices().map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>
       ${CFG.vapidPublicKey ? `<label class="alerts"><input type="checkbox" id="accNotify"${S.pushOn ? " checked" : ""}><span><b>${L.accNotify}</b><small class="muted">${L.accNotifyWhy}</small></span></label>
       <p class="pushmsg" id="pushMsg" role="status"${isIOS && !isApp() && !S.pushOn ? "" : " hidden"}>${isIOS && !isApp() ? L.pushIos : ""}</p>` : ""}
       ${CFG.emailAlerts ? `<label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>` : ""}
@@ -1602,6 +1610,7 @@ function openAccount(why) {
     else { await pushStop(); say(L.pushOff); }
     box.disabled = false;
   });
+  box.querySelector("#accShop")?.addEventListener("change", e => { setShop(e.target.value); toast(L.myShopSaved(S.shop)); });
   box.querySelector("[data-acc-pc]")?.addEventListener("click", () => { closeDialogs(); $("#locBtn").click(); });
   if ($("#accDlg").hidden) openDialog($("#accDlg"));
 }
