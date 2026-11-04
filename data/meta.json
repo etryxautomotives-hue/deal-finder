@@ -1,1 +1,1 @@
-{"collected_at": "2026-11-04T06:04:31+00:00", "deals": 364, "stores": ["Aldi", "Intermarché", "Lidl"]}
+{"collected_at": "2026-11-04T15:31:34+00:00", "deals": 1656, "stores": ["Aldi", "Delhaize", "Intermarché", "Lidl"], "per_shop": {"Aldi BE": 83, "Aldi NL": 38, "Delhaize BE": 1292, "Intermarché BE": 222, "Lidl BE": 21}, "kept_from_before": ["Aldi BE", "Aldi NL"], "collectors": {"Aldi": "failed", "Lidl": 21, "Delhaize": 1292, "Intermarché": 222, "Aldi NL": "failed", "Lidl NL": 0}}
