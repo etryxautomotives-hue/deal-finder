@@ -54,12 +54,13 @@ jobs:
           git diff --cached --quiet || git commit -m "Deals for $(date -u +%F)"
           # main may have moved while collecting (a merged PR): put the data commit on top, retry a few times
           ok=; for i in 1 2 3; do if git pull --rebase origin main && git push; then ok=1; break; fi; sleep 5; done; [ -n "$ok" ]
-      - name: Daily email (only the morning run; skipped until the secrets in docs/SETUP-ALERTS.md exist)
+      - name: Daily notification and email (only the morning run; skipped until the secrets in docs/SETUP-ALERTS.md exist)
         if: github.event_name == 'schedule'
-        continue-on-error: true   # an email problem must never stop the site from updating
+        continue-on-error: true   # a notification problem must never stop the site from updating
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_FROM: ${{ vars.ALERT_FROM }}
           SITE_URL: ${{ vars.SITE_URL }}

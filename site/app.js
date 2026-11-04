@@ -117,7 +117,12 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
-  accAlerts: "Dagelijkse e-mail", accAlertsWhy: "Eén mail per dag, alleen als iets van je lijst nieuw in promo is in je buurt.",
+  accAlerts: "Ook per e-mail", accAlertsWhy: "Dezelfde samenvatting in je mailbox.",
+  accNotify: "Dagelijkse melding op dit toestel", accNotifyWhy: "Eén melding per dag, alleen als iets van je lijst nieuw in promo is in je buurt.",
+  pushIos: "Op iPhone of iPad: tik op Deel en dan op ‘Zet op beginscherm’. Open deal'ke daarna via het icoon en zet dit aan.",
+  pushDenied: "Meldingen staan uit voor deze site. Zet ze aan in de instellingen van je browser en probeer opnieuw.",
+  pushNo: "Deze browser kan geen meldingen tonen.", pushOn: "Melding staat aan. Je hoort het morgenochtend als er iets is.", pushOff: "Melding staat uit op dit toestel.",
+  promoNote: n => n === 1 ? "1 ding van je lijst in promo" : `${n} dingen van je lijst in promo`, promoSee: "Bekijk", promoWhat: (q, s) => `${q} bij ${s}`,
   menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
   menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
   menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
@@ -172,7 +177,12 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
-  accAlerts: "E-mail quotidien", accAlertsWhy: "Un e-mail par jour, seulement si un produit de votre liste passe en promo près de chez vous.",
+  accAlerts: "Aussi par e-mail", accAlertsWhy: "Le même résumé dans votre boîte mail.",
+  accNotify: "Notification quotidienne sur cet appareil", accNotifyWhy: "Une notification par jour, seulement si un produit de votre liste passe en promo près de chez vous.",
+  pushIos: "Sur iPhone ou iPad : touchez Partager puis « Sur l’écran d’accueil ». Ouvrez ensuite deal'ke depuis l’icône et activez ceci.",
+  pushDenied: "Les notifications sont bloquées pour ce site. Autorisez-les dans les réglages du navigateur et réessayez.",
+  pushNo: "Ce navigateur ne peut pas afficher de notifications.", pushOn: "Notification activée. On vous prévient demain matin s’il y a du nouveau.", pushOff: "Notification désactivée sur cet appareil.",
+  promoNote: n => n === 1 ? "1 produit de votre liste en promo" : `${n} produits de votre liste en promo`, promoSee: "Voir", promoWhat: (q, s) => `${q} chez ${s}`,
   menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
   menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
   menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
@@ -218,7 +228,12 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
-  accAlerts: "Daily email", accAlertsWhy: "One email a day, only when something on your list is newly on promo near you.",
+  accAlerts: "Also by email", accAlertsWhy: "The same summary in your inbox.",
+  accNotify: "Daily notification on this device", accNotifyWhy: "One notification a day, only when something on your list is newly on promo near you.",
+  pushIos: "On iPhone or iPad: tap Share, then ‘Add to Home Screen’. Then open deal'ke from the icon and switch this on.",
+  pushDenied: "Notifications are blocked for this site. Allow them in your browser settings and try again.",
+  pushNo: "This browser can't show notifications.", pushOn: "Notification is on. You'll hear from us tomorrow morning if there's something new.", pushOff: "Notification is off on this device.",
+  promoNote: n => n === 1 ? "1 thing from your list on promo" : `${n} things from your list on promo`, promoSee: "View", promoWhat: (q, s) => `${q} at ${s}`,
   menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
   menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
   menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
@@ -306,7 +321,8 @@ const S = {
   list: store.get("list", {}), // id -> deal snapshot, so the list survives a new week of data
   wants: store.get("wants", []), // [{ id, q }]: products in your own words ("koffie"), matched to deals every day
   shop: store.get("shop", ""),   // preferred chain: shown first, cheaper options still shown
-  alerts: store.get("alerts", false), // daily summary email (sent by alerts/daily.py on GitHub Actions)
+  alerts: store.get("alerts", false), // also by email (sent by alerts/daily.py on GitHub Actions, once email is set up)
+  pushOn: store.get("pushOn", null),  // this device's push subscription {endpoint, keys}, or null (not synced: it's per device)
   bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
   shown: 48,
 };
@@ -578,6 +594,7 @@ function render() {
 function renderStatic() {
   const L = t();
   document.documentElement.lang = S.lang;
+  promoNote();
   document.querySelectorAll("[data-t]").forEach(el => { const v = L[el.dataset.t]; if (typeof v === "string") el.textContent = v; });
   document.querySelectorAll("[data-t-ph]").forEach(el => { el.placeholder = L[el.dataset.tPh]; el.setAttribute("aria-label", L[el.dataset.tPh]); });
   document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === S.lang));
@@ -733,7 +750,7 @@ function addWants(text) {
     if (have.has(DS.fold(q))) continue;
     have.add(DS.fold(q)); n++; S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
   }
-  store.set("wants", S.wants); $("#listCount").textContent = listN();
+  store.set("wants", S.wants); $("#listCount").textContent = listN(); promoSeen();  // you are looking at it
   return n;
 }
 // "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
@@ -1047,7 +1064,8 @@ function bind() {
     const r = +($("#radiusSeg [aria-pressed=true]")?.dataset.r || S.radius); S.radius = r; store.set("radius", r);
     computeNearest(); closeDialogs(); renderStatic(); render();
   });
-  $("#listBtn").addEventListener("click", () => { renderList(); openDialog($("#listBg"), $("#drawer .x")); });
+  $("#listBtn").addEventListener("click", openList);
+  $("#promoNote")?.addEventListener("click", e => { if (e.target.closest("[data-promo-see]")) openList(); else if (e.target.closest("[data-promo-x]")) promoSeen(); });
   $("#drawer").addEventListener("click", async e => {
     const tb = e.target.closest("[data-buy]");
     if (tb) { const id = tb.dataset.deal; toggleBought(tb.dataset.buy, id ? (DEALS.find(x => x.id === id) || S.list[id]) : null, tb.dataset.label); return; }
@@ -1304,6 +1322,7 @@ function renderPricing() {
 }
 function showView() {
   if (location.hash === "#account") { history.replaceState(null, "", location.pathname + location.search); openAccount(); }
+  if (location.hash === "#list") { history.replaceState(null, "", location.pathname + location.search); if (DEALS.length) openList(); }  // tapped the daily notification
   const v = location.hash === "#recipes" ? "recipes" : location.hash === "#pricing" ? "pricing" : "deals";
   $("#viewDeals").hidden = v !== "deals";
   $("#viewRecipes").hidden = v !== "recipes";
@@ -1376,7 +1395,7 @@ function bindRecipes() {
 
 // ---------- accounts and payments (on only when config.js has the Supabase keys) ----------
 const CFG = window.DK_CONFIG || {};
-const ACC = { on: !!(CFG.supabaseUrl && CFG.supabaseAnonKey), sb: null, user: null, profile: null, pulling: false };
+const ACC = { on: !!(CFG.supabaseUrl && CFG.supabaseAnonKey), sb: null, user: null, profile: null, pulling: false, push: [] };
 const PAY = () => ACC.on && CFG.payments === true;  // Plus is only sold (and locked) once Stripe is connected
 const isPlus = () => ["trialing", "active"].includes(ACC.profile?.subscription_status);
 // Free: every deal, my list, one own recipe. Plus: unlimited recipes and the weekly plan.
@@ -1431,6 +1450,8 @@ async function pull() {
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
   if (!S.shop && data.prefs?.shop) S.shop = data.prefs.shop;
   if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
+  // devices that get the daily notification: the account's list is the truth (the morning job removes dead ones)
+  ACC.push = (data.prefs?.push || []).filter(p => p?.endpoint);
   const seen = new Set(S.bought.map(b => `${b.k}|${b.day}`));
   S.bought = DKBasket.pruneBought([...(data.prefs?.bought || []).filter(b => b?.k && b.day && !seen.has(`${b.k}|${b.day}`)), ...S.bought]
     .sort((a, b) => a.day.localeCompare(b.day)), Date.now());
@@ -1448,10 +1469,72 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList() }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
+// ---------- daily notification (web push) ----------
+// The morning job (alerts/daily.py) sends it through the browser's own push service; sw.js shows it.
+const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const isApp = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const pushCan = () => !!CFG.vapidPublicKey && "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+const pushList = () => [...(S.pushOn ? [{ ...S.pushOn, at: DKBasket.dayOf(Date.now()) }] : []), ...ACC.push.filter(p => p.endpoint !== S.pushOn?.endpoint)].slice(0, 5);
+const keyBytes = b64 => Uint8Array.from(atob((b64 + "=".repeat(-b64.length & 3)).replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+async function pushStart() {   // returns "on", "ios", "denied" or "no"
+  if (!pushCan()) return isIOS && !isApp() ? "ios" : "no";
+  if (await Notification.requestPermission() !== "granted") return "denied";
+  try {
+    const reg = await navigator.serviceWorker.register("sw.js");
+    await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription() || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(CFG.vapidPublicKey) });
+    const j = sub.toJSON();
+    S.pushOn = { endpoint: j.endpoint, keys: j.keys }; store.set("pushOn", S.pushOn); push();
+    return "on";
+  } catch { return "no"; }
+}
+async function pushStop() {
+  const reg = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : null;
+  const sub = await reg?.pushManager.getSubscription();
+  const gone = S.pushOn?.endpoint || sub?.endpoint;
+  ACC.push = ACC.push.filter(p => p.endpoint !== gone);
+  S.pushOn = null; store.set("pushOn", null); push();
+  try { await sub?.unsubscribe(); } catch { /* already gone */ }
+}
+// the browser can drop a subscription (or the person blocks notifications): then the switch must say "off"
+async function pushCheck() {
+  if (!S.pushOn || !pushCan()) return;
+  const sub = Notification.permission === "granted" && await (await navigator.serviceWorker.getRegistration())?.pushManager.getSubscription();
+  if (!sub) { ACC.push = ACC.push.filter(p => p.endpoint !== S.pushOn.endpoint); S.pushOn = null; store.set("pushOn", null); push(); }
+  else if (sub.endpoint !== S.pushOn.endpoint) { const j = sub.toJSON(); S.pushOn = { endpoint: j.endpoint, keys: j.keys }; store.set("pushOn", S.pushOn); push(); }
+}
+
+// ---------- "on promo now" note when the site opens ----------
+// Works without an account or notifications: what's new on promo from your list since you last looked.
+const promoKey = (item, d) => `${DS.fold(item.q)}|${d.store}|${d.price}`;
+function promoNow() {
+  if (!S.wants.length || !window.DKBasket) return [];
+  const c = DKBasket.compare(S.wants, nearDeals(), S.shop);
+  return c.items.map(({ item, best, byShop }) => ({ item, d: (c.pick && byShop[c.pick.chain]) || best })).filter(x => x.d);
+}
+function promoNote() {
+  const el = $("#promoNote"); if (!el) return;
+  const seen = new Set(store.get("seenPromo", []));
+  const fresh = promoNow().filter(x => !seen.has(promoKey(x.item, x.d)));
+  if (!fresh.length || SAMPLE) { el.hidden = true; return; }
+  const L = t();
+  el.innerHTML = `<span class="bell" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <span class="txt"><b>${L.promoNote(fresh.length)}</b><small>${fresh.slice(0, 3).map(x => esc(L.promoWhat(x.item.q, x.d.store))).join(" · ")}${fresh.length > 3 ? " …" : ""}</small></span>
+    <button type="button" class="btn small" data-promo-see>${L.promoSee}</button>
+    <button type="button" class="x" data-promo-x aria-label="${L.close}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>`;
+  el.hidden = false;
+}
+function promoSeen() {
+  const keys = promoNow().map(x => promoKey(x.item, x.d));
+  store.set("seenPromo", [...new Set([...store.get("seenPromo", []), ...keys])].slice(-300));
+  const el = $("#promoNote"); if (el) el.hidden = true;
+}
+function openList() { promoSeen(); renderList(); openDialog($("#listBg"), $("#drawer .x")); }
+
 async function callFn(name) {
   const { data, error } = await ACC.sb.functions.invoke(name, { body: {} });
   if (error || !data?.url) { toast(t().accErr); return; }
@@ -1501,7 +1584,9 @@ function openAccount(why) {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
-      <label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>
+      ${CFG.vapidPublicKey ? `<label class="alerts"><input type="checkbox" id="accNotify"${S.pushOn ? " checked" : ""}><span><b>${L.accNotify}</b><small class="muted">${L.accNotifyWhy}</small></span></label>
+      <p class="pushmsg" id="pushMsg" role="status"${isIOS && !isApp() && !S.pushOn ? "" : " hidden"}>${isIOS && !isApp() ? L.pushIos : ""}</p>` : ""}
+      ${CFG.emailAlerts ? `<label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>` : ""}
       <div class="cta">${!PAY() ? "" : isPlus() || ACC.profile?.subscription_status === "past_due"
         ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
         : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
@@ -1510,6 +1595,13 @@ function openAccount(why) {
   }
   paintCc(guessCc(), "accPc");
   box.querySelector("#accAlerts")?.addEventListener("change", e => { S.alerts = e.target.checked; store.set("alerts", S.alerts); });
+  box.querySelector("#accNotify")?.addEventListener("change", async e => {
+    const box = e.target, msg = $("#pushMsg"), say = m => { if (msg) { msg.textContent = m; msg.hidden = !m; } };
+    box.disabled = true;
+    if (box.checked) { const r = await pushStart(); box.checked = r === "on"; say({ on: L.pushOn, ios: L.pushIos, denied: L.pushDenied, no: L.pushNo }[r]); }
+    else { await pushStop(); say(L.pushOff); }
+    box.disabled = false;
+  });
   box.querySelector("[data-acc-pc]")?.addEventListener("click", () => { closeDialogs(); $("#locBtn").click(); });
   if ($("#accDlg").hidden) openDialog($("#accDlg"));
 }
@@ -1517,5 +1609,5 @@ function openAccount(why) {
 // ---------- start ----------
 bind();
 bindRecipes();
-load().then(() => { renderStatic(); render(); showView(); initAccounts(); });
+load().then(() => { renderStatic(); render(); showView(); initAccounts(); pushCheck(); });
 })();
