@@ -183,6 +183,12 @@ Object.assign(T.en, { nearT: (n, r) => `${n} shops within ${r} km`, nearSub: (n,
   nearNL: "in the Netherlands, no promos online yet", country: "Country", cc: { BE: "Belgium", NL: "Netherlands" },
   accPc: "Your postal code or address", accPcWhy: "So we show the promos near you straight away. You can change it any time.", accChange: "Change" });
 Object.assign(T.nl, { accSignIn: "Inloggen", accTitle: "Mijn account", accEmail: "E-mail", accSend: "Stuur me een inloglink", accWhy: "Geen wachtwoord nodig: je krijgt een link per e-mail. Je lijst en recepten staan dan op al je toestellen.", accSent: e => `Kijk in je mailbox (${e}) en klik op de link.`, accPlan: "Abonnement", accFree: "Gratis", accTrial: d => `Plus, gratis proefperiode tot ${d}`, accActive: d => `Plus, verlengt op ${d}`, accEnds: d => `Plus, stopt op ${d}`, accPastDue: "Plus, betaling mislukt: werk je betaalgegevens bij", accManage: "Beheer abonnement", accSubscribe: "Neem Plus, € 4,99 per maand", accLogout: "Uitloggen", accOut: "Je bent uitgelogd", accErr: "Dat lukte niet. Probeer het zo opnieuw.", accRedirect: "Even geduld, we openen de betaalpagina…", accSynced: "Je lijst en recepten worden bewaard in je account.", accNeed: { plan: "Je week plannen zit in Plus. Probeer het 14 dagen gratis.", recipes: "Meer dan één eigen recept zit in Plus. Probeer het 14 dagen gratis." } });
+Object.assign(T.nl, { meT: "Mijn profiel", meName: "Je naam", meNamePh: "Bv. Mama of Jonas", avChange: "Kies een foto", avUpload: "Foto van je toestel", avErr: "Die foto lukte niet. Probeer een andere.",
+  famT: "Mijn huis", famNone: "Deel je lijst met je gezin of vrienden: iedereen ziet dezelfde lijst en vinkt af wat gekocht is.", famSome: n => `${n} mensen delen deze lijst`,
+  famInvite: "Nodig iemand uit", famShareText: "Kom bij ons huis op deal'ke, dan delen we één boodschappenlijst.", famCopied: "Link gekopieerd: stuur hem door", famLink: "Of stuur deze link (14 dagen geldig):",
+  famLeave: "Verlaat het huis", famRemove: "Verwijder", famYou: "jij", famJoined: h => `Welkom in ${h}! Jullie delen nu één lijst.`, famJoinErr: "Die uitnodiging is verlopen. Vraag een nieuwe link.",
+  famJoinSign: "Je bent uitgenodigd voor een gedeelde lijst. Log in om erbij te komen.", famLeft: "Je hebt het huis verlaten", famClear: "Wis wat gekocht is", famShared: n => `Gedeeld met ${n}`, homeName: "Thuis",
+  famOff: "Samen een lijst delen staat nog niet aan.", famBought: n => `afgevinkt door ${n}` });
 T.nl.sorts.value = "Goedkoopst per kg / L";
 Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. gehakt, pasta, ui", rFree: q => `“${q}” toevoegen als eigen ingrediënt`,
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
@@ -236,6 +242,12 @@ Object.assign(T.fr, {
   freeBtn: "Voir les promos gratuites", soon: "Les comptes et le paiement arrivent bientôt. D’ici là, tout est gratuit.",
 });
 Object.assign(T.fr, { accSignIn: "Se connecter", accTitle: "Mon compte", accEmail: "E-mail", accSend: "Recevoir un lien de connexion", accWhy: "Pas de mot de passe : vous recevez un lien par e-mail. Votre liste et vos recettes vous suivent sur tous vos appareils.", accSent: e => `Regardez votre boîte mail (${e}) et cliquez sur le lien.`, accPlan: "Abonnement", accFree: "Gratuit", accTrial: d => `Plus, essai gratuit jusqu’au ${d}`, accActive: d => `Plus, renouvelé le ${d}`, accEnds: d => `Plus, se termine le ${d}`, accPastDue: "Plus, paiement échoué : mettez à jour votre moyen de paiement", accManage: "Gérer l’abonnement", accSubscribe: "Prendre Plus, 4,99 € par mois", accLogout: "Se déconnecter", accOut: "Vous êtes déconnecté", accErr: "Ça n’a pas marché. Réessayez dans un instant.", accRedirect: "Un instant, on ouvre la page de paiement…", accSynced: "Votre liste et vos recettes sont enregistrées dans votre compte.", accNeed: { plan: "Planifier la semaine fait partie de Plus. Essayez 14 jours gratuitement.", recipes: "Plus d’une recette perso fait partie de Plus. Essayez 14 jours gratuitement." } });
+Object.assign(T.fr, { meT: "Mon profil", meName: "Votre prénom", meNamePh: "P. ex. Maman ou Lucas", avChange: "Choisir une photo", avUpload: "Photo de l’appareil", avErr: "Cette photo n’a pas marché. Essayez-en une autre.",
+  famT: "Ma maison", famNone: "Partagez votre liste avec votre famille ou vos amis : tout le monde voit la même liste et coche ce qui est acheté.", famSome: n => `${n} personnes partagent cette liste`,
+  famInvite: "Inviter quelqu’un", famShareText: "Rejoins notre maison sur deal'ke pour partager une seule liste de courses.", famCopied: "Lien copié : envoyez-le", famLink: "Ou envoyez ce lien (valable 14 jours) :",
+  famLeave: "Quitter la maison", famRemove: "Retirer", famYou: "vous", famJoined: h => `Bienvenue dans ${h} ! Vous partagez maintenant une liste.`, famJoinErr: "Cette invitation a expiré. Demandez un nouveau lien.",
+  famJoinSign: "Vous êtes invité à une liste partagée. Connectez-vous pour la rejoindre.", famLeft: "Vous avez quitté la maison", famClear: "Effacer ce qui est acheté", famShared: n => `Partagée avec ${n}`, homeName: "Maison",
+  famOff: "Le partage de liste n’est pas encore activé.", famBought: n => `coché par ${n}` });
 T.fr.sorts.value = "Moins cher au kg / L";
 Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. haché, pâtes, oignon", rFree: q => `Ajouter « ${q} » comme ingrédient`,
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
@@ -289,6 +301,12 @@ Object.assign(T.en, {
   freeBtn: "See the free deals", soon: "Accounts and payment are coming soon. Until then everything is free.",
 });
 Object.assign(T.en, { accSignIn: "Sign in", accTitle: "My account", accEmail: "Email", accSend: "Email me a sign-in link", accWhy: "No password: we email you a link. Your list and recipes then follow you on every device.", accSent: e => `Check your inbox (${e}) and click the link.`, accPlan: "Plan", accFree: "Free", accTrial: d => `Plus, free trial until ${d}`, accActive: d => `Plus, renews on ${d}`, accEnds: d => `Plus, ends on ${d}`, accPastDue: "Plus, payment failed: please update your payment details", accManage: "Manage subscription", accSubscribe: "Get Plus, €4.99 a month", accLogout: "Sign out", accOut: "You're signed out", accErr: "That didn't work. Please try again in a moment.", accRedirect: "One moment, opening the payment page…", accSynced: "Your list and recipes are saved to your account.", accNeed: { plan: "Planning your week is part of Plus. Try it free for 14 days.", recipes: "More than one recipe of your own is part of Plus. Try it free for 14 days." } });
+Object.assign(T.en, { meT: "My profile", meName: "Your name", meNamePh: "E.g. Mum or Jonas", avChange: "Pick a picture", avUpload: "Photo from your device", avErr: "That photo didn't work. Try another one.",
+  famT: "My home", famNone: "Share your list with family or friends: everyone sees the same list and ticks off what's bought.", famSome: n => `${n} people share this list`,
+  famInvite: "Invite someone", famShareText: "Join our home on deal'ke so we share one shopping list.", famCopied: "Link copied: send it on", famLink: "Or send this link (valid 14 days):",
+  famLeave: "Leave this home", famRemove: "Remove", famYou: "you", famJoined: h => `Welcome to ${h}! You now share one list.`, famJoinErr: "That invite has expired. Ask for a new link.",
+  famJoinSign: "You've been invited to a shared list. Sign in to join.", famLeft: "You left the home", famClear: "Clear what's bought", famShared: n => `Shared with ${n}`, homeName: "Home",
+  famOff: "Sharing a list isn't switched on yet.", famBought: n => `ticked by ${n}` });
 T.en.sorts.value = "Cheapest per kg / L";
 Object.assign(T.nl, { sgRecent: "Recent gezocht", sgFav: "Jouw favorieten in promo", sgAll: q => `Alle promo's voor “${q}”`, sgDel: q => `“${q}” uit je zoekgeschiedenis halen`, qFuzzy: "Geen exacte treffers, dit lijkt er het meest op." });
 Object.assign(T.fr, { sgRecent: "Recherches récentes", sgFav: "Vos favoris en promo", sgAll: q => `Toutes les promos pour « ${q} »`, sgDel: q => `Retirer « ${q} » de l’historique`, qFuzzy: "Pas de résultat exact, voici les plus proches." });
@@ -319,7 +337,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home", "diet"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home", "diet", "me"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -339,6 +357,7 @@ const S = {
   alerts: store.get("alerts", false), // also by email (sent by alerts/daily.py on GitHub Actions, once email is set up)
   pushOn: store.get("pushOn", null),  // this device's push subscription {endpoint, keys}, or null (not synced: it's per device)
   bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
+  me: store.get("me", { name: "", avatar: "" }),   // name and picture the people you share a list with see
   diet: new Set(store.get("diet", [])), // profile: vegetarian, gluten-free, halal, ... (site/diet.js); the same as the filters
   shown: 48,
 };
@@ -756,6 +775,10 @@ const today = () => DKBasket.dayOf(Date.now());
 const boughtOf = k => S.bought.find(b => b.k === k && (k.startsWith("d:") || b.day === today()));  // a need ticks again every day
 function toggleBought(k, d, label) {
   const hit = boughtOf(k);
+  if (FAM.hid && k.startsWith("w:")) {   // shared list: the tick is for everyone
+    const w = S.wants.find(x => "w:" + x.id === k);
+    if (w) { const on = !(hit || w.doneBy); w.doneBy = on ? ACC.user.id : null; famTick(w.id, on); if (!on && !hit) { renderList(); return; } }
+  }
   if (hit) S.bought = S.bought.filter(b => b !== hit);
   else {
     S.bought.push({ k, day: today(), name: (d?.name || label || "").slice(0, 80), store: d?.store || "", paid: d?.price || 0, save: DKBasket.saveOf(d) });
@@ -767,7 +790,7 @@ function toggleBought(k, d, label) {
   if (!hit && DKBasket.saveOf(d) > 0) toast(t().savedMonth(money(DKBasket.savings(S.bought, Date.now()).month)));
   renderList(); renderHero();
 }
-const tickBtn = (k, d, label) => { const on = !!boughtOf(k), L = t();
+const tickBtn = (k, d, label, done) => { const on = done ?? !!boughtOf(k), L = t();
   return `<button type="button" class="tick" data-buy="${k}"${d ? ` data-deal="${d.id}"` : ""} data-label="${esc(label || "")}" aria-pressed="${on}" aria-label="${on ? L.bought : L.notBought}"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`; };
 function savedHTML(L) {
   const s = DKBasket.savings(S.bought, Date.now());
@@ -793,6 +816,7 @@ function addWants(text) {
     have.add(DS.fold(q)); n++; S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
   }
   store.set("wants", S.wants); $("#listCount").textContent = listN(); promoSeen();  // you are looking at it
+  if (FAM.hid && n) famAdd(S.wants.slice(-n).map(w => w.q));
   return n;
 }
 // "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
@@ -813,8 +837,9 @@ function wantsHTML(L) {
   const others = c.shops.filter(s => s !== p).slice(0, 3);
   const rows = c.items.map(({ item, best, byShop }) => {
     const d = (c.split?.moved.includes(item.id) && byShop[c.split.chain]) || (p && byShop[p.chain]) || best;
-    const on = !!boughtOf("w:" + item.id);
-    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q)}<span><b class="wq">${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
+    const on = !!boughtOf("w:" + item.id) || !!item.doneBy;
+    const who = FAM.hid && FAM.members.length > 1 ? memberOf(item.doneBy || item.by) : null;
+    return `<li class="tickrow${on ? " done" : ""}">${tickBtn("w:" + item.id, d, item.q, on)}<span><b class="wq">${who ? `<span class="by" title="${esc(item.doneBy ? L.famBought(who.name || "?") : who.name || "")}">${av(who.avatar, 18, who.name || "")}</span>` : ""}${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
       ${d ? `<button type="button" class="p linkish" data-open="${d.id}">${money(d.price)}</button>` : `<span class="p"></span>`}
       <button type="button" data-unwant="${item.id}" aria-label="${L.remove}">${x}</button></li>`;
   }).join("");
@@ -822,7 +847,8 @@ function wantsHTML(L) {
       <button type="submit" class="btn">${L.wantAdd}</button></form>
     ${N ? `${pickBox}${tip}${split}${chains.length ? shopSel : ""}
     ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b>${favNote(s.chain)}</span>`).join("")}</div>` : ""}
-    <section class="shop"><div class="shop-h">${L.wantsT}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul></section>` : ""}`;
+    <section class="shop"><div class="shop-h">${L.wantsT}${FAM.hid && FAM.members.length > 1 ? `<span class="sharedwith">${FAM.members.map(m => av(m.avatar, 22, m.name || "")).join("")}${L.famShared(esc(FAM.name))}</span>` : ""}</div><p class="hint">${L.tickHint}</p><ul>${rows}</ul>
+      ${FAM.hid && S.wants.some(w => w.doneBy) ? `<button type="button" class="linkish" data-fam-clear>${L.famClear}</button>` : ""}</section>` : ""}`;
 }
 function listText() {
   const L = t(), by = groupList();
@@ -1113,7 +1139,8 @@ function bind() {
     const tb = e.target.closest("[data-buy]");
     if (tb) { const id = tb.dataset.deal; toggleBought(tb.dataset.buy, id ? (DEALS.find(x => x.id === id) || S.list[id]) : null, tb.dataset.label); return; }
     const uw = e.target.closest("[data-unwant]");
-    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); return; }
+    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); famRemove(uw.dataset.unwant); return; }
+    if (e.target.closest("[data-fam-clear]")) { famClear(); return; }
     if (e.target.closest("#clearList")) { S.list = {}; S.wants = []; store.set("list", S.list); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); render(); }
     if (e.target.closest("#shareList")) {
       const text = listText();
@@ -1483,11 +1510,12 @@ async function initAccounts() {
   const { data } = await ACC.sb.auth.getSession();
   await setUser(data.session?.user || null);
   if (url.has("paid")) { await refreshProfile(); openAccount(); }  // back from Stripe checkout
+  if (!ACC.user && pendingJoin()) openAccount("join");               // opened an invite link: sign in first
 }
 async function setUser(user) {
   if ((user?.id || null) === (ACC.user?.id || null) && ACC.profile) return;
   ACC.user = user; ACC.profile = null;
-  if (user) { await refreshProfile(); await pull(); }
+  if (user) { await refreshProfile(); await pull(); await famLoad(); } else famReset();
   paintAccount();
 }
 async function refreshProfile() {
@@ -1514,6 +1542,7 @@ async function pull() {
   const known = new Set(S.wants.map(w => DS.fold(w.q)));
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
   if (data.prefs?.shop) S.shop = data.prefs.shop;
+  if (data.prefs?.me && (data.prefs.me.name || data.prefs.me.avatar) && !S.me.name && !S.me.avatar) { S.me = data.prefs.me; store.set("me", S.me); }
   if (Array.isArray(data.prefs?.diet) && data.prefs.diet.length) { S.diet = new Set(data.prefs.diet); store.set("diet", [...S.diet]); }  // allergies: the account wins
   if (data.prefs?.home?.adults && !localStorage.getItem("dk.home")) { S.home = data.prefs.home; store.set("home", S.home); }  // the shop saved in the account wins: it is a profile setting
   if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
@@ -1536,10 +1565,135 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home, diet: [...S.diet] }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home, diet: [...S.diet], me: S.me }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
+// ---------- sharing a list with family or friends (supabase/migrations/003_households.sql) ----------
+// A "home" has members and one shared list. When you're in one, "What you need" on My list IS that list:
+// everyone adds to it, and a tick means bought for everybody. Ticks arrive on the other phones straight away.
+const FAM = { hid: null, name: "", owner: null, members: [], ch: null, off: false };
+const JOIN_KEY = "dk.joinCode";
+if (url.get("join")) { try { localStorage.setItem(JOIN_KEY, url.get("join").slice(0, 40)); } catch { /* private mode */ } }
+const pendingJoin = () => { try { return localStorage.getItem(JOIN_KEY); } catch { return null; } };
+const isUuid = id => /^[0-9a-f-]{36}$/.test(id);
+const meName = () => S.me.name || (ACC.user?.email || "").split("@")[0];
+const memberOf = id => FAM.members.find(m => m.user_id === id);
+const av = (v, size, label) => window.DKAvatars ? DKAvatars.html(v, size, label) : "";
+function famReset() { if (FAM.ch) { try { ACC.sb.removeChannel(FAM.ch); } catch { /* gone */ } } Object.assign(FAM, { hid: null, name: "", owner: null, members: [], ch: null }); }
+async function famLoad() {
+  if (!ACC.user) return;
+  const code = pendingJoin();
+  if (code) {
+    try { localStorage.removeItem(JOIN_KEY); } catch { /* private mode */ }
+    history.replaceState(null, "", location.pathname + location.hash);
+    const { error } = await ACC.sb.rpc("join_household", { code, my_name: meName(), my_avatar: S.me.avatar || null });
+    if (error) toast(/expired/.test(error.message) ? t().famJoinErr : t().famOff);
+    else { await famLoad(); toast(t().famJoined(FAM.name)); return; }
+  }
+  const { data, error } = await ACC.sb.from("household_members").select("household_id, households(name, owner)").eq("user_id", ACC.user.id).maybeSingle();
+  if (error) { FAM.off = true; return; }       // migration 003 not run yet: sharing stays hidden
+  FAM.off = false;
+  if (!data) { famReset(); return; }
+  FAM.hid = data.household_id; FAM.name = data.households?.name || t().homeName; FAM.owner = data.households?.owner;
+  await famPull(true);
+  if (!FAM.ch && ACC.sb.channel) {
+    FAM.ch = ACC.sb.channel("hh-" + FAM.hid).on("postgres_changes", { event: "*", schema: "public", table: "household_items", filter: `household_id=eq.${FAM.hid}` }, () => famPull())
+      .on("postgres_changes", { event: "*", schema: "public", table: "household_members", filter: `household_id=eq.${FAM.hid}` }, () => famPull()).subscribe();
+  }
+}
+// members and the shared list; the first time on a device, what's already on your own list joins the shared one
+async function famPull(first) {
+  if (!FAM.hid) return;
+  const [m, it] = await Promise.all([
+    ACC.sb.from("household_members").select("user_id, name, avatar").eq("household_id", FAM.hid).order("joined_at"),
+    ACC.sb.from("household_items").select("id, q, added_by, done_by, done_at, created_at").eq("household_id", FAM.hid).order("created_at")]);
+  FAM.members = m.data || [];
+  let items = it.data || [];
+  const seeded = "dk.famSeeded." + FAM.hid;
+  if (first && !localStorage.getItem(seeded)) {
+    const have = new Set(items.map(x => DS.fold(x.q)));
+    const add = S.wants.filter(w => !have.has(DS.fold(w.q))).map(w => ({ household_id: FAM.hid, q: w.q, added_by: ACC.user.id }));
+    if (add.length) { const r = await ACC.sb.from("household_items").insert(add).select("id, q, added_by, done_by, done_at, created_at"); items = [...items, ...(r.data || [])]; }
+    try { localStorage.setItem(seeded, "1"); } catch { /* private mode */ }
+  }
+  S.wants = items.map(x => ({ id: x.id, q: x.q, by: x.added_by, doneBy: x.done_by || null }));
+  store.set("wants", S.wants);   // a copy in prefs too, so the daily notification knows it
+  $("#listCount").textContent = listN();
+  if (!$("#listBg").hidden) renderList();
+  if (!$("#accDlg").hidden) openAccount(ACC.why);
+  promoNote();
+}
+async function famAdd(qs) {
+  if (!FAM.hid || !qs.length) return;
+  await ACC.sb.from("household_items").insert(qs.map(q => ({ household_id: FAM.hid, q, added_by: ACC.user.id })));
+  famPull();
+}
+async function famRemove(id) { if (FAM.hid && isUuid(id)) { await ACC.sb.from("household_items").delete().eq("id", id); famPull(); } }
+async function famTick(id, on) {
+  if (!FAM.hid || !isUuid(id)) return;
+  await ACC.sb.from("household_items").update({ done_by: on ? ACC.user.id : null, done_at: on ? new Date().toISOString() : null }).eq("id", id);
+  famPull();
+}
+async function famClear() { if (FAM.hid) { await ACC.sb.from("household_items").delete().eq("household_id", FAM.hid).not("done_by", "is", null); famPull(); } }
+async function famInvite() {
+  const L = t();
+  if (!FAM.hid) {
+    const { error } = await ACC.sb.rpc("create_household", { hh_name: L.homeName, my_name: meName(), my_avatar: S.me.avatar || null });
+    if (error) { toast(L.famOff); return; }
+    await famLoad();
+  }
+  const { data: code, error } = await ACC.sb.rpc("invite_code");
+  if (error || !code) { toast(L.accErr); return; }
+  const link = location.origin + location.pathname + "?join=" + encodeURIComponent(code);
+  FAM.link = link; openAccount(ACC.why);
+  try { if (navigator.share) { await navigator.share({ title: "deal'ke", text: L.famShareText, url: link }); return; } } catch { /* closed the share sheet */ }
+  try { await navigator.clipboard.writeText(link); toast(L.famCopied); } catch { /* the link is shown in the account */ }
+}
+async function famLeave(uid) {
+  if (!FAM.hid) return;
+  await ACC.sb.from("household_members").delete().eq("household_id", FAM.hid).eq("user_id", uid);
+  if (uid === ACC.user.id) {
+    S.wants = S.wants.filter(w => !w.doneBy).map(w => ({ id: w.id, q: w.q })); store.set("wants", S.wants);  // keep a copy of what's still needed
+    famReset(); toast(t().famLeft); openAccount(ACC.why); $("#listCount").textContent = listN();
+  } else famPull();
+}
+function saveMe() {
+  store.set("me", S.me);
+  if (FAM.hid) ACC.sb.from("household_members").update({ name: meName(), avatar: S.me.avatar || null }).eq("household_id", FAM.hid).eq("user_id", ACC.user.id).then(() => famPull());
+}
+// the home on the account page: a house with everyone in it
+function houseHTML(L) {
+  const people = FAM.hid ? FAM.members : [{ user_id: ACC.user.id, name: meName(), avatar: S.me.avatar }];
+  const roof = `<svg class="house-bg" viewBox="0 0 320 210" preserveAspectRatio="none" aria-hidden="true"><path d="M160 8 12 92h22v110h252V92h22z" fill="var(--mustard-soft)" stroke="var(--mustard)" stroke-width="4" stroke-linejoin="round"/><rect x="226" y="30" width="22" height="38" fill="var(--mustard)" rx="3"/></svg>`;
+  const who = people.map(m => `<span class="person">${av(m.avatar, 46, m.name || "")}<small>${esc(m.user_id === ACC.user.id ? `${m.name || meName()} (${L.famYou})` : m.name || "?")}</small></span>`).join("");
+  const rows = FAM.hid && FAM.members.length > 1 ? `<ul class="members">${FAM.members.map(m => `<li>${av(m.avatar, 28, m.name || "")}<span>${esc(m.name || "?")}${m.user_id === ACC.user.id ? ` (${L.famYou})` : ""}</span>
+      ${m.user_id === ACC.user.id ? "" : FAM.owner === ACC.user.id ? `<button type="button" class="linkish" data-fam-remove="${esc(m.user_id)}">${L.famRemove}</button>` : ""}</li>`).join("")}</ul>` : "";
+  return `<section class="famcard"><h4>${esc(FAM.hid ? FAM.name : L.famT)}</h4>
+    <div class="house">${roof}<div class="people">${who}</div></div>
+    <p class="muted">${FAM.hid && FAM.members.length > 1 ? L.famSome(FAM.members.length) : L.famNone}</p>
+    <button type="button" class="btn block" data-fam-invite>${L.famInvite}</button>
+    ${FAM.link ? `<p class="muted small">${L.famLink}</p><input class="famlink" readonly value="${esc(FAM.link)}" aria-label="${L.famLink}">` : ""}
+    ${rows}${FAM.hid ? `<button type="button" class="linkish leave" data-fam-remove="${esc(ACC.user.id)}">${L.famLeave}</button>` : ""}</section>`;
+}
+function meHTML(L) {
+  const pick = window.DKAvatars ? `<div class="avpick" id="avPick" hidden>${DKAvatars.KEYS.map(k => `<button type="button" data-av="a:${k}" aria-pressed="${S.me.avatar === "a:" + k}" aria-label="${k}">${DKAvatars.svg(k)}</button>`).join("")}
+      <label class="btn ghost avup">${L.avUpload}<input type="file" id="avFile" accept="image/*" hidden></label></div>` : "";
+  return `<section class="mecard"><button type="button" class="mepic" data-av-open aria-expanded="false" aria-controls="avPick" aria-label="${L.avChange}">${av(S.me.avatar, 64, meName())}<span class="pen" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span></button>
+    <label class="field mename"><span>${L.meName}</span><input id="meName" maxlength="30" autocomplete="nickname" value="${esc(S.me.name)}" placeholder="${esc(L.meNamePh)}"></label></section>${pick}`;
+}
+function bindMe(box) {
+  const L = t();
+  box.querySelector("[data-av-open]")?.addEventListener("click", e => { const p = $("#avPick"); p.hidden = !p.hidden; e.currentTarget.setAttribute("aria-expanded", String(!p.hidden)); });
+  box.querySelectorAll("[data-av]").forEach(b => b.addEventListener("click", () => { S.me = { ...S.me, avatar: b.dataset.av }; saveMe(); openAccount(ACC.why); }));
+  box.querySelector("#avFile")?.addEventListener("change", async e => {
+    try { S.me = { ...S.me, avatar: await DKAvatars.fromFile(e.target.files[0]) }; saveMe(); openAccount(ACC.why); } catch { toast(L.avErr); }
+  });
+  box.querySelector("#meName")?.addEventListener("change", e => { S.me = { ...S.me, name: e.target.value.trim().slice(0, 30) }; saveMe(); });
+  box.querySelector("[data-fam-invite]")?.addEventListener("click", famInvite);
+  box.querySelectorAll("[data-fam-remove]").forEach(b => b.addEventListener("click", () => famLeave(b.dataset.famRemove)));
+}
+
 // ---------- daily notification (web push) ----------
 // The morning job (alerts/daily.py) sends it through the browser's own push service; sw.js shows it.
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -1627,7 +1781,7 @@ function planLine() {
 function openAccount(why) {
   const L = t(); ACC.why = why;
   const box = $("#accBox");
-  const upsell = why && why !== "trial" ? `<p class="upsell">${L.accNeed[why] || ""}</p>` : "";
+  const upsell = why === "join" ? `<p class="upsell">${L.famJoinSign}</p>` : why && why !== "trial" ? `<p class="upsell">${L.accNeed[why] || ""}</p>` : "";
   if (!ACC.user) {
     box.innerHTML = `<h3 id="accTitle">${L.accSignIn}</h3>${upsell}<p class="muted">${L.accWhy}</p>
       <form id="accForm" class="acc-form"><label class="field"><span>${L.accEmail}</span><input id="accEmail" type="email" required autocomplete="email" inputmode="email"></label>
@@ -1649,6 +1803,7 @@ function openAccount(why) {
     });
   } else {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
+      ${meHTML(L)}${FAM.off ? "" : houseHTML(L)}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
       ${window.DKDiet ? `<div class="accdiet"><b>${L.dietAcc}</b><small class="muted">${L.dietAccWhy}</small>
@@ -1666,6 +1821,7 @@ function openAccount(why) {
       <p class="muted small">${L.accSynced}</p>`;
   }
   paintCc(guessCc(), "accPc");
+  if (ACC.user) bindMe(box);
   box.querySelector("#accAlerts")?.addEventListener("change", e => { S.alerts = e.target.checked; store.set("alerts", S.alerts); });
   box.querySelector("#accNotify")?.addEventListener("change", async e => {
     const box = e.target, msg = $("#pushMsg"), say = m => { if (msg) { msg.textContent = m; msg.hidden = !m; } };
