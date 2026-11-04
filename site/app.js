@@ -117,6 +117,13 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
+  wantPh: "Voeg toe: koffie, melk, kipfilet…", wantAdd: "Voeg toe", wantsT: "Wat je nodig hebt",
+  wantNone: "deze week geen promo in de buurt", wantAt: (c, p) => `${c} · ${p}`,
+  cheapT: "Goedkoopste winkel voor je lijst", myShopT: "Jouw winkel", myShop: "Mijn winkel", myShopAny: "Geen voorkeur",
+  covers: (a, b) => `${a} van ${b} in promo`, tipCheaper: (c, v, n) => `${c} is ${v} goedkoper voor dezelfde ${n}`,
+  tipMore: (c, n) => `${c} heeft er ${n} meer in promo`, prefMissing: c => `${c} heeft niets van je lijst in promo deze week`,
+  otherShops: "Andere winkels", dealsT: "Bewaarde promo's",
+  listSub2: "Typ wat je nodig hebt. Elke dag zoeken we de beste promo in de buurt.",
   checked: (n, here, time) => `<b>${n}</b> promo's${here ? ` bij ${here}` : ""} · gecontroleerd ${time}`, today: t => `vandaag om ${t}`,
   navHome: "Home", navPricing: "Tarieven",
   eyebrow: c => `België · ${c} ketens · één eerlijke prijs per kg`,
@@ -156,6 +163,13 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
+  wantPh: "Ajoutez : café, lait, filet de poulet…", wantAdd: "Ajouter", wantsT: "Ce qu’il vous faut",
+  wantNone: "pas de promo près de chez vous cette semaine", wantAt: (c, p) => `${c} · ${p}`,
+  cheapT: "Magasin le moins cher pour votre liste", myShopT: "Votre magasin", myShop: "Mon magasin", myShopAny: "Pas de préférence",
+  covers: (a, b) => `${a} sur ${b} en promo`, tipCheaper: (c, v, n) => `${c} est ${v} moins cher pour les mêmes ${n}`,
+  tipMore: (c, n) => `${c} en a ${n} de plus en promo`, prefMissing: c => `${c} n’a rien de votre liste en promo cette semaine`,
+  otherShops: "Autres magasins", dealsT: "Promos gardées",
+  listSub2: "Tapez ce qu’il vous faut. Chaque jour, on cherche la meilleure promo près de chez vous.",
   checked: (n, here, time) => `<b>${n}</b> promos${here ? ` près de ${here}` : ""} · vérifiées ${time}`, today: t => `aujourd’hui à ${t}`,
   navHome: "Accueil", navPricing: "Tarifs",
   eyebrow: c => `Belgique · ${c} enseignes · un prix honnête au kilo`,
@@ -186,6 +200,13 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
+  wantPh: "Add: coffee, milk, chicken…", wantAdd: "Add", wantsT: "What you need",
+  wantNone: "no deal nearby this week", wantAt: (c, p) => `${c} · ${p}`,
+  cheapT: "Cheapest shop for your list", myShopT: "Your shop", myShop: "My shop", myShopAny: "No preference",
+  covers: (a, b) => `${a} of ${b} on promo`, tipCheaper: (c, v, n) => `${c} is ${v} cheaper for the same ${n}`,
+  tipMore: (c, n) => `${c} has ${n} more on promo`, prefMissing: c => `${c} has nothing from your list on promo this week`,
+  otherShops: "Other shops", dealsT: "Saved deals",
+  listSub2: "Type what you need. Every day we find the best deal nearby.",
   checked: (n, here, time) => `<b>${n}</b> deals${here ? ` near ${here}` : ""} · checked ${time}`, today: t => `today at ${t}`,
   navHome: "Home", navPricing: "Pricing",
   eyebrow: c => `Belgium · ${c} chains · one honest price per kg`,
@@ -241,7 +262,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -256,6 +277,8 @@ const S = {
   chains: new Set((url.get("store") || "").split(",").filter(Boolean)),
   sort: url.get("sort") || store.get("sort", "value"),
   list: store.get("list", {}), // id -> deal snapshot, so the list survives a new week of data
+  wants: store.get("wants", []), // [{ id, q }]: products in your own words ("koffie"), matched to deals every day
+  shop: store.get("shop", ""),   // preferred chain: shown first, cheaper options still shown
   shown: 48,
 };
 let DEALS = [], BRANCHES = [], PCS = {}, PCS_NL = {}, SAMPLE = false, UPDATED = null;
@@ -537,7 +560,7 @@ function renderStatic() {
   $("#footUpdated").textContent = UPDATED ? L.updated(new Date(UPDATED).toLocaleString(LOCALE[S.lang], { dateStyle: "medium", timeStyle: "short" })) : "";
   $("#hero").classList.toggle("compact", !!S.pc && !url.has("hero"));
   $("#hero").classList.toggle("slim", !S.pc && !url.has("hero"));  // first visit: one postcode box, then straight to the deals
-  $("#listCount").textContent = Object.keys(S.list).length;
+  $("#listCount").textContent = listN();
 }
 
 function syncURL() {
@@ -641,7 +664,7 @@ function toggleList(id) {
   if (S.list[id]) delete S.list[id];
   else { const { hay, until, i, _sx, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); }
   store.set("list", S.list);
-  const c = $("#listCount"); c.textContent = Object.keys(S.list).length; c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+  const c = $("#listCount"); c.textContent = listN(); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   document.querySelectorAll(`[data-add="${id}"]`).forEach(b => {
     const on = !!S.list[id]; b.setAttribute("aria-pressed", on);
     b.innerHTML = b.classList.contains("btn") ? `${plus(on)} ${on ? t().added : t().add}` : plus(on);
@@ -650,9 +673,51 @@ function toggleList(id) {
   if (!$("#listBg").hidden) renderList();
 }
 
+const listN = () => Object.keys(S.list).length + S.wants.length;
+const nearDeals = () => DEALS.filter(d => inRadius(d));
+function addWants(text) {
+  const have = new Set(S.wants.map(w => DS.fold(w.q)));
+  for (const q of String(text).split(/[,;\n]+/).map(x => x.trim()).filter(x => x.length >= 2).slice(0, 30)) {
+    if (have.has(DS.fold(q))) continue;
+    have.add(DS.fold(q)); S.wants.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), q: q.slice(0, 60) });
+  }
+  store.set("wants", S.wants); $("#listCount").textContent = listN();
+}
+// "What you need": every item matched to this week's deals nearby, and the shop that covers most for least
+function wantsHTML(L) {
+  const N = S.wants.length;
+  const c = DKBasket.compare(S.wants, nearDeals(), S.shop);
+  const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  const chains = [...new Set(nearDeals().map(d => d.store))].sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9));
+  const shopSel = `<label class="myshop"><span>${L.myShop}</span><select id="myShop"><option value="">${L.myShopAny}</option>
+    ${[...new Set([S.shop, ...chains].filter(Boolean))].map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>`;
+  const p = c.pick;
+  const pickBox = p ? `<div class="starthere">${sicon(p.chain)}<div><small>${p.chain === S.shop ? L.myShopT : L.cheapT}</small><b>${esc(p.chain)}</b>
+      <div class="sub">${L.covers(p.n, N)}${kmText(p.chain) ? ` · ${kmText(p.chain)}` : ""}</div></div>
+      <div class="tot"><b>${money(p.total)}</b></div></div>` : "";
+  const tip = c.tip ? `<p class="tip">${c.tip.cheaper ? L.tipCheaper(esc(c.tip.chain), money(c.tip.cheaper), c.tip.on) : ""}${c.tip.cheaper && c.tip.more ? " · " : ""}${c.tip.more ? L.tipMore(esc(c.tip.chain), c.tip.more) : ""}</p>`
+    : c.preferredMissing ? `<p class="tip">${L.prefMissing(esc(S.shop))}</p>` : "";
+  const others = c.shops.filter(s => s !== p).slice(0, 3);
+  const rows = c.items.map(({ item, best, byShop }) => {
+    const d = (p && byShop[p.chain]) || best;
+    return `<li><span><b class="wq">${esc(item.q)}</b><span class="unit">${d ? `${esc(d.name)} · ${esc(d.store)}${d.promo_text ? ` · ${esc(d.promo_text)}` : ""}` : L.wantNone}</span></span>
+      ${d ? `<button type="button" class="p linkish" data-open="${d.id}">${money(d.price)}</button>` : `<span class="p"></span>`}
+      <button type="button" data-unwant="${item.id}" aria-label="${L.remove}">${x}</button></li>`;
+  }).join("");
+  return `<form class="wantform" id="wantForm"><input id="wantIn" autocomplete="off" enterkeyhint="done" placeholder="${L.wantPh}" aria-label="${L.wantPh}">
+      <button type="submit" class="btn">${L.wantAdd}</button></form>
+    ${N ? `${pickBox}${tip}${chains.length ? shopSel : ""}
+    ${others.length ? `<div class="othershops"><small>${L.otherShops}</small>${others.map(s => `<span>${sicon(s.chain)}${esc(s.chain)} · ${L.covers(s.n, N)} · <b>${money(s.total)}</b></span>`).join("")}</div>` : ""}
+    <section class="shop"><div class="shop-h">${L.wantsT}</div><ul>${rows}</ul></section>` : ""}`;
+}
 function listText() {
   const L = t(), by = groupList();
-  return Object.entries(by).map(([c, items]) => `${c}${kmText(c) ? ` (${kmText(c)})` : ""}\n` +
+  const c = S.wants.length ? DKBasket.compare(S.wants, nearDeals(), S.shop) : null;
+  const need = c ? `${L.wantsT}${c.pick ? ` (${c.pick.chain})` : ""}\n` + c.items.map(({ item, best, byShop }) => {
+    const d = (c.pick && byShop[c.pick.chain]) || best;
+    return `- ${item.q}${d ? `: ${d.name}, ${d.store}, ${money(d.price)}` : ""}`; }).join("\n") + "\n\n" : "";
+  if (!Object.keys(S.list).length) return need.trim();
+  return need + Object.entries(by).map(([c, items]) => `${c}${kmText(c) ? ` (${kmText(c)})` : ""}\n` +
     items.map(d => `- ${d.name}${d.pack_size ? `, ${d.pack_size}` : ""}: ${money(d.price)}${d.promo_text ? ` [${d.promo_text}]` : ""}`).join("\n")).join("\n\n") + `\n\n${L.total}: ${money(listTotals().total)}`;
 }
 function groupList() {
@@ -666,7 +731,7 @@ function listTotals() {
   return { total, saved };
 }
 function renderList() {
-  const L = t(), by = groupList(), n = Object.keys(S.list).length, { total, saved } = listTotals();
+  const L = t(), by = groupList(), n = Object.keys(S.list).length, { total, saved } = listTotals(), focusWant = document.activeElement?.id === "wantIn";
   const x = `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
   const shops = Object.entries(by).map(([c, items]) => ({ c, items,
     sum: items.reduce((a, d) => a + d.price, 0), save: items.reduce((a, d) => a + (d.old_price > d.price ? d.old_price - d.price : 0), 0) }));
@@ -674,9 +739,10 @@ function renderList() {
   const best = [...shops].sort((a, b) => b.save - a.save || b.items.length - a.items.length || (dist(a.c) ?? 1e9) - (dist(b.c) ?? 1e9))[0];
   if (best) shops.sort((a, b) => (b === best) - (a === best));
   $("#drawer").innerHTML = `
-    <div class="drawer-head"><div><h3 id="listTitle">${L.listTitle}</h3>${n ? `<p>${L.listSub}</p>` : ""}</div>
+    <div class="drawer-head"><div><h3 id="listTitle">${L.listTitle}</h3><p>${L.listSub2}</p></div>
       <button type="button" class="x" data-close aria-label="${L.close}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-    <div class="drawer-body">${n ? `
+    <div class="drawer-body">${wantsHTML(L)}${n ? `
+      ${S.wants.length ? `<h4 class="dealsT">${L.dealsT}</h4>` : ""}
       ${shops.length > 1 || best ? `<div class="starthere">${sicon(best.c)}<div><small>${L.startHere}</small><b>${esc(best.c)}</b>
         <div class="sub">${L.ofItems(best.items.length, n)}${kmText(best.c) ? ` · ${kmText(best.c)}` : ""}</div></div>
         <div class="tot"><b>${money(best.sum)}</b>${best.save ? L.totalSave(money(best.save)) : ""}</div></div>` : ""}
@@ -686,12 +752,13 @@ function renderList() {
         <ul>${s.items.map(d => `<li><span>${esc(d.name)}${d.promo_text || d.pack_size ? `<span class="unit">${esc([d.pack_size, d.promo_text].filter(Boolean).join(" · "))}</span>` : ""}</span>
           <span class="p">${money(d.price)}</span>
           <button type="button" data-add="${d.id}" aria-label="${L.remove}">${x}</button></li>`).join("")}</ul></section>`).join("")}`
-      : `<p class="drawer-empty">${L.listEmpty}</p>`}</div>
-    ${n ? `<div class="drawer-foot">
-      <div class="total"><span>${L.total}</span><b>${money(total)}</b></div>
+      : S.wants.length ? "" : `<p class="drawer-empty">${L.listEmpty}</p>`}</div>
+    ${n || S.wants.length ? `<div class="drawer-foot">
+      ${n ? `<div class="total"><span>${L.total}</span><b>${money(total)}</b></div>` : ""}
       ${saved > 0 ? `<div class="total"><span>${L.saved}</span><span class="good">${money(saved)}</span></div>` : ""}
       <button type="button" class="btn block" id="shareList">${L.share}</button>
       <button type="button" class="btn ghost" id="clearList">${L.clearList}</button></div>` : ""}`;
+  if (focusWant) $("#wantIn")?.focus();
 }
 
 let toastTimer;
@@ -927,12 +994,22 @@ function bind() {
   });
   $("#listBtn").addEventListener("click", () => { renderList(); openDialog($("#listBg"), $("#drawer .x")); });
   $("#drawer").addEventListener("click", async e => {
-    if (e.target.closest("#clearList")) { S.list = {}; store.set("list", S.list); $("#listCount").textContent = 0; renderList(); render(); }
+    const uw = e.target.closest("[data-unwant]");
+    if (uw) { S.wants = S.wants.filter(w => w.id !== uw.dataset.unwant); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); return; }
+    if (e.target.closest("#clearList")) { S.list = {}; S.wants = []; store.set("list", S.list); store.set("wants", S.wants); $("#listCount").textContent = listN(); renderList(); render(); }
     if (e.target.closest("#shareList")) {
       const text = listText();
       try { await navigator.share({ title: t().listTitle, text }); return; } catch (err) { if (err?.name === "AbortError") return; }
       try { await navigator.clipboard.writeText(text); toast(t().copied); } catch { /* no clipboard either */ }
     }
+  });
+  $("#drawer").addEventListener("submit", e => {
+    if (e.target.id !== "wantForm") return;
+    e.preventDefault(); addWants($("#wantIn").value); renderList(); $("#wantIn").focus();
+  });
+  $("#drawer").addEventListener("change", e => {
+    if (e.target.id !== "myShop") return;
+    S.shop = e.target.value; store.set("shop", S.shop); renderList();
   });
   $("#heroPc").addEventListener("input", () => { if (!S.pc) $("#heroGo").textContent = t().heroGo($("#heroPc").value.trim().length === 4 ? $("#heroPc").value.trim() : ""); });
 }
@@ -1047,7 +1124,7 @@ function addDeals(deals) {
   let n = 0;
   for (const d of deals) if (!S.list[d.id]) { const { hay, until, i, ...keep } = d; S.list[d.id] = keep; n++; }
   store.set("list", S.list);
-  $("#listCount").textContent = Object.keys(S.list).length;
+  $("#listCount").textContent = listN();
   toast(t().addedMissing(n));
 }
 
@@ -1255,11 +1332,16 @@ async function pull() {
   // preferred postcode: the one saved in the account, else the one given when the account was made
   const pref = data.prefs?.pc || ACC.user.user_metadata?.pc;
   if (pref && !S.pc && pcAt(pref)) { S.pc = pref; store.set("pc", pref); computeNearest(); }
+  // list items and preferred shop live in prefs, so no database change is needed
+  const known = new Set(S.wants.map(w => DS.fold(w.q)));
+  S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
+  if (!S.shop && data.prefs?.shop) S.shop = data.prefs.shop;
+  store.set("wants", S.wants); store.set("shop", S.shop);
   const r = data.prefs?.radius || ACC.user.user_metadata?.radius;
   if (r && RADII.includes(+r) && !localStorage.getItem("dk.radius")) { S.radius = +r; store.set("radius", S.radius); }
   store.set("list", S.list); store.set("recipes", R.own); store.set("have", R.have); store.set("plan", [...R.plan]);
   ACC.pulling = false;
-  $("#listCount").textContent = Object.keys(S.list).length;
+  $("#listCount").textContent = listN();
   renderStatic(); render(); if (location.hash === "#recipes") renderRecipes();
   push();
 }
@@ -1268,7 +1350,7 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }

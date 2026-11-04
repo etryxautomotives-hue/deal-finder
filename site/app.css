@@ -343,6 +343,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .total b{font-size:var(--t-xl);font-weight:800}
 .total .good{color:var(--lime-ink);font-weight:700}
 .drawer-empty{color:var(--muted);text-align:center;padding:var(--s8) var(--s4)}
+/* shopping list: what you need, matched to this week's deals */
+.wantform{display:flex;gap:var(--s2)}
+.wantform input{flex:1;min-width:0;min-height:var(--tap);border:0;border-radius:var(--r-sm);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 var(--s4);font-size:var(--t-md);outline:none}
+.wantform input:focus{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.wantform .btn{min-height:var(--tap)}
+.tip{margin:0;background:var(--card);border-radius:var(--r-sm);padding:var(--s3) var(--s4);font-size:var(--t-sm);font-weight:600;box-shadow:inset 3px 0 0 var(--mustard)}
+.othershops{display:grid;gap:var(--s1);font-size:12.5px;color:var(--muted)}
+.othershops small{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.othershops span{display:flex;align-items:center;gap:6px}
+.othershops b{color:var(--ink);font-variant-numeric:tabular-nums}
+.othershops .sicon{width:18px;height:18px;border-radius:5px;font-size:8px}
+.drawer li .wq{display:block;font-weight:700}
+.drawer li .p.linkish{width:auto;height:auto;min-height:36px;border-radius:var(--r-sm);padding:0 var(--s2);color:var(--ink);font-weight:700;font-size:var(--t-sm)}
+.myshop{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);font-size:var(--t-sm);color:var(--muted)}
+.myshop select{min-height:var(--tap);border:0;border-radius:var(--pill);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 var(--s4);font-size:var(--t-sm);color:var(--ink)}
+.dealsT{margin:var(--s3) 0 0;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
 .toast{position:fixed;left:50%;bottom:calc(var(--s5) + env(safe-area-inset-bottom));transform:translate(-50%,24px);opacity:0;pointer-events:none;
   background:var(--dark);color:#fff;padding:var(--s3) var(--s5);border-radius:var(--pill);font-size:var(--t-sm);font-weight:600;transition:.25s var(--ease);z-index:60}
