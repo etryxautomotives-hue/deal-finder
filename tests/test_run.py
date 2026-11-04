@@ -40,3 +40,49 @@ def test_jsonld_products_makes_links_absolute():
     [p] = jsonld_products(html, "https://shop.be/promos")
     assert p["image"] == "https://shop.be/img/gouda.jpg"
     assert p["url"] == "https://shop.be/p/gouda"
+
+
+def _row(store, name, price=1.0, cc="BE", until="2026-11-10", seen="2026-11-03T06:00:00+00:00"):
+    return {"store": store, "name": name, "price": price, "cc": cc, "valid_until": until, "collected_at": seen}
+
+
+def test_carry_over_keeps_a_failed_shops_valid_deals():
+    from collector.run import carry_over
+    prev = [_row("Delhaize", f"p{i}") for i in range(10)] + [_row("Delhaize", "old", until="2026-11-01"),
+                                                             _row("Aldi", "a")]
+    fresh = [_row("Aldi", "a")]
+    kept, shops = carry_over(prev, fresh, date(2026, 11, 4))
+    assert shops == ["Delhaize BE"]
+    assert len(kept) == 10 and all(r["name"] != "old" for r in kept)
+
+
+def test_carry_over_leaves_normal_days_alone():
+    from collector.run import carry_over
+    prev = [_row("Lidl", f"p{i}") for i in range(10)]
+    fresh = [_row("Lidl", f"q{i}") for i in range(6)]  # a new week with a bit fewer deals is fine
+    assert carry_over(prev, fresh, date(2026, 11, 4)) == ([], [])
+
+
+def test_carry_over_drops_undated_deals_after_a_few_days():
+    from collector.run import carry_over
+    prev = [_row("Delhaize", "x", until=None, seen="2026-11-03T06:00:00+00:00"),
+            _row("Delhaize", "y", until=None, seen="2026-10-30T06:00:00+00:00")]
+    kept, _ = carry_over(prev, [], date(2026, 11, 4))
+    assert [r["name"] for r in kept] == ["x"]
+
+
+def test_carry_over_does_not_duplicate_and_keeps_countries_apart():
+    from collector.run import carry_over
+    prev = [_row("Aldi", "a", cc="NL"), _row("Aldi", "b", cc="NL"), _row("Aldi", "a")]
+    fresh = [_row("Aldi", "a")]
+    kept, shops = carry_over(prev, fresh, date(2026, 11, 4))
+    assert shops == ["Aldi NL"] and len(kept) == 2
+
+
+def test_save_writes_per_shop_counts_and_kept_shops(tmp_path):
+    save([Deal(store="Aldi", name="x", price=1, source_url="u")], tmp_path,
+         kept=[_row("Delhaize", "d")], kept_shops=["Delhaize BE"], counts={"Delhaize": "failed"})
+    meta = json.loads((tmp_path / "meta.json").read_text())
+    assert meta["per_shop"] == {"Aldi BE": 1, "Delhaize BE": 1}
+    assert meta["kept_from_before"] == ["Delhaize BE"]
+    assert len(json.loads((tmp_path / "deals.json").read_text())) == 2
