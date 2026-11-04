@@ -117,6 +117,7 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
+  accAlerts: "Dagelijkse e-mail", accAlertsWhy: "Eén mail per dag, alleen als iets van je lijst nieuw in promo is in je buurt.",
   menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
   menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
   menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
@@ -171,6 +172,7 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
+  accAlerts: "E-mail quotidien", accAlertsWhy: "Un e-mail par jour, seulement si un produit de votre liste passe en promo près de chez vous.",
   menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
   menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
   menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
@@ -216,6 +218,7 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
+  accAlerts: "Daily email", accAlertsWhy: "One email a day, only when something on your list is newly on promo near you.",
   menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
   menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
   menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
@@ -286,7 +289,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -303,6 +306,7 @@ const S = {
   list: store.get("list", {}), // id -> deal snapshot, so the list survives a new week of data
   wants: store.get("wants", []), // [{ id, q }]: products in your own words ("koffie"), matched to deals every day
   shop: store.get("shop", ""),   // preferred chain: shown first, cheaper options still shown
+  alerts: store.get("alerts", false), // daily summary email (sent by alerts/daily.py on GitHub Actions)
   bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
   shown: 48,
 };
@@ -1426,6 +1430,7 @@ async function pull() {
   const known = new Set(S.wants.map(w => DS.fold(w.q)));
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
   if (!S.shop && data.prefs?.shop) S.shop = data.prefs.shop;
+  if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
   const seen = new Set(S.bought.map(b => `${b.k}|${b.day}`));
   S.bought = DKBasket.pruneBought([...(data.prefs?.bought || []).filter(b => b?.k && b.day && !seen.has(`${b.k}|${b.day}`)), ...S.bought]
     .sort((a, b) => a.day.localeCompare(b.day)), Date.now());
@@ -1443,7 +1448,7 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
@@ -1496,6 +1501,7 @@ function openAccount(why) {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
+      <label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>
       <div class="cta">${!PAY() ? "" : isPlus() || ACC.profile?.subscription_status === "past_due"
         ? `<button type="button" class="btn" data-portal>${L.accManage}</button>`
         : `<button type="button" class="btn" data-soon>${ACC.profile?.trial_end ? L.accSubscribe : L.trial}</button>`}
@@ -1503,6 +1509,7 @@ function openAccount(why) {
       <p class="muted small">${L.accSynced}</p>`;
   }
   paintCc(guessCc(), "accPc");
+  box.querySelector("#accAlerts")?.addEventListener("change", e => { S.alerts = e.target.checked; store.set("alerts", S.alerts); });
   box.querySelector("[data-acc-pc]")?.addEventListener("click", () => { closeDialogs(); $("#locBtn").click(); });
   if ($("#accDlg").hidden) openDialog($("#accDlg"));
 }
