@@ -613,7 +613,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .alerts input{width:22px;height:22px;margin-top:2px;accent-color:var(--lime-d);flex:none}
 .alerts b{display:block;font-size:var(--t-sm)}
 .alerts small{display:block;font-size:12.5px}
-.accshop{display:grid;gap:var(--s2);margin:var(--s4) 0}
+.accdiet{display:grid;gap:var(--s2);margin:var(--s4) 0}
+.accdiet b{font-size:var(--t-sm)}
+.accdiet small{font-size:12.5px}
+.accdiet .chips{flex-wrap:wrap;overflow:visible}
+.dietnote{margin:var(--s2) 0 0;font-size:12.5px;color:var(--muted)}
+.dietnote[hidden]{display:none}display:grid;gap:var(--s2);margin:var(--s4) 0}
 .accshop b{display:block;font-size:var(--t-sm)}
 .accshop small{display:block;font-size:12.5px}
 .accshop select{width:100%;max-width:100%;min-height:var(--tap);padding:0 var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--card);font:500 var(--t-md)/1 var(--sans);color:var(--ink)}

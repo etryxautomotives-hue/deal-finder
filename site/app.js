@@ -27,6 +27,9 @@ const T = {
     secTitle: "Promo's van deze week", searchTitle: q => `Resultaten voor “${q}”`,
     secSub: (n, pc, r) => `${n} promo's${pc ? ` binnen ${r} km van ${pc}` : ""}`,
     sorts: { value: "Beste prijs per kg/L", price: "Laagste prijs", discount: "Grootste korting", near: "Dichtstbij", ending: "Eindigt binnenkort" },
+    dietT: "Dieet", diets: { bio: "Bio", veg: "Vegetarisch", vegan: "Vegan", gf: "Glutenvrij", nomilk: "Zonder melk", halal: "Halal", nonuts: "Zonder noten" },
+    dietNote: "Gekozen op basis van de productnaam: check altijd het etiket als het om een allergie gaat.",
+    dietAcc: "Mijn dieet en allergieën", dietAccWhy: "Geldt voor de promo's, je lijst en het weekmenu. Het zijn dezelfde knoppen als in de filters.",
     kinds: { "1+1": "1+1 (2 voor 1)", "2+1": "2+1 (3 voor 2)", multi: "Meer kopen", "2nd_half": "2de halve prijs", "2nd_pct": "2de met korting", percent: "% korting", bundle: "Bundelprijs", price_drop: "Prijsdaling", other: "Andere" },
     tag: { free: n => `${n} gratis`, "2nd_half": "2de halve prijs", price_drop: "Prijsdaling", promo: "Promo" },
     cats: { fruit_veg: "Groenten & fruit", meat_fish: "Vlees & vis", dairy: "Zuivel & eieren", bread: "Brood", pantry: "Voorraad & maaltijden", snacks: "Snacks & snoep", drinks: "Dranken", household: "Huishouden", other: "Andere" },
@@ -63,6 +66,9 @@ const T = {
     secTitle: "Les promos de la semaine", searchTitle: q => `Résultats pour « ${q} »`,
     secSub: (n, pc, r) => `${n} promos${pc ? ` à moins de ${r} km de ${pc}` : ""}`,
     sorts: { value: "Meilleur prix au kg/L", price: "Prix le plus bas", discount: "Plus grosse remise", near: "Le plus proche", ending: "Se termine bientôt" },
+    dietT: "Régime", diets: { bio: "Bio", veg: "Végétarien", vegan: "Vegan", gf: "Sans gluten", nomilk: "Sans lait", halal: "Halal", nonuts: "Sans noix" },
+    dietNote: "Choisi d’après le nom du produit : vérifiez toujours l’étiquette en cas d’allergie.",
+    dietAcc: "Mon régime et mes allergies", dietAccWhy: "S’applique aux promos, à votre liste et au menu de la semaine. Ce sont les mêmes boutons que dans les filtres.",
     kinds: { "1+1": "1+1 (2 pour 1)", "2+1": "2+1 (3 pour 2)", multi: "Achat groupé", "2nd_half": "2e à moitié prix", "2nd_pct": "2e en promo", percent: "% de remise", bundle: "Prix lot", price_drop: "Baisse de prix", other: "Autres" },
     tag: { free: n => `${n} offert`, "2nd_half": "2e à moitié prix", price_drop: "Baisse de prix", promo: "Promo" },
     cats: { fruit_veg: "Fruits & légumes", meat_fish: "Viande & poisson", dairy: "Produits laitiers", bread: "Pain", pantry: "Épicerie & plats", snacks: "Snacks & bonbons", drinks: "Boissons", household: "Maison", other: "Autres" },
@@ -99,6 +105,9 @@ const T = {
     secTitle: "This week's deals", searchTitle: q => `Results for “${q}”`,
     secSub: (n, pc, r) => `${n} deals${pc ? ` within ${r} km of ${pc}` : ""}`,
     sorts: { value: "Best price per kg/L", price: "Lowest price", discount: "Biggest discount", near: "Nearest", ending: "Ending soon" },
+    dietT: "Diet", diets: { bio: "Organic", veg: "Vegetarian", vegan: "Vegan", gf: "Gluten-free", nomilk: "No milk", halal: "Halal", nonuts: "No nuts" },
+    dietNote: "Picked from the product name: always check the label for allergies.",
+    dietAcc: "My diet and allergies", dietAccWhy: "Applies to the deals, your list and the week menu. These are the same buttons as in the filters.",
     kinds: { "1+1": "1+1 (2 for 1)", "2+1": "2+1 (3 for 2)", multi: "Buy more", "2nd_half": "2nd half price", "2nd_pct": "2nd discounted", percent: "% off", bundle: "Bundle price", price_drop: "Price drop", other: "Other" },
     tag: { free: n => `${n} free`, "2nd_half": "2nd half price", price_drop: "Price drop", promo: "Deal" },
     cats: { fruit_veg: "Fruit & veg", meat_fish: "Meat & fish", dairy: "Dairy & eggs", bread: "Bread", pantry: "Pantry & meals", snacks: "Snacks & sweets", drinks: "Drinks", household: "Household", other: "Other" },
@@ -126,6 +135,7 @@ Object.assign(T.nl, {
   menuT: "Weekmenu", menuSub: "Wij kiezen je avondeten uit wat deze week in promo is. Je eigen recepten doen mee.",
   menuMake: "Maak mijn weekmenu", menuRedo: "Opnieuw", menuSwap: "Ander recept", menuToList: "Wat ontbreekt op mijn lijst",
   menuDays: ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"], menuSaves: v => `bespaart ≈ ${v}`, menuN: "Avonden",
+  menuNoDiet: "Geen enkel recept past bij je dieet. Voeg je eigen recepten toe, dan kiezen we daaruit.",
   homeAdults: "Volwassenen", homeKids: "Kinderen", homeFor: "Voor", forN: (n, r) => `voor ${n} pers.${r ? ` (recept: ${r})` : ""}`,
   wantsAdded: n => n ? `${n} op je lijst gezet` : "Staat al op je lijst",
   splitTip: (c, v, n) => `Haal ${n} ${n === 1 ? "product" : "producten"} bij ${c} en bespaar ${v} extra`,
@@ -187,6 +197,7 @@ Object.assign(T.fr, {
   menuT: "Menu de la semaine", menuSub: "On choisit vos dîners parmi les promos de la semaine. Vos recettes en font partie.",
   menuMake: "Créer mon menu", menuRedo: "Refaire", menuSwap: "Autre recette", menuToList: "Ce qui manque dans ma liste",
   menuDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"], menuSaves: v => `économise ≈ ${v}`, menuN: "Soirs",
+  menuNoDiet: "Aucune recette ne correspond à votre régime. Ajoutez vos recettes, on choisira parmi elles.",
   homeAdults: "Adultes", homeKids: "Enfants", homeFor: "Pour", forN: (n, r) => `pour ${n} pers.${r ? ` (recette : ${r})` : ""}`,
   wantsAdded: n => n ? `${n} ajoutés à votre liste` : "Déjà dans votre liste",
   splitTip: (c, v, n) => `Prenez ${n} produit${n === 1 ? "" : "s"} chez ${c} et économisez ${v} de plus`,
@@ -239,6 +250,7 @@ Object.assign(T.en, {
   menuT: "Week menu", menuSub: "We pick your dinners from this week's deals. Your own recipes take part.",
   menuMake: "Make my week menu", menuRedo: "Again", menuSwap: "Other recipe", menuToList: "Put what's missing on my list",
   menuDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], menuSaves: v => `saves ≈ ${v}`, menuN: "Evenings",
+  menuNoDiet: "No recipe fits your diet. Add your own recipes and we'll pick from those.",
   homeAdults: "Adults", homeKids: "Children", homeFor: "For", forN: (n, r) => `for ${n}${r ? ` (recipe: ${r})` : ""}`,
   wantsAdded: n => n ? `${n} added to your list` : "Already on your list",
   splitTip: (c, v, n) => `Get ${n} item${n === 1 ? "" : "s"} at ${c} and save ${v} more`,
@@ -307,7 +319,7 @@ const CHAINS = {
 };
 
 // ---------- state ----------
-const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home"]); // saved to the account when signed in
+const SYNCED = new Set(["list", "recipes", "have", "plan", "pc", "radius", "hist", "wants", "shop", "bought", "alerts", "home", "diet"]); // saved to the account when signed in
 const store = {
   get(k, d) { try { const v = localStorage.getItem("dk." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("dk." + k, JSON.stringify(v)); } catch { /* private mode */ } if (SYNCED.has(k)) queueSync(); },
@@ -327,6 +339,7 @@ const S = {
   alerts: store.get("alerts", false), // also by email (sent by alerts/daily.py on GitHub Actions, once email is set up)
   pushOn: store.get("pushOn", null),  // this device's push subscription {endpoint, keys}, or null (not synced: it's per device)
   bought: store.get("bought", []), // items ticked as bought: the only thing "money saved" counts
+  diet: new Set(store.get("diet", [])), // profile: vegetarian, gluten-free, halal, ... (site/diet.js); the same as the filters
   shown: 48,
 };
 let DEALS = [], BRANCHES = [], PCS = {}, PCS_NL = {}, SAMPLE = false, UPDATED = null;
@@ -418,11 +431,15 @@ function inRadius(d) {
 }
 
 // ---------- filtering ----------
+const dietOn = () => S.diet.size > 0 && !!window.DKDiet;
+const dietOk = d => !dietOn() || DKDiet.fits(d, [...S.diet]);
+function setDiet(k) { S.diet.has(k) ? S.diet.delete(k) : S.diet.add(k); store.set("diet", [...S.diet]); matchCache.clear(); promoNote(); }
 function matches(d, skip) {
   if (!inRadius(d)) return false;
   if (skip !== "cat" && S.cat && d.cat !== S.cat) return false;
   if (skip !== "kind" && S.kinds.size && !S.kinds.has(d.group)) return false;
   if (skip !== "chain" && S.chains.size && !S.chains.has(d.store)) return false;
+  if (!dietOk(d)) return false;
   if (S.q && !DS.search(DEALS, S.q).hits.has(d.id)) return false;  // typo-tolerant, see search.js
   return true;
 }
@@ -581,6 +598,8 @@ function render() {
     KIND_ORDER.filter(k => kindN.get(k) || S.kinds.has(k)).map(k => [k, L.kinds[k], kindN.get(k) || 0]),
     k => S.kinds.has(k), "data-kind").replace(/class="chip"/g, 'class="chip sm"');
 
+  $("#diets").innerHTML = (window.DKDiet ? DKDiet.KEYS : []).map(k => `<button type="button" class="chip sm diet" data-diet="${k}" aria-pressed="${S.diet.has(k)}">${esc(L.diets[k])}</button>`).join("");
+  $("#dietNote").hidden = !dietOn(); $("#dietNote").textContent = L.dietNote;
   const chains = [...new Set(DEALS.map(d => d.store))]
     .filter(c => chainN.get(c) || S.chains.has(c))
     .sort((a, b) => (dist(a) ?? 1e9) - (dist(b) ?? 1e9) || a.localeCompare(b));
@@ -760,7 +779,7 @@ function savedHTML(L) {
   return `<div class="savedbox"><b>${L.savedMonth(money(s.month))}</b>${bits.length ? `<small>${bits.join(" · ")}</small>` : ""}</div>`;
 }
 const listN = () => Object.keys(S.list).length + S.wants.length;
-const nearDeals = () => DEALS.filter(d => inRadius(d));
+const nearDeals = () => DEALS.filter(d => inRadius(d) && dietOk(d));
 // favourite shop: chosen in the account or on My list; the shops near you first, nearest on top
 const shopChoices = () => {
   const near = Object.entries(nearest).filter(([, n]) => n?.d != null && n.d <= S.radius).map(([k]) => k.split("|")[1]);
@@ -984,12 +1003,12 @@ function renderSuggest() {
     <span class="pn"><b>${esc(d.name)}</b><span class="st">${sicon(d.store)}${esc(d.store)}${d.pack_size ? ` · ${esc(d.pack_size)}` : ""}${kmText(d.store) ? ` · ${kmText(d.store)}` : ""}</span></span>
     <span class="pp">${money(d.price)}</span>`);
   if (!q) {
-    const rec = DS.recent(HIST, now, "", 5), fav = DS.favourites(DEALS, HIST, now, { filter: inRadius, n: 4 });
+    const rec = DS.recent(HIST, now, "", 5), fav = DS.favourites(DEALS, HIST, now, { filter: d => inRadius(d) && dietOk(d), n: 4 });
     if (rec.length) { head(L.sgRecent); rec.forEach(past); }
     if (fav.length) { head(L.sgFav); fav.forEach(deal); }
   } else {
     DS.recent(HIST, now, q, 2).forEach(past);
-    const s = DS.suggest(DEALS, q, HIST, now, { filter: inRadius, n: 6 });
+    const s = DS.suggest(DEALS, q, HIST, now, { filter: d => inRadius(d) && dietOk(d), n: 6 });
     s.deals.forEach(deal);
     if (s.total) opt({ all: q }, `<span class="th ic">${lens}</span><span class="pn"><b>${esc(L.sgAll(q))}</b></span><span class="pp n">${s.total}</span>`, "all");
   }
@@ -1058,6 +1077,7 @@ function bind() {
     if ("portal" in el.dataset) { openPortal(); return; }
     if ("logout" in el.dataset) { signOut(); return; }
     if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
+    if (el.dataset.diet) { setDiet(el.dataset.diet); S.shown = 48; render(); if (!$("#accDlg").hidden) openAccount(ACC.why); if (location.hash === "#recipes") renderRecipes(); return; }
     if (el.dataset.kind) { S.kinds.has(el.dataset.kind) ? S.kinds.delete(el.dataset.kind) : S.kinds.add(el.dataset.kind); S.shown = 48; render(); return; }
     if (el.dataset.chain === "*") { S.chains.clear(); S.shown = 48; render(); return; }
     if (el.dataset.chain) { S.chains.has(el.dataset.chain) ? S.chains.delete(el.dataset.chain) : S.chains.add(el.dataset.chain); S.shown = 48; render(); return; }
@@ -1149,10 +1169,10 @@ function wordStart(hay, k) {
 }
 const matchCache = new Map();
 function bestDeal(ing) {
-  const key = ing.k.join("|") + "#" + (ing.c || "") + "#" + S.pc + S.radius;
+  const key = ing.k.join("|") + "#" + (ing.c || "") + "#" + S.pc + S.radius + [...S.diet];
   if (matchCache.has(key)) return matchCache.get(key);
   const ks = ing.k.map(fold);
-  const d = DEALS.filter(x => inRadius(x) && (!ing.c || x.cat === ing.c) && ks.some(k => wordStart(x.hay, k)))
+  const d = DEALS.filter(x => inRadius(x) && dietOk(x) && (!ing.c || x.cat === ing.c) && ks.some(k => wordStart(x.hay, k)))
     .sort((a, b) => SORTS.value(a, b))[0] || null;
   matchCache.set(key, d);
   return d;
@@ -1197,7 +1217,7 @@ function renderRecipes() {
   const est = planned.reduce((a, x) => a + x.st.cost, 0);
   const promo = new Set(planned.flatMap(x => x.st.deals.map(d => d.id))).size;
   $("#plan").innerHTML = `<div class="menu">
-    <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : L.menuSub}</p></div>
+    <div class="menu-h"><div><h3>${L.menuT}</h3><p>${planned.length ? L.planSum(planned.length, promo, money(est)) : dietOn() && !menuRank(new Set()).length ? L.menuNoDiet : L.menuSub}</p></div>
       <div class="menu-act"><span class="seg" role="group" aria-label="${L.menuN}">${seg}</span>
         <button type="button" class="btn${planned.length ? " ghost" : ""}" data-automenu>${planned.length ? L.menuRedo : L.menuMake}</button></div></div>
     ${home}
@@ -1210,8 +1230,10 @@ function renderRecipes() {
 // Week menu: dinners ranked by what this week's deals save on the ingredients you still need to buy.
 // Your own recipes get a small head start, so the menu uses them when they're about as good.
 const menuSave = st => Math.round(st.deals.reduce((a, d) => a + DKBasket.saveOf(d), 0) * (st.packs || 1) * 100) / 100;
+// a recipe fits your diet when no ingredient goes against it (stoofvlees is not vegetarian, bloem not gluten-free)
+const recipeFits = r => !dietOn() || r.i.every(ing => DKDiet.ingredientFits({ name: [ing.n?.nl || iName(ing), ...(ing.k || [])].join(" "), category: ing.c || "" }, [...S.diet]));
 function menuRank(skip) {
-  return allRecipes().filter(r => !skip.has(r.id)).map(r => { const st = recipeStats(r);
+  return allRecipes().filter(r => !skip.has(r.id) && recipeFits(r)).map(r => { const st = recipeStats(r);
     return { r, score: menuSave(st) + 3 * st.promo / r.i.length + (r.own ? 1 : 0) }; })
     .sort((a, b) => b.score - a.score).map(x => x.r.id);
 }
@@ -1492,6 +1514,7 @@ async function pull() {
   const known = new Set(S.wants.map(w => DS.fold(w.q)));
   S.wants = [...S.wants, ...(data.prefs?.wants || []).filter(w => w?.q && !known.has(DS.fold(w.q)))];
   if (data.prefs?.shop) S.shop = data.prefs.shop;
+  if (Array.isArray(data.prefs?.diet) && data.prefs.diet.length) { S.diet = new Set(data.prefs.diet); store.set("diet", [...S.diet]); }  // allergies: the account wins
   if (data.prefs?.home?.adults && !localStorage.getItem("dk.home")) { S.home = data.prefs.home; store.set("home", S.home); }  // the shop saved in the account wins: it is a profile setting
   if (data.prefs?.alerts) { S.alerts = true; store.set("alerts", true); }
   // devices that get the daily notification: the account's list is the truth (the morning job removes dead ones)
@@ -1513,7 +1536,7 @@ function queueSync() { if (!ACC.user || ACC.pulling) return; clearTimeout(syncTi
 async function push() {
   if (!ACC.user) return;
   await ACC.sb.from("user_data").upsert({ user_id: ACC.user.id, list: S.list, recipes: R.own, have: R.have, plan: [...R.plan],
-    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home }, updated_at: new Date().toISOString() });
+    prefs: { pc: S.pc, radius: S.radius, lang: S.lang, shop: S.shop, wants: S.wants, bought: S.bought, alerts: !!S.alerts, push: pushList(), home: S.home, diet: [...S.diet] }, updated_at: new Date().toISOString() });
   // separate call, so the list still syncs if the history column (migration 002) isn't there yet
   await ACC.sb.from("user_data").update({ history: HIST }).eq("user_id", ACC.user.id);
 }
@@ -1628,6 +1651,9 @@ function openAccount(why) {
     box.innerHTML = `<h3 id="accTitle">${L.accTitle}</h3>${upsell}
       <dl class="facts"><dt>${L.accEmail}</dt><dd>${esc(ACC.user.email)}</dd><dt>${L.accPlan}</dt><dd>${esc(planLine())}</dd>
         <dt>${L.accPc}</dt><dd>${S.pc ? esc(`${pcName(S.pc)} · ${S.radius} km`) : "–"} <button type="button" class="linkish" data-acc-pc>${L.accChange}</button></dd></dl>
+      ${window.DKDiet ? `<div class="accdiet"><b>${L.dietAcc}</b><small class="muted">${L.dietAccWhy}</small>
+        <div class="chips">${DKDiet.KEYS.map(k => `<button type="button" class="chip sm diet" data-diet="${k}" aria-pressed="${S.diet.has(k)}">${esc(L.diets[k])}</button>`).join("")}</div>
+        <small class="muted">${L.dietNote}</small></div>` : ""}
       <label class="accshop"><span><b>${L.myShop}</b><small class="muted">${L.myShopWhy}</small></span>
         <select id="accShop"><option value="">${L.myShopAny}</option>${shopChoices().map(ch => `<option value="${esc(ch)}"${ch === S.shop ? " selected" : ""}>${esc(ch)}${kmText(ch) ? ` · ${kmText(ch)}` : ""}</option>`).join("")}</select></label>
       ${CFG.vapidPublicKey ? `<label class="alerts"><input type="checkbox" id="accNotify"${S.pushOn ? " checked" : ""}><span><b>${L.accNotify}</b><small class="muted">${L.accNotifyWhy}</small></span></label>
