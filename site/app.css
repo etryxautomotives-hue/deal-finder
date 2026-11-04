@@ -610,6 +610,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .alerts input{width:22px;height:22px;margin-top:2px;accent-color:var(--lime-d);flex:none}
 .alerts b{display:block;font-size:var(--t-sm)}
 .alerts small{display:block;font-size:12.5px}
+.accshop{display:grid;gap:var(--s2);margin:var(--s4) 0}
+.accshop b{display:block;font-size:var(--t-sm)}
+.accshop small{display:block;font-size:12.5px}
+.accshop select{width:100%;max-width:100%;min-height:var(--tap);padding:0 var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--card);font:500 var(--t-md)/1 var(--sans);color:var(--ink)}
 .pushmsg{margin:calc(-1 * var(--s2)) 0 var(--s4) 34px;padding:var(--s2) var(--s3);border-radius:var(--r-sm);background:var(--soft);font-size:13px;line-height:1.45}
 /* "on promo now" note: what's new from your list since you last looked */
 .promonote{display:flex;align-items:center;gap:var(--s3);margin:var(--s3) 0 0;padding:var(--s3) var(--s3) var(--s3) var(--s4);border-radius:var(--r);background:var(--lime-soft);border:1px solid var(--lime-d);color:var(--ink)}
