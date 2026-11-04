@@ -66,7 +66,7 @@ def test_carry_over_leaves_normal_days_alone():
 def test_carry_over_drops_undated_deals_after_a_few_days():
     from collector.run import carry_over
     prev = [_row("Delhaize", "x", until=None, seen="2026-11-03T06:00:00+00:00"),
-            _row("Delhaize", "y", until=None, seen="2026-10-30T06:00:00+00:00")]
+            _row("Delhaize", "y", until=None, seen="2026-10-27T06:00:00+00:00")]
     kept, _ = carry_over(prev, [], date(2026, 11, 4))
     assert [r["name"] for r in kept] == ["x"]
 

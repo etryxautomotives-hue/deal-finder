@@ -117,6 +117,7 @@ const T = {
 };
 // Text for the Base44-style layout (hero, week band, store lists, pricing)
 Object.assign(T.nl, {
+  checked: (n, here, time) => `<b>${n}</b> promo's${here ? ` bij ${here}` : ""} · gecontroleerd ${time}`, today: t => `vandaag om ${t}`,
   navHome: "Home", navPricing: "Tarieven",
   eyebrow: c => `België · ${c} ketens · één eerlijke prijs per kg`,
   heroH: "Betaal minder voor <em>dezelfde</em> boodschappen.",
@@ -155,6 +156,7 @@ Object.assign(T.nl, { rPick: "Ingrediënten", rPickPh: "Zoek een product, bv. ge
   rSteps: "Zo maak je het (mag leeg)", rAmount: "Hoeveelheid", rNone: "Voeg minstens één ingrediënt toe.", editRecipe: "Bewerk recept",
   stepsTitle: "Zo maak je het", rHint: "Kies uit de producten van alle winkels. Elke week zoeken we de beste promo voor elk ingrediënt.", rSaved: "Recept bewaard" });
 Object.assign(T.fr, {
+  checked: (n, here, time) => `<b>${n}</b> promos${here ? ` près de ${here}` : ""} · vérifiées ${time}`, today: t => `aujourd’hui à ${t}`,
   navHome: "Accueil", navPricing: "Tarifs",
   eyebrow: c => `Belgique · ${c} enseignes · un prix honnête au kilo`,
   heroH: "Payez moins pour <em>les mêmes</em> courses.",
@@ -184,6 +186,7 @@ Object.assign(T.fr, { rPick: "Ingrédients", rPickPh: "Cherchez un produit, ex. 
   rSteps: "Préparation (facultatif)", rAmount: "Quantité", rNone: "Ajoutez au moins un ingrédient.", editRecipe: "Modifier la recette",
   stepsTitle: "Préparation", rHint: "Choisissez parmi les produits de tous les magasins. Chaque semaine, on cherche la meilleure promo pour chaque ingrédient.", rSaved: "Recette enregistrée" });
 Object.assign(T.en, {
+  checked: (n, here, time) => `<b>${n}</b> deals${here ? ` near ${here}` : ""} · checked ${time}`, today: t => `today at ${t}`,
   navHome: "Home", navPricing: "Pricing",
   eyebrow: c => `Belgium · ${c} chains · one honest price per kg`,
   heroH: "Pay less for <em>the same</em> groceries.",
@@ -533,6 +536,7 @@ function renderStatic() {
   paintCc();
   $("#footUpdated").textContent = UPDATED ? L.updated(new Date(UPDATED).toLocaleString(LOCALE[S.lang], { dateStyle: "medium", timeStyle: "short" })) : "";
   $("#hero").classList.toggle("compact", !!S.pc && !url.has("hero"));
+  $("#hero").classList.toggle("slim", !S.pc && !url.has("hero"));  // first visit: one postcode box, then straight to the deals
   $("#listCount").textContent = Object.keys(S.list).length;
 }
 
@@ -555,7 +559,12 @@ function renderHero() {
   const chains = [...new Set(live.map(d => d.store))];
   const saves = live.filter(d => d.old_price > d.price).map(d => d.old_price - d.price);
   const avg = saves.length ? saves.reduce((a, b) => a + b, 0) / saves.length : 0;
-  $("#trustbar").innerHTML = `<span class="icons">${chains.map(c => sicon(c, "lg")).join("")}</span><span>${L.trustbar(live.length, chains.length)}</span>
+  // one slim line above the deals: how many, where, and when we last looked (stale deals are what people hate most)
+  const when = UPDATED ? new Date(UPDATED) : null;
+  const time = when ? (when.toDateString() === new Date().toDateString()
+    ? L.today(when.toLocaleTimeString(LOCALE[S.lang], { hour: "2-digit", minute: "2-digit" }))
+    : when.toLocaleString(LOCALE[S.lang], { weekday: "short", hour: "2-digit", minute: "2-digit" })) : "";
+  $("#trustbar").innerHTML = `<span class="icons">${chains.map(c => sicon(c)).join("")}</span><span>${L.checked(live.length, pcAt(S.pc) ? pcName(S.pc) : "", time)}</span>
     ${avg ? `<span class="pill lime">${L.avgSave(money(avg))}</span>` : ""}`;
   $("#eyebrow").textContent = L.eyebrow(chains.length);
   $("#heroH").innerHTML = L.heroH;
