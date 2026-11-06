@@ -70,14 +70,14 @@
 
   // ---------- the button ----------
   const icon = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v7m-3-3 3 3 3-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  const canOffer = () => !standalone() && (prompt || ios || mobile);
+  const canOffer = () => !standalone();   // always offered until installed; without a browser install prompt it shows the steps
 
   function paint() {
     const T = L(), show = canOffer();
     const top = $("#appBtn"), foot = $("#appLine");
     if (top) {
-      top.hidden = !show || !mobile;   // in the top bar only on phones and tablets; computers get the footer line
-      top.innerHTML = `${icon}<span class="lbl">${T.short}</span>`;
+      top.hidden = !show;   // in the top bar on every screen size, plus the footer line
+      top.innerHTML = `${icon}<span class="lbl-l">${T.btn}</span><span class="lbl-s">${T.short}</span>`;
       top.setAttribute("aria-label", T.btn);
     }
     if (foot) {
