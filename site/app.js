@@ -1750,9 +1750,17 @@ async function initAccounts() {
 async function setUser(user) {
   if ((user?.id || null) === (ACC.user?.id || null) && ACC.profile) return;
   ACC.user = user; ACC.profile = null;
+  adminCheck(user);
   if (user) { await refreshProfile(); await mktPending(); await refreshPlan(); await pull(); await famLoad(); await inviteCheck(); }
   else { ACC.plan = null; ACC.invite = null; famReset(); }
   paintAccount();
+}
+// people with back-end access get an "Admin" button to switch over (the database decides who: admin_role, 005_admin.sql)
+async function adminCheck(user) {
+  const b = $("#admBtn"); if (!b) return;
+  b.hidden = true;
+  if (!user) return;
+  try { const { data } = await ACC.sb.rpc("admin_role"); b.hidden = !data || ACC.user?.id !== user.id; } catch { /* no button */ }
 }
 // ticked "send me news" while signing in to an account that already existed: save that yes now
 async function mktPending() {

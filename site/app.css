@@ -759,3 +759,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (max-width:820px){.appbtn{padding:0 10px}}
 @media (max-width:380px){.appbtn .lbl{display:none}}
 #appDlg{z-index:70}
+
+/* "Admin" button: only for people with back-end access */
+.admbtn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 var(--s3);border-radius:var(--pill);background:var(--ink);color:var(--lime);
+  font-size:var(--t-sm);font-weight:700;text-decoration:none;white-space:nowrap}
+.admbtn:hover{background:#000}
+.admbtn[hidden]{display:none}
+@media (max-width:480px){.admbtn{padding:0 10px}.admbtn .lbl{display:none}}
