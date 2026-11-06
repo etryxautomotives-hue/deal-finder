@@ -70,7 +70,18 @@
 
   // ---------- the button ----------
   const icon = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v7m-3-3 3 3 3-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  const canOffer = () => !standalone();   // always offered until installed; without a browser install prompt it shows the steps
+  // Hidden once deal'ke is installed on this device. We know that when: it is open as the app right now; the browser
+  // said "installed" (appinstalled); it was ever opened as the app here (same browser storage on Android and computers);
+  // or Chrome confirms it (getInstalledRelatedApps, manifest related_applications). A browser that offers to install
+  // again (beforeinstallprompt) means it was removed, so the button comes back.
+  // iPhone keeps home-screen apps in separate storage and tells the browser nothing, so Safari may still show it there.
+  const canOffer = () => !standalone() && get("app_installed") !== "1";
+  if (standalone()) set("app_installed", "1");
+  if (navigator.getInstalledRelatedApps) {
+    navigator.getInstalledRelatedApps().then(apps => {
+      if (apps.some(a => a.platform === "webapp")) { set("app_installed", "1"); paint(); }
+    }).catch(() => { /* not allowed here: keep what we know */ });
+  }
 
   function paint() {
     const T = L(), show = canOffer();
@@ -163,9 +174,9 @@
   }
 
   // ---------- wiring ----------
-  addEventListener("beforeinstallprompt", e => { e.preventDefault(); prompt = e; paint(); });
+  addEventListener("beforeinstallprompt", e => { e.preventDefault(); prompt = e; set("app_installed", "0"); paint(); });
   addEventListener("appinstalled", () => {
-    prompt = null; track("app_installed"); paint();
+    prompt = null; set("app_installed", "1"); track("app_installed"); paint();
     try { typeof toast === "function" && toast(L().done); } catch { /* fine */ }
   });
   addEventListener("online", paint);
