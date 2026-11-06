@@ -157,6 +157,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero.slim h1{font-size:var(--t-2xl);margin:0 0 var(--s2)}
 .hero.slim .lead{font-size:var(--t-sm);margin:0 0 var(--s4)}
 .after{margin-top:var(--s8)}
+.neartop{margin-top:var(--s4)}
 .hero.compact{display:none}
 
 /* week band */
@@ -180,7 +181,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .leaflet-container{font:inherit}
 .leaflet-popup-content{font-size:13px;line-height:1.45}
 .leaflet-popup-content a{color:var(--ink);font-weight:600}
-@media (max-width:820px){.near{padding:var(--s4)}.near-body{grid-template-columns:minmax(0,1fr)}.map{height:320px}.near-list{max-height:none}}
+@media (max-width:820px){.near{padding:var(--s4)}.near-body{grid-template-columns:minmax(0,1fr)}.map{height:280px}.near-list{max-height:200px}}
 .band{display:flex;align-items:center;gap:var(--s4);background:var(--mustard);border-radius:var(--r);padding:var(--s4) var(--s5);margin-bottom:var(--s6)}
 .band .ic{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.28);display:grid;place-items:center;flex:none}
 .band h2{margin:0;font-size:var(--t-xl);line-height:1.15}
