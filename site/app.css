@@ -156,7 +156,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero.slim>div:last-child,.hero.slim .trial,.hero.slim .note,.hero.slim .eyebrow{display:none}
 .hero.slim h1{font-size:var(--t-2xl);margin:0 0 var(--s2)}
 .hero.slim .lead{font-size:var(--t-sm);margin:0 0 var(--s4)}
-.after{margin-top:var(--s8)}
+
 .neartop{margin-top:var(--s4)}
 .hero.compact{display:none}
 
