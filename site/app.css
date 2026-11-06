@@ -736,3 +736,26 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .maint{position:fixed;inset:0;z-index:70;background:var(--bg);display:grid;place-items:center;padding:var(--s5)}
 .maint .pop{max-width:440px;text-align:center}
 .alerts.mkt{margin:var(--s3) 0}
+
+/* ---------- app install (install.js) ---------- */
+.appbtn{display:inline-flex;align-items:center;gap:6px;min-height:var(--tap);min-width:var(--tap);padding:0 var(--s3);border:0;border-radius:var(--pill);
+  background:transparent;box-shadow:inset 0 0 0 1.5px var(--lime-d);color:var(--ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.appbtn:hover{background:var(--lime-soft)}
+.appbtn[hidden]{display:none}
+.appline{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3);color:var(--ink)}
+.appline[hidden]{display:none}
+.btn.sm{min-height:var(--tap);padding:0 var(--s4)}
+.offnote{margin:var(--s3) 0 0;padding:var(--s3) var(--s4);border-radius:var(--r);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);font-size:var(--t-sm);color:var(--ink)}
+.offnote[hidden]{display:none}
+.apphint{position:relative;text-align:left}
+.apphint .appicon{display:block;width:64px;height:64px;border-radius:15px;margin:0 0 var(--s4);box-shadow:var(--shadow)}
+.apphint h3{margin-bottom:var(--s4)}
+.apphint p{margin:0 0 var(--s3)}
+.apphint .muted{color:var(--muted);font-size:var(--t-sm)}
+.appsteps{list-style:none;margin:0 0 var(--s4);padding:0;display:grid;gap:var(--s3)}
+.appsteps li{display:flex;align-items:center;gap:var(--s3);font-size:var(--t-md)}
+.appsteps .ic{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--lime-soft);color:var(--lime-ink)}
+.appnum{font-size:18px;line-height:1}
+@media (max-width:820px){.appbtn{padding:0 10px}}
+@media (max-width:380px){.appbtn .lbl{display:none}}
+#appDlg{z-index:70}

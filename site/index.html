@@ -50,6 +50,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4.5 20c1.2-3.6 4-5.4 7.5-5.4s6.3 1.8 7.5 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <span class="lbl" id="accLbl"></span>
       </button>
+      <button type="button" class="appbtn" id="appBtn" hidden></button>
       <button type="button" class="mylist" id="listBtn" aria-haspopup="dialog">
         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m3.5 6 1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="lbl" data-t="myList">My list</span><span class="count" id="listCount">0</span>
@@ -62,6 +63,7 @@
 <div id="viewDeals">
   <div class="wrap">
     <div class="trustbar" id="trustbar"></div>
+    <div class="offnote" id="offNote" role="status" hidden></div>
     <div class="promonote" id="promoNote" role="status" hidden></div>
   </div>
 
@@ -146,6 +148,7 @@
 
 <footer class="foot">
   <div class="wrap">
+    <p class="appline" id="appLine" hidden></p>
     <p id="footUpdated"></p>
     <p data-t="footNote"></p>
     <p class="credits">Product photos and prices: the stores' own websites · Shop locations © <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors</p>
@@ -221,5 +224,6 @@
 <script src="avatars.js" defer></script>
 <script src="consent.js" defer></script>
 <script src="app.js" defer></script>
+<script src="install.js" defer></script>
 </body>
 </html>
