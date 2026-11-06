@@ -70,6 +70,16 @@ async function checkout(q) {
 }
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".webmanifest": "application/manifest+json", ".svg": "image/svg+xml" };
 http.createServer(async (req, res) => {
+  // what consent.js and app.js call directly on Supabase's REST API, as a visitor (role anon)
+  if (req.url === "/rest/v1/rpc/track" && req.method === "POST") {
+    let b = ""; for await (const c of req) b += c;
+    const r = await psql(["set role anon", `select public.track(${lit(JSON.parse(b).batch)}::jsonb)`]);
+    res.writeHead(r.error ? 400 : 200, { "Content-Type": "application/json" }); res.end(r.error ? JSON.stringify(r.error) : r.out); return;
+  }
+  if (req.url.startsWith("/rest/v1/site_settings")) {
+    const r = await psql(["set role anon", "select coalesce(jsonb_agg(jsonb_build_object('key', key, 'value', value)), '[]') from public.site_settings"]);
+    res.writeHead(200, { "Content-Type": "application/json" }); res.end(r.out || "[]"); return;
+  }
   if (req.method === "POST") {
     let b = ""; for await (const c of req) b += c;
     const q = JSON.parse(b || "{}");

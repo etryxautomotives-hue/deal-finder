@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>deal'ke · Privacy</title>
+<meta name="theme-color" content="#F6F4EE">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Libre+Baskerville:wght@700&display=swap">
+<link rel="stylesheet" href="app.css">
+<style>
+  .priv{max-width:720px;margin:0 auto;padding:var(--s6) 16px var(--s8)}
+  .priv h1{font-size:var(--t-3xl);margin:var(--s4) 0}
+  .priv h2{font-size:var(--t-xl);margin:var(--s6) 0 var(--s2)}
+  .priv h3{font-size:var(--t-md);margin:var(--s4) 0 var(--s1)}
+  .priv nav a{margin-right:var(--s3);font-weight:600}
+  .priv .todo{background:var(--mustard-soft);padding:2px 6px;border-radius:6px}
+  .priv section{border-top:1px solid var(--line);margin-top:var(--s6)}
+</style>
+</head>
+<body>
+<main class="priv">
+  <p><a href="./">← deal’ke</a></p>
+  <nav aria-label="Language"><a href="#nl">Nederlands</a><a href="#fr">Français</a><a href="#en">English</a></nav>
+
+  <section id="nl" lang="nl">
+    <h1>Privacy</h1>
+    <p>deal’ke wordt uitgebaten door <span class="todo">[naam en adres van de uitbater, ondernemingsnummer]</span>. Vragen of je gegevens laten wissen: <span class="todo">[e-mailadres]</span>.</p>
+    <h3>Zonder account</h3>
+    <p>Je lijst, postcode en instellingen blijven op je eigen toestel (local storage). Dat is nodig om de site te laten werken en daar vragen we geen toestemming voor.</p>
+    <h3>Anonieme statistieken (alleen als je “Akkoord” klikt)</h3>
+    <p>We tellen welke deals, winkels en zoekwoorden bekeken worden, met een willekeurig nummer per bezoek, telefoon of computer, taal en de eerste twee cijfers van je postcode. Geen naam, e-mail, IP-adres of account. Ruwe gegevens wissen we na 13 maanden; daarna houden we alleen dagtotalen. Met die totalen tonen we winkels hoeveel mensen we naar hen sturen, zonder dat iemand herkenbaar is. Je keuze wijzigen kan altijd via “Cookies” onderaan de site.</p>
+    <h3>Met een account</h3>
+    <p>We bewaren je e-mailadres, je lijst, recepten en instellingen (Supabase, servers in de EU), en bij Premium je abonnement (betaling via Stripe). Rechtsgrond: de overeenkomst om de dienst te leveren.</p>
+    <h3>Nieuws per e-mail</h3>
+    <p>Alleen als je het vakje “Stuur me deal’ke-nieuws” aanvinkt. Uitschrijven kan altijd in je account of via de link in elke e-mail.</p>
+    <h3>Je rechten</h3>
+    <p>Je kan je gegevens inkijken, laten verbeteren of wissen, en klacht indienen bij de Gegevensbeschermingsautoriteit (gegevensbeschermingsautoriteit.be).</p>
+  </section>
+
+  <section id="fr" lang="fr">
+    <h2>Confidentialité</h2>
+    <p>deal’ke est exploité par <span class="todo">[nom et adresse de l’exploitant, numéro d’entreprise]</span>. Questions ou suppression de vos données : <span class="todo">[adresse e-mail]</span>.</p>
+    <h3>Sans compte</h3>
+    <p>Votre liste, code postal et réglages restent sur votre appareil (local storage). C’est nécessaire au fonctionnement du site, sans consentement requis.</p>
+    <h3>Statistiques anonymes (seulement si vous cliquez « Accepter »)</h3>
+    <p>Nous comptons les promos, magasins et recherches consultés, avec un numéro aléatoire par visite, téléphone ou ordinateur, langue et les deux premiers chiffres du code postal. Ni nom, ni e-mail, ni adresse IP, ni compte. Les données brutes sont effacées après 13 mois ; ensuite seuls des totaux par jour restent. Vous pouvez changer d’avis via « Cookies » en bas du site.</p>
+    <h3>Avec un compte</h3>
+    <p>Nous gardons votre e-mail, votre liste, vos recettes et réglages (Supabase, serveurs dans l’UE), et pour Premium votre abonnement (paiement par Stripe). Base légale : le contrat pour fournir le service.</p>
+    <h3>Nouvelles par e-mail</h3>
+    <p>Uniquement si vous cochez la case. Désinscription à tout moment dans votre compte ou via le lien dans chaque e-mail.</p>
+    <h3>Vos droits</h3>
+    <p>Accès, rectification, effacement, et plainte auprès de l’Autorité de protection des données (autoriteprotectiondonnees.be).</p>
+  </section>
+
+  <section id="en" lang="en">
+    <h2>Privacy</h2>
+    <p>deal’ke is run by <span class="todo">[name and address of the operator, company number]</span>. Questions or deleting your data: <span class="todo">[email address]</span>.</p>
+    <h3>Without an account</h3>
+    <p>Your list, postcode and settings stay on your own device (local storage). The site needs this to work, so no consent is asked.</p>
+    <h3>Anonymous statistics (only if you click “Accept”)</h3>
+    <p>We count which deals, shops and searches are looked at, with a random number per visit, phone or computer, language and the first two digits of your postcode. No name, email, IP address or account. Raw data is deleted after 13 months; after that only daily totals are kept. You can change your choice any time with “Cookies” at the bottom of the site.</p>
+    <h3>With an account</h3>
+    <p>We keep your email, list, recipes and settings (Supabase, servers in the EU), and for Premium your subscription (payment by Stripe). Legal basis: the contract to provide the service.</p>
+    <h3>News by email</h3>
+    <p>Only if you tick the box. Unsubscribe any time in your account or with the link in every email.</p>
+    <h3>Your rights</h3>
+    <p>Access, correction, deletion, and a complaint to the Belgian Data Protection Authority (dataprotectionauthority.be).</p>
+  </section>
+</main>
+</body>
+</html>

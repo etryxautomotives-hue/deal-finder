@@ -714,3 +714,25 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* the house grows with the people in it (up to 5 plus free places), so nobody sits on the roof */
 .house{aspect-ratio:auto;padding:30% 13% 6%;box-sizing:border-box}
 .house .people{position:relative;left:auto;right:auto;top:auto;bottom:auto;min-height:72px}
+
+/* ---------- cookie banner (site/consent.js): "Reject" and "Accept" look exactly the same, on purpose (GDPR) ---------- */
+.ck{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:var(--s3) max(16px,env(safe-area-inset-left,0px)) calc(var(--s3) + env(safe-area-inset-bottom,0px))}
+.ck-in{max-width:880px;margin:0 auto;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-lg),inset 0 0 0 1px var(--line);
+  padding:var(--s4) var(--s5);display:flex;gap:var(--s4);align-items:center}
+.ck-txt b{font-family:var(--serif);font-size:var(--t-md)}
+.ck-txt p{margin:var(--s1) 0 0;font-size:var(--t-sm);color:var(--muted)}
+.ck-txt a{color:var(--ink)}
+.ck-btns{display:flex;gap:var(--s2);flex:none}
+.ck-b{min-height:var(--tap);min-width:112px;padding:0 var(--s5);border:0;border-radius:var(--r-sm);background:var(--ink);color:var(--card);font-size:var(--t-sm);font-weight:700}
+.ck-b:hover{background:#000}
+@media (max-width:640px){.ck-in{flex-direction:column;align-items:stretch;padding:var(--s4)}.ck-btns .ck-b{flex:1}}
+.ck-links{font-size:var(--t-xs);color:var(--muted)}
+.ck-links a,.ck-links .linkish{color:var(--muted);font-size:inherit}
+/* message bar from the back end, and the "back soon" screen */
+.announce{font-size:var(--t-sm);font-weight:600;padding:var(--s2) 0;text-align:center}
+.announce.info{background:var(--lime-soft);color:var(--lime-ink)}
+.announce.warn{background:var(--mustard-soft);color:#5C3F06}
+.announce a{font-weight:700}
+.maint{position:fixed;inset:0;z-index:70;background:var(--bg);display:grid;place-items:center;padding:var(--s5)}
+.maint .pop{max-width:440px;text-align:center}
+.alerts.mkt{margin:var(--s3) 0}

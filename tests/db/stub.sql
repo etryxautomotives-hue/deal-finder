@@ -8,7 +8,7 @@ do $$ begin create role authenticated; exception when duplicate_object then null
 do $$ begin create role anon; exception when duplicate_object then null; end $$;
 do $$ begin create role service_role bypassrls; exception when duplicate_object then null; end $$;
 create schema auth;
-create table auth.users (id uuid primary key, email text);
+create table auth.users (id uuid primary key, email text, raw_user_meta_data jsonb, created_at timestamptz default now(), last_sign_in_at timestamptz);
 create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.uid', true), '')::uuid $$;
 grant usage on schema public, auth to authenticated, anon, service_role;
 grant execute on function auth.uid() to authenticated, anon, service_role;
