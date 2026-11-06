@@ -314,6 +314,10 @@ Object.assign(T.en, { sgRecent: "Recent searches", sgFav: "Your favourites on pr
 Object.assign(T.en, { rPick: "Ingredients", rPickPh: "Search a product, e.g. mince, pasta, onion", rFree: q => `Add “${q}” as your own ingredient`,
   rSteps: "How to make it (optional)", rAmount: "Amount", rNone: "Add at least one ingredient.", editRecipe: "Edit recipe",
   stepsTitle: "How to make it", rHint: "Pick from every store's products. Each week we find the best deal for each ingredient.", rSaved: "Recipe saved" });
+// the email list: only with a yes from the person (unticked by default, can be switched off in the account)
+Object.assign(T.nl, { mkt: "Stuur me af en toe deal’ke-nieuws en tips per e-mail", mktWhy: "Hooguit een paar keer per maand. Afmelden kan altijd, hier in je account.", mktOn: "Je krijgt deal’ke-nieuws per e-mail", mktOff: "Je krijgt geen deal’ke-nieuws meer" });
+Object.assign(T.fr, { mkt: "Envoyez-moi de temps en temps les nouvelles et astuces de deal’ke par e-mail", mktWhy: "Quelques fois par mois au maximum. Désinscription possible à tout moment, ici dans votre compte.", mktOn: "Vous recevrez les nouvelles de deal’ke par e-mail", mktOff: "Vous ne recevrez plus les nouvelles de deal’ke" });
+Object.assign(T.en, { mkt: "Send me deal’ke news and tips by email now and then", mktWhy: "A few times a month at most. Unsubscribe any time, here in your account.", mktOn: "You'll get deal’ke news by email", mktOff: "You won't get deal’ke news any more" });
 const LOCALE = { nl: "nl-BE", fr: "fr-BE", en: "en-GB" };
 const KIND_ORDER = ["1+1", "2+1", "multi", "2nd_half", "2nd_pct", "percent", "bundle", "price_drop", "other"];
 // ---------- Premium: Single and Family (strings) ----------
@@ -518,6 +522,51 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const money = v => v == null ? "" : new Intl.NumberFormat(LOCALE[S.lang], { style: "currency", currency: "EUR" }).format(v);
 const fold = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
+// ---------- anonymous statistics (site/consent.js: only after "Accept" on the cookie banner) ----------
+const trk = (kind, d) => { try { window.DKTrack?.(kind, d); } catch { /* never in the way */ } };
+
+// ---------- site settings from the admin back end (supabase site_settings, readable by everyone) ----------
+let SET = {};
+async function getSettings() {
+  const c = window.DK_CONFIG || {};
+  if (!c.supabaseUrl || !c.supabaseAnonKey) return {};
+  try {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 2500);  // never hold the page up
+    const r = await fetch(c.supabaseUrl.replace(/\/$/, "") + "/rest/v1/site_settings?select=key,value",
+      { headers: { apikey: c.supabaseAnonKey, Authorization: "Bearer " + c.supabaseAnonKey }, signal: ctl.signal });
+    clearTimeout(timer);
+    if (!r.ok) return {};
+    return Object.fromEntries((await r.json()).map(x => [x.key, x.value]));
+  } catch { return {}; }
+}
+const dealKey = d => `${d.store}|${d.name}`;
+// stores and deals hidden in the back end (e.g. a wrong price) don't show
+function applySettings(raw) {
+  const hideS = new Set(Array.isArray(SET.hidden_stores) ? SET.hidden_stores : []);
+  const hideD = new Set(Array.isArray(SET.hidden_deals) ? SET.hidden_deals : []);
+  return raw.filter(d => !hideS.has(d.store) && !hideD.has(dealKey(d)));
+}
+function paintSettings() {
+  const lang = S.lang, f = SET.features || {};
+  document.querySelectorAll('[data-view="recipes"]').forEach(a => { a.hidden = f.recipes === false; });
+  document.querySelectorAll('[data-view="pricing"]').forEach(a => { a.hidden = f.pricing === false; });
+  if (f.recipes === false && location.hash === "#recipes") location.hash = "#deals";
+  if (f.pricing === false && location.hash === "#pricing") location.hash = "#deals";
+  const a = SET.announcement, txt = a?.on && (a[lang] || a.nl || a.en || a.fr);
+  let bar = $("#announce");
+  if (txt) {
+    if (!bar) { bar = document.createElement("div"); bar.id = "announce"; bar.setAttribute("role", "status"); $("header.top").after(bar); }
+    bar.className = "announce " + (a.tone === "warn" ? "warn" : "info");
+    bar.innerHTML = `<div class="wrap">${esc(txt)}${a.link && /^https?:\/\//.test(a.link) ? ` <a href="${esc(a.link)}" rel="noopener">→</a>` : ""}</div>`;
+  } else bar?.remove();
+  const m = SET.maintenance, mt = m?.on && (m[lang] || m.nl || m.en);
+  let ov = $("#maint");
+  if (mt) {
+    if (!ov) { ov = document.createElement("div"); ov.id = "maint"; ov.className = "maint"; document.body.append(ov); }
+    ov.innerHTML = `<div class="pop"><h3>deal’ke</h3><p>${esc(mt)}</p></div>`;
+  } else ov?.remove();
+}
+
 // ---------- data ----------
 function dealKind(text) { // mirrors collector/parse.py deal_kind for older data
   if (!text) return null;
@@ -547,12 +596,13 @@ async function getJSON(path) {
 }
 
 async function load() {
-  const [deals, branches, pcs, meta, pcsNl] = await Promise.all([
+  const [deals, branches, pcs, meta, pcsNl, set] = await Promise.all([
     getJSON("data/deals.json"), getJSON("data/stores.json"), getJSON("data/postcodes.json"), getJSON("data/meta.json"),
-    getJSON("data/postcodes-nl.json")]);
+    getJSON("data/postcodes-nl.json"), getSettings()]);
+  SET = set || {};
   let raw = deals || [];
   if (!raw.length) { raw = (await getJSON("data/sample-deals.json")) || []; SAMPLE = true; }
-  DEALS = prepare(raw);
+  DEALS = prepare(applySettings(raw));
   BRANCHES = branches || [];
   PCS = pcs || {};
   PCS_NL = pcsNl || {};
@@ -869,6 +919,7 @@ function openDeal(id) {
   const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d) return;
   if (S.q) noteSearch(S.q);  // opening a result confirms the search
   noteProduct(d);
+  trk("open_deal", { store: d.store, cat: d.cat, label: d.name });
   const L = t(), F = L.facts, on = !!S.list[d.id], n = nearOf(d);
   const save = d.old_price ? d.old_price - d.price : null;
   const dest = n ? `${n.b.lat},${n.b.lon}` : encodeURIComponent(`${d.store} ${pcName(S.pc)} ${d.cc === "NL" ? "Nederland" : "Belgium"}`);
@@ -894,8 +945,8 @@ function openDeal(id) {
       </dl>
       <div class="cta">
         <button type="button" class="btn" data-add="${d.id}" aria-pressed="${on}">${plus(on)} ${on ? L.added : L.add}</button>
-        <a class="btn ghost" href="https://www.google.com/maps/dir/?api=1&destination=${dest}" target="_blank" rel="noopener">${L.directions}</a>
-        ${d.source_url && !SAMPLE ? `<a class="btn ghost" href="${esc(d.source_url)}" target="_blank" rel="noopener">${L.seeStore}</a>` : ""}
+        <a class="btn ghost" href="https://www.google.com/maps/dir/?api=1&destination=${dest}" target="_blank" rel="noopener" data-trk="directions" data-trk-store="${esc(d.store)}" data-trk-label="${esc(d.name)}">${L.directions}</a>
+        ${d.source_url && !SAMPLE ? `<a class="btn ghost" href="${esc(d.source_url)}" target="_blank" rel="noopener" data-trk="to_store" data-trk-store="${esc(d.store)}" data-trk-label="${esc(d.name)}">${L.seeStore}</a>` : ""}
       </div>
       ${others.length ? `<div class="others"><h3>${L.sameElse}</h3><ul>${others.map(o =>
         `<li><button type="button" data-open="${o.id}"><span class="on">${esc(o.name)} · ${esc(o.store)}</span><b>${money(o.unit_price)}/${L.perUnit[o.unit] || o.unit}</b></button></li>`).join("")}</ul></div>` : ""}
@@ -907,7 +958,7 @@ function openDeal(id) {
 function toggleList(id) {
   const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d) return;
   if (S.list[id]) delete S.list[id];
-  else { const { hay, until, i, _sx, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); }
+  else { const { hay, until, i, _sx, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); trk("add_list", { store: d.store, cat: d.cat, label: d.name }); }
   store.set("list", S.list);
   const c = $("#listCount"); c.textContent = listN(); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   document.querySelectorAll(`[data-add="${id}"]`).forEach(b => {
@@ -1180,6 +1231,7 @@ function runSearch(q) {
   q = q.trim(); $("#q").value = q;
   closeSuggest(); if (q) noteSearch(q);
   if (q !== S.q) { S.q = q; S.shown = 48; render(); }
+  if (q) trk("search", { label: q.toLowerCase(), n: DEALS.filter(d => matches(d)).length });
   $("#q").blur(); $("#results").scrollIntoView({ behavior: "smooth" });
 }
 function renderSuggest() {
@@ -1264,7 +1316,7 @@ function bind() {
     if (el.dataset.add) { e.stopPropagation(); toggleList(el.dataset.add); return; }
     if (el.dataset.open) { openDeal(el.dataset.open); return; }
     if ("close" in el.dataset || (el.classList.contains("scrim") && e.target === el)) { closeDialogs(); return; }
-    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); renderStatic(); render(); showView(); paintAccount(); return; }
+    if (el.dataset.lang) { S.lang = el.dataset.lang; store.set("lang", S.lang); paintSettings(); renderStatic(); render(); showView(); paintAccount(); return; }
     if ("soon" in el.dataset) { closeDialogs(); startTrial(); return; }
     if (el.dataset.buy) { buy(el.dataset.buy); return; }
     if (el.dataset.famMove) { famMove(el.dataset.famMove); return; }
@@ -1275,11 +1327,11 @@ function bind() {
     if ("account" in el.dataset) { openAccountFresh(); return; }
     if ("portal" in el.dataset) { openPortal(); return; }
     if ("logout" in el.dataset) { signOut(); return; }
-    if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); return; }
+    if (el.dataset.cat != null && el.closest("#tabs")) { S.cat = el.dataset.cat; S.shown = 48; render(); if (S.cat) trk("filter_cat", { cat: S.cat }); return; }
     if (el.dataset.diet) { setDiet(el.dataset.diet); S.shown = 48; render(); if (!$("#accDlg").hidden) openAccount(ACC.why); if (location.hash === "#recipes") renderRecipes(); return; }
     if (el.dataset.kind) { S.kinds.has(el.dataset.kind) ? S.kinds.delete(el.dataset.kind) : S.kinds.add(el.dataset.kind); S.shown = 48; render(); return; }
     if (el.dataset.chain === "*") { S.chains.clear(); S.shown = 48; render(); return; }
-    if (el.dataset.chain) { S.chains.has(el.dataset.chain) ? S.chains.delete(el.dataset.chain) : S.chains.add(el.dataset.chain); S.shown = 48; render(); return; }
+    if (el.dataset.chain) { S.chains.has(el.dataset.chain) ? S.chains.delete(el.dataset.chain) : S.chains.add(el.dataset.chain); S.shown = 48; render(); if (S.chains.has(el.dataset.chain)) trk("filter_store", { store: el.dataset.chain }); return; }
     if (el.dataset.r) { document.querySelectorAll("#radiusSeg button").forEach(b => b.setAttribute("aria-pressed", b === el)); return; }
     if (el.classList.contains("card")) { openDeal(el.dataset.id); return; }
   });
@@ -1439,7 +1491,7 @@ function menuRank(skip) {
     .sort((a, b) => b.score - a.score).map(x => x.r.id);
 }
 const swappedOut = new Set();  // recipes you swapped away, so "other recipe" keeps offering new ones
-function autoMenu() { matchCache.clear(); swappedOut.clear(); R.plan = new Set(menuRank(new Set()).slice(0, R.menuN)); store.set("plan", [...R.plan]); }
+function autoMenu() { trk("recipe", { label: "week_menu" }); matchCache.clear(); swappedOut.clear(); R.plan = new Set(menuRank(new Set()).slice(0, R.menuN)); store.set("plan", [...R.plan]); }
 function resizeMenu(n) {  // keep the dinners you have, drop from the end or add the next best
   const keep = [...R.plan].slice(0, n);
   R.plan = new Set([...keep, ...menuRank(new Set([...keep, ...swappedOut])).slice(0, Math.max(0, n - keep.length))]); store.set("plan", [...R.plan]);
@@ -1599,6 +1651,7 @@ function showView() {
   document.querySelectorAll("[data-view]").forEach(a => a.setAttribute("aria-current", a.dataset.view === v ? "page" : "false"));
   if (v === "recipes") renderRecipes();
   if (v === "pricing") renderPricing();
+  trk(v === "pricing" ? "pricing" : "view", { label: v });
 }
 
 function bindRecipes() {
@@ -1697,9 +1750,16 @@ async function initAccounts() {
 async function setUser(user) {
   if ((user?.id || null) === (ACC.user?.id || null) && ACC.profile) return;
   ACC.user = user; ACC.profile = null;
-  if (user) { await refreshProfile(); await refreshPlan(); await pull(); await famLoad(); await inviteCheck(); }
+  if (user) { await refreshProfile(); await mktPending(); await refreshPlan(); await pull(); await famLoad(); await inviteCheck(); }
   else { ACC.plan = null; ACC.invite = null; famReset(); }
   paintAccount();
+}
+// ticked "send me news" while signing in to an account that already existed: save that yes now
+async function mktPending() {
+  let want = false; try { want = localStorage.getItem("dk.mkt") === "1"; localStorage.removeItem("dk.mkt"); } catch { /* */ }
+  if (want && ACC.profile && ACC.profile.marketing_opt_in === false) {
+    const { data } = await ACC.sb.rpc("set_marketing", { yes: true }); if (data) ACC.profile.marketing_opt_in = true;
+  }
 }
 // what the database says about your plan: Single, Family (owner or member), or free
 async function refreshPlan() {
@@ -2142,6 +2202,7 @@ function openAccount(why) {
           <span class="cc-seg" role="group" data-for="accPc"></span></div>
         <small class="muted">${L.accPcWhy}</small></div>
       <p class="pc-error" id="accPcErr" role="alert" hidden></p>
+      <label class="alerts mkt"><input type="checkbox" id="accMkt"><span><b>${L.mkt}</b><small class="muted">${L.mktWhy}</small></span></label>
       <button class="btn block" type="submit">${L.accSend}</button></form>
       <p class="muted small" id="accSent" hidden></p>
       <div class="pop-actions"><button type="button" class="btn ghost" data-close>${L.close}</button></div>`;
@@ -2150,7 +2211,10 @@ function openAccount(why) {
       const email = $("#accEmail").value.trim();
       if ($("#accPc").value.trim() && !await setPc($("#accPc").value, $("#accPcErr"), "accPc")) return; // optional, but must be valid
       renderStatic(); render();
-      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { data: S.pc ? { pc: S.pc, radius: S.radius } : {}, emailRedirectTo: location.origin + location.pathname + (pendingInvite() ? "?invite=" + pendingInvite() : "") + (why === "trial" || why === "buy" ? "#pricing" : "") } });
+      const mkt = $("#accMkt")?.checked === true;
+      try { mkt ? localStorage.setItem("dk.mkt", "1") : localStorage.removeItem("dk.mkt"); } catch { /* private mode */ }  // an existing account: saved after sign-in
+      trk("signup", {});
+      const { error } = await ACC.sb.auth.signInWithOtp({ email, options: { data: { ...(S.pc ? { pc: S.pc, radius: S.radius } : {}), ...(mkt ? { marketing: true } : {}) }, emailRedirectTo: location.origin + location.pathname + (pendingInvite() ? "?invite=" + pendingInvite() : "") + (why === "trial" || why === "buy" ? "#pricing" : "") } });
       const sent = $("#accSent"); if (sent) { sent.textContent = error ? L.accErr : L.accSent(email); sent.hidden = false; }
     });
   } else {
@@ -2167,11 +2231,17 @@ function openAccount(why) {
       ${CFG.vapidPublicKey ? `<label class="alerts"><input type="checkbox" id="accNotify"${S.pushOn ? " checked" : ""}><span><b>${L.accNotify}</b><small class="muted">${L.accNotifyWhy}</small></span></label>
       <p class="pushmsg" id="pushMsg" role="status"${isIOS && !isApp() && !S.pushOn ? "" : " hidden"}>${isIOS && !isApp() ? L.pushIos : ""}</p>` : ""}
       ${CFG.emailAlerts ? `<label class="alerts"><input type="checkbox" id="accAlerts"${S.alerts ? " checked" : ""}><span><b>${L.accAlerts}</b><small class="muted">${L.accAlertsWhy}</small></span></label>` : ""}
+      ${"marketing_opt_in" in (ACC.profile || {}) ? `<label class="alerts mkt"><input type="checkbox" id="accMkt"${ACC.profile.marketing_opt_in ? " checked" : ""}><span><b>${L.mkt}</b><small class="muted">${L.mktWhy}</small></span></label>` : ""}
       <div class="cta"><button type="button" class="btn ghost" data-logout>${L.accLogout}</button></div>
       <p class="muted small">${L.accSynced}</p>`;
   }
   paintCc(guessCc(), "accPc");
   if (ACC.user) bindMe(box);
+  if (ACC.user) box.querySelector("#accMkt")?.addEventListener("change", async e => {
+    const on = e.target.checked, { data, error } = await ACC.sb.rpc("set_marketing", { yes: on });
+    if (error) { e.target.checked = !on; toast(L.accErr); return; }
+    ACC.profile.marketing_opt_in = !!data; toast(data ? L.mktOn : L.mktOff);
+  });
   box.querySelector("#accAlerts")?.addEventListener("change", e => { S.alerts = e.target.checked; store.set("alerts", S.alerts); });
   box.querySelector("#accNotify")?.addEventListener("change", async e => {
     const box = e.target, msg = $("#pushMsg"), say = m => { if (msg) { msg.textContent = m; msg.hidden = !m; } };
@@ -2188,5 +2258,7 @@ function openAccount(why) {
 // ---------- start ----------
 bind();
 bindRecipes();
-load().then(() => { renderStatic(); render(); showView(); initAccounts(); pushCheck(); });
+// a click on "to the store" / "directions" in the details (anonymous, only with consent)
+document.addEventListener("click", e => { const a = e.target.closest("[data-trk]"); if (a) trk(a.dataset.trk, { store: a.dataset.trkStore, label: a.dataset.trkLabel }); });
+load().then(() => { paintSettings(); renderStatic(); render(); showView(); initAccounts(); pushCheck(); });
 })();

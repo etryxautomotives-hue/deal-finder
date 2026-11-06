@@ -8,3 +8,4 @@ $P -f tests/db/stub.sql >/dev/null
 for m in supabase/migrations/*.sql; do $P -f "$m" >/dev/null; done
 $P -f tests/db/premium.test.sql
 bash tests/db/concurrency.sh
+$P -f tests/db/admin.test.sql
