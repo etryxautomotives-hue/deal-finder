@@ -77,9 +77,16 @@ const flush = p => p.evaluate(() => { Object.defineProperty(document, "visibilit
   check((await plain.textContent("#main")).includes("No access"), "3 an account without access gets 'No access'");
   check(await plain.$eval("#tabs", e => e.hidden), "3 and no menu");
 
+  await plain.goto(BASE, { waitUntil: "networkidle" }); await wait(500);
+  check(await plain.$eval("#admBtn", e => e.hidden), "3 a normal account has no Admin button on the site");
+
   // 4. Miro, owner
   const m = await ctx(b, "miro");
-  await m.goto(BASE + "admin.html", { waitUntil: "networkidle" }); await m.waitForSelector(".adm-kpi");
+  await m.goto(BASE, { waitUntil: "networkidle" }); await m.waitForSelector("#admBtn:not([hidden])");
+  await shot(m, "site-admin-button.png");
+  await m.click("#admBtn"); await m.waitForSelector(".adm-kpi");
+  check(m.url().endsWith("admin.html"), "4 the owner switches from the site to the admin with one button");
+  check(await m.$eval("#toSite", e => e.getAttribute("href")) === "./", "4 and back with 'To the site'");
   check((await m.$$("#tabs a")).length === 8, "4 the owner sees all 8 sections");
   check((await m.textContent("#main")).includes("Shop health"), "4 overview shows shop health");
   check((await m.textContent("#main")).includes("Growth per month"), "4 overview shows growth");
