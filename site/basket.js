@@ -6,13 +6,15 @@
    - only exact matches count (no typo guesses: a wrong match on a shopping list costs money),
    - the word must be a whole word or the end of a compound ("melk" finds "Halfvolle melk", "koffie" finds
      "Oploskoffie", but "melk" never finds "Melkchocolade"); the product found is always shown,
+   - when we know what the item is ("kip" is chicken), the product must be that thing, not a spice mix or soup
+     that only contains it, in any language ("chicken" finds "Filet de poulet"),
    - then the lowest price you pay at the till.
    Shops are ranked by how many of your items they have on promo, then by the total for those items.
    Your preferred shop comes first, and we say when another shop is cheaper for the same items or has more.
    Money saved: only items ticked as bought count (normal price minus deal price), per week and month. */
 (function (root) {
   const S = root.DKSearch || (typeof require === "function" ? require("./search.js") : null);
-  const fold = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const fold = s => String(s || "").toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[̀-ͯ]/g, "");
   const toks = s => fold(s).split(/[^a-z0-9%]+/).filter(Boolean);
 
   // ...unless the rest only says how it is cut: "kipfiletreepjes" is still kipfilet, "kaasblokjes" still kaas
@@ -31,7 +33,9 @@
     const out = [];
     // In Dutch the last part of a compound word says what it is: "kipfilet" is a filet, "oploskoffie" is coffee,
     // but "melkchocolade" is chocolate. So the word must be a whole word or the end of one.
-    for (const d of deals) if (res.hits.has(d.id) && fit(item, d) === 2) out.push({ d, fit: 2 });
+    // When we know what the item is (concepts.js), the product must BE that: "kip" on your list is chicken, not
+    // "Santa Maria Kruiden, Kip"; "chicken" also finds "Filet de poulet". Otherwise the word rule above.
+    for (const d of deals) if (res.hits.has(d.id) && (res.head ? S.tierOf(res.head, d) === 3 : fit(item, d) === 2)) out.push({ d, fit: 2 });
     out.sort((a, b) => a.d.price - b.d.price);
     return out;
   }

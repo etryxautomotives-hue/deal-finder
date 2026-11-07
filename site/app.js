@@ -586,7 +586,9 @@ function prepare(raw) {
     const kind = d.deal_kind || dealKind(d.promo_text) || (d.old_price ? "price_drop" : "other");
     const discount = d.old_price && d.old_price > d.price ? (d.old_price - d.price) / d.old_price : null;
     let id = 0; for (const c of `${d.store}|${d.name}|${d.pack_size}|${d.price}`) id = (id * 31 + c.charCodeAt(0)) | 0;
-    return { ...d, id: "d" + (id >>> 0).toString(36), kind, group: kindGroup(kind), cat: d.category || "other",
+    // what the product is (concepts.js): its aisle also fixes the shop's own label ("Kattenvoeding, Kip" is not meat)
+    const k = window.DKConcepts ? DKConcepts.analyse(d.name, d.brand, d.language) : { type: null, all: [], marks: [], aisle: null };
+    return { ...d, id: "d" + (id >>> 0).toString(36), kind, group: kindGroup(kind), cat: k.aisle || d.category || "other", pk: k,
       discount, until: d.valid_until ? new Date(d.valid_until) : null, hay: fold(`${d.name} ${d.brand || ""} ${d.store}`), i };
   });
 }
@@ -827,7 +829,7 @@ function render() {
     .filter(([k]) => k !== "near" || Object.keys(nearest).length)
     .map(([k, v]) => `<option value="${k}"${S.sort === k ? " selected" : ""}>${v}</option>`).join("");
 
-  const list = DEALS.filter(d => matches(d)).sort(SORTS[S.sort] || SORTS.value);
+  const list = DEALS.filter(d => matches(d)).sort(S.q ? searchOrder() : SORTS[S.sort] || SORTS.value);
   const here = pcAt(S.pc) ? pcName(S.pc) : "";
   $("#secTitle").textContent = S.q ? L.searchTitle(S.q) : (S.cat ? L.cats[S.cat] : L.secTitle);
   $("#secSub").textContent = (S.q && list.length && DS.search(DEALS, S.q).mode < 3 ? L.qFuzzy + " " : "") + L.secSub(list.length, Object.keys(nearest).length ? here : "", S.radius);
@@ -958,7 +960,7 @@ function openDeal(id) {
 function toggleList(id) {
   const d = DEALS.find(x => x.id === id) || S.list[id]; if (!d) return;
   if (S.list[id]) delete S.list[id];
-  else { const { hay, until, i, _sx, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); trk("add_list", { store: d.store, cat: d.cat, label: d.name }); }
+  else { const { hay, until, i, _sx, pk, ...keep } = d; S.list[id] = keep; toast(t().addedToast); noteProduct(d, 2); trk("add_list", { store: d.store, cat: d.cat, label: d.name }); }
   store.set("list", S.list);
   const c = $("#listCount"); c.textContent = listN(); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   document.querySelectorAll(`[data-add="${id}"]`).forEach(b => {
@@ -1233,6 +1235,14 @@ function runSearch(q) {
   if (q !== S.q) { S.q = q; S.shown = 48; render(); }
   if (q) trk("search", { label: q.toLowerCase(), n: DEALS.filter(d => matches(d)).length });
   $("#q").blur(); $("#results").scrollIntoView({ behavior: "smooth" });
+}
+// Search results: what you look for first (chicken before chicken spices, exact before typos), then within that
+// group your favourites first (unless you picked another order), then the order you picked (price per kg by default)
+function searchOrder() {
+  const res = DS.search(DEALS, S.q), by = SORTS[S.sort] || SORTS.value, now = Date.now(), fav = new Map();
+  const topQ = S.sort === "value" ? DS.topQueries(HIST, now) : null;
+  const likes = d => { if (!topQ) return 0; if (!fav.has(d.id)) fav.set(d.id, DS.personal(HIST, d, now, topQ) >= 1 ? 1 : 0); return fav.get(d.id); };
+  return (a, b) => DS.group(res, b) - DS.group(res, a) || likes(b) - likes(a) || by(a, b);
 }
 function renderSuggest() {
   const L = t(), input = $("#q"), box = $("#qList"), q = input.value.trim(), now = Date.now();

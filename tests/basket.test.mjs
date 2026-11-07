@@ -31,7 +31,7 @@ test("the end of a compound counts, the start doesn't: melkchocolade is not milk
   const more = [...deals, mk("8", "Melkchocolade", "Delhaize", 1.2), mk("9", "Oploskoffie", "Lidl", 3.2), mk("10", "Koffiebonen", "Lidl", 2)];
   const [melk, koffie] = B.compare(items(["melk", "koffie"]), more).items;
   assert.equal(melk.byShop.Delhaize, undefined);
-  assert.equal(koffie.byShop.Lidl.id, "9");
+  assert.equal(koffie.byShop.Lidl.id, "10");   // coffee beans are coffee too (product types), and cheaper
   const [kip] = B.compare(items(["kipfilet"]), [mk("k", "Kipfiletreepjes", "Aldi", 3)]).items;
   assert.equal(kip.best.id, "k");   // only says how it is cut
 });

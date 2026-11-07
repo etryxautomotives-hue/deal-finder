@@ -1,14 +1,21 @@
-/* deal'ke search: typo-tolerant product matching and a personal ranking from your own searches and clicks.
+/* deal'ke search: finds what people mean, forgives typos, and puts your own favourites first.
    Runs in the browser only (no server, no AI). app.js uses window.DKSearch; tests/search.test.mjs runs it in Node.
 
-   Matching, per word of the query:
-   - exact:  the word appears in the product's name, brand or store ("filet" finds "Kipfilet"), as before
-   - fuzzy:  only when nothing matches exactly. Words of 4+ letters may have 1 typo, words of 8+ letters 2
-             (a typo = a wrong, missing, extra or swapped letter), so "kipfillet", "yoghurth", "mkel" still work.
-   Personal ranking: every search you make and every product you open or add to your list is counted, and older
-   counts fade (half-life 30 days). Products you open often, and products matching what you often search, come first. */
+   1. What the product IS (concepts.js): every product gets a type ("Santa Maria Kruiden, Kip" is a spice mix
+      that contains chicken; "Kipfiletreepjes" is chicken). A search for "kip" shows real chicken first, then
+      products that only contain or taste of chicken (spice mixes, soup, pizza), and things that are not food
+      for people (cat food) last. "kipkruiden" or "kruiden" puts the spice mixes first instead.
+   2. Words in any language: "chicken", "poulet" and "kip" are the same idea, "vis" finds zalm and kabeljauw,
+      "kaas" finds "fromage". A word we know as a food only counts at the start of a word in the name, so "ei"
+      finds eggs, not every name with "ei" inside it.
+   3. Typos: words of 4+ letters may have 1 typo, words of 8+ letters 2 (a wrong, missing, extra or swapped
+      letter), so "kipfillet", "yoghurth", "mkel" still work. Close matches of longer words ("tomaat" for
+      "Tomaten") show even when there are exact ones, just below them.
+   4. Personal ranking: every search you make and every product you open or add to your list is counted, and
+      older counts fade (half-life 30 days). Within each group above, your favourites come first. */
 (function (root) {
-  const fold = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const K = root.DKConcepts || (typeof require === "function" ? require("./concepts.js") : null);
+  const fold = s => String(s || "").toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[̀-ͯ]/g, "");
   const words = s => fold(s).split(/[^a-z0-9%]+/).filter(Boolean);
   const qwords = q => fold(q).split(/\s+/).map(w => w.replace(/^[^a-z0-9%]+|[^a-z0-9%]+$/g, "")).filter(Boolean);
   const allowed = w => w.length >= 8 ? 2 : w.length >= 4 ? 1 : 0;
@@ -37,7 +44,8 @@
   function prep(d) {
     if (!d._sx) {
       const name = fold(d.name);
-      d._sx = { name, toks: words(`${d.name} ${d.brand || ""}`), hay: d.hay || fold(`${d.name} ${d.brand || ""} ${d.store}`) };
+      d._sx = { name, toks: words(`${d.name} ${d.brand || ""}`), hay: d.hay || fold(`${d.name} ${d.brand || ""} ${d.store}`),
+        k: d.pk || (K ? K.analyse(d.name, d.brand, d.language) : { type: null, all: [], marks: [] }) };
     }
     return d._sx;
   }
@@ -59,27 +67,75 @@
     if (w.length >= 5 && editIn(w, x.name.replace(/[^a-z0-9%]+/g, ""), true, k) <= k) return [1, 0.3]; // typo inside a compound word
     return [0, 0];
   }
-  function dealMatch(ws, d) {
+  // Which ideas each query word stands for. "kipkruiden" needs both chicken and spices; "vis" any fish.
+  const wordCache = new Map();
+  function wordConcepts(w) {
+    if (!K) return null;
+    if (!wordCache.has(w)) {
+      const cs = K.conceptsOfWord(w);
+      const a = !known(w) ? K.analyse(w, "", "nl").all.filter(c => !K.C[c].marker) : [];
+      const kind = !cs.length ? K.kindOf(w) : [];
+      const typo = !cs.length && !known(w) && w.length >= 4 ? K.conceptsOfWord(w, editIn) : [];
+      wordCache.set(w, a.length > 1 ? { all: a } : cs.length ? { any: cs } : kind.length ? { any: kind, kind: true }
+        : typo.length ? { any: typo, typo: true } : null);
+    }
+    return wordCache.get(w);
+  }
+  const known = w => !!K && K.WORD_SET.has(w);
+  const has = (x, c) => x.k.all.some(a => K.isA(a, c)) || (K.C[c].marker && x.k.marks && x.k.marks.includes(c));
+  // One product against the query: [level, score] or [0, 0]. Level 3 = exact or same idea, 2/1 = close (typo).
+  function dealMatch(ws, wc, d) {
     const x = prep(d); let level = 3, sum = 0;
-    for (const w of ws) { const [l, s] = wordMatch(w, x); if (!l) return [0, 0]; if (l < level) level = l; sum += s; }
+    for (let i = 0; i < ws.length; i++) {
+      const w = ws[i], cw = wc[i];
+      if (cw && (cw.all ? cw.all.every(c => has(x, c)) : cw.any.some(c => has(x, c)))) {
+        // "chiken" is chicken but was a typo; "gouda" finds other cheese too, after the products called gouda
+        if (cw.typo || (cw.kind && !x.toks.some(t => t === w || t.startsWith(w) || (w.length > 3 && t.endsWith(w))))) {
+          if (level > 2) level = 2; sum += 0.5;
+        } else sum += 1;
+        continue;
+      }
+      let [l, s] = wordMatch(w, x);
+      if (l === 3 && (cw || known(w)) && !x.toks.some(t => t === w || (w.length > 3 && t.startsWith(w)))) l = 0;  // "ei" is not in "eiwit", "cola" not in "chocolade"
+      if (!l) return [0, 0];
+      if (l < level) level = l; sum += s;
+    }
     return [level, sum / ws.length];
   }
+  // Group of a product for this query: 3 it IS what you look for, 2 it contains it or no idea known, 1 not food
+  function tierOf(head, d) {
+    if (!head || !K) return 2;
+    const t = prep(d).k.type;
+    if (t && K.isA(t, head)) return 3;
+    if (t && K.C[t].strong) return 1;
+    return 2;
+  }
 
-  // The whole catalogue against a query. Exact matches win; close matches only show when nothing matches exactly.
+  // The whole catalogue against a query. hits: id -> rank (higher first): group, then exact before close.
   let cache = { q: null, deals: null, res: null };
   function search(deals, q) {
     if (cache.q === q && cache.deals === deals) return cache.res;
-    const ws = qwords(q), hits = new Map();
+    let ws = qwords(q); const hits = new Map();
+    if (ws.length > 1 && known(ws.join(" "))) ws = [ws.join(" ")];             // "pommes de terre", "cat food": one idea
+    // a word with a typo-guessed idea that is spelled exactly like this in some product name is no typo ("filet")
+    const wc = ws.map(w => { const c = wordConcepts(w); return c && c.typo && deals.some(d => prep(d).hay.includes(w)) ? null : c; });
+    const head = K && ws.length ? K.queryHead(ws.join(" "), wc.map(c => c ? (c.all || c.any) : [])) : null;
     let mode = 0;
     if (ws.length) {
       const all = [];
-      for (const d of deals) { const [l, s] = dealMatch(ws, d); if (l) { all.push([d, l, s]); if (l > mode) mode = l; } }
-      for (const [d, l, s] of all) if (l === mode) hits.set(d.id, s);
+      for (const d of deals) { const [l, s] = dealMatch(ws, wc, d); if (l) { all.push([d, l, s]); if (l > mode) mode = l; } }
+      // close matches join the exact ones when every unsure word is long enough to be clear ("tomaat" ~ "tomaten")
+      // products of the same kind ("gouda" -> other cheese) always stay, below the exact ones
+      const related = wc.some(c => c && c.kind);
+      const minKeep = related ? Math.min(2, mode) : mode === 3 ? (ws.every((w, i) => w.length >= 6 && !wc[i] && !known(w)) ? 2 : 3) : mode;
+      for (const [d, l, s] of all) if (l >= minKeep) hits.set(d.id, tierOf(head, d) * 10 + l * 2 + s);
     }
-    const res = { q, words: ws, mode, hits };
+    const res = { q, words: ws, mode, hits, head };
     cache = { q, deals, res };
     return res;
   }
+  // The group a hit belongs to (same group = same kind of match); the list sorts by price within a group
+  const group = (res, d) => Math.floor((res.hits.get(d.id) || 0) / 2) * 2;
 
   // ---------- personal history ----------
   // { q: { "kipfilet": [count, lastSeenMs] }, p: { "<product name>": [count, ms] }, c: { "<category>": [count, ms] } }
@@ -133,7 +189,7 @@
     const rows = [];
     for (const d of deals) {
       if (!res.hits.has(d.id) || !ok(d)) continue;
-      rows.push({ d, score: res.hits.get(d.id) * 3 + personal(h, d, now, topQ) });
+      rows.push({ d, score: res.hits.get(d.id) * 10 + personal(h, d, now, topQ) });
     }
     rows.sort((a, b) => b.score - a.score || (a.d.unit_price || a.d.price || 0) - (b.d.unit_price || b.d.price || 0));
     const seen = new Set(), out = [];
@@ -150,6 +206,6 @@
       .slice(0, n).map(r => r.d);
   }
 
-  const api = { fold, qwords, editIn, search, suggest, favourites, recent, bump, prune, merge, empty, clean, weight, productKey, personal };
+  const api = { fold, qwords, editIn, search, group, tierOf, topQueries, suggest, favourites, recent, bump, prune, merge, empty, clean, weight, productKey, personal };
   if (typeof module === "object" && module.exports) module.exports = api; else root.DKSearch = api;
 })(typeof window !== "undefined" ? window : globalThis);
